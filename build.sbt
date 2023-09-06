@@ -31,3 +31,5 @@ lazy val library = Project(appName, file("."))
   commands += Command.command("testAll") { state =>
       "test" :: state
   }
+
+  Global / bloopAggregateSourceDependencies := true
