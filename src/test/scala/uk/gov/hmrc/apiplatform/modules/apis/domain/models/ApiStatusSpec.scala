@@ -28,15 +28,19 @@ class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyCheck
     val values =
       Table(
         ("Status", "text"),
-        (ApiStatus.ALPHA, "alpha"),
-        (ApiStatus.BETA, "beta"),
-        (ApiStatus.DEPRECATED, "deprecated"),
-        (ApiStatus.PROTOTYPED, "prototyped"),
-        (ApiStatus.PUBLISHED, "published"),
-        (ApiStatus.RETIRED, "retired"),
-        (ApiStatus.STABLE, "stable")
+        (ApiStatus.ALPHA, "Alpha"),
+        (ApiStatus.BETA, "Beta"),
+        (ApiStatus.STABLE, "Stable"),
+        (ApiStatus.DEPRECATED, "Deprecated"),
+        (ApiStatus.RETIRED, "Retired"),
       )
 
+    "display text correctly" in {
+      forAll(values) { (s, t) =>
+        s.displayText shouldBe t
+      }
+    }
+    
     "convert to string correctly" in {
       forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()

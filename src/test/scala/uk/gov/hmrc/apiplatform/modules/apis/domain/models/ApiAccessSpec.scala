@@ -23,6 +23,14 @@ import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 class ApiAccessSpec extends BaseJsonFormattersSpec {
 
   "ApiAccess" should {
+    
+    "display text correctly" in {
+      ApiAccess.PUBLIC.displayText shouldBe "Public"
+      ApiAccess.Private(Nil, Some(true)).displayText shouldBe "Private(Trial)"
+      ApiAccess.Private(Nil, Some(false)).displayText shouldBe "Private"
+      ApiAccess.Private(Nil, None).displayText shouldBe "Private"
+    }
+
     "read public access from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PUBLIC"}""")(ApiAccess.PUBLIC)
     }

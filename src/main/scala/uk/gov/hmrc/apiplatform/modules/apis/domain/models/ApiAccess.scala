@@ -20,11 +20,19 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
 
-sealed trait ApiAccess
+sealed trait ApiAccess {
+  lazy val displayText: String = ApiAccess.displayText(this)
+}
 
 object ApiAccess {
   case object PUBLIC                                                                           extends ApiAccess
   case class Private(whitelistedApplicationIds: List[String], isTrial: Option[Boolean] = None) extends ApiAccess
+
+  def displayText(apiAccess: ApiAccess): String = apiAccess match {
+    case PUBLIC => "Public"
+    case Private(_,Some(true)) => "Private(Trial)"
+    case Private(_,_) => "Private"
+  }
 
   private implicit val formatPublicApiAccess = Json.format[PUBLIC.type]
 

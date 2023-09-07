@@ -37,7 +37,7 @@ class ApiDefinitionSpec extends HmrcSpec {
            |   "versions":[
            |      {
            |         "version":"1.0",
-           |         "status":"PUBLISHED",
+           |         "status":"STABLE",
            |         "access": {
            |           "type": "$accessType"
            |            ${whitelistedApplicationIds.fold("")(w => s""" ,"whitelistedApplicationIds": $w""")}

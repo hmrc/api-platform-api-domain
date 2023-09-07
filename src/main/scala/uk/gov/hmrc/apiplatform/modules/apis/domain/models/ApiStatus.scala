@@ -18,18 +18,21 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 
-sealed trait ApiStatus
+sealed trait ApiStatus {
+  lazy val displayText: String = {
+    val txt = this.toString
+    txt.take(1).toUpperCase +txt.drop(1).toLowerCase()
+  }
+}
 
 object ApiStatus {
-  case object PROTOTYPED extends ApiStatus
   case object ALPHA      extends ApiStatus
   case object BETA       extends ApiStatus
   case object STABLE     extends ApiStatus
-  case object PUBLISHED  extends ApiStatus
   case object DEPRECATED extends ApiStatus
   case object RETIRED    extends ApiStatus
 
-  final val values = Set(PROTOTYPED, ALPHA, BETA, STABLE, PUBLISHED, DEPRECATED, RETIRED)
+  final val values = Set(ALPHA, BETA, STABLE, DEPRECATED, RETIRED)
 
   def apply(text: String): Option[ApiStatus] = {
     ApiStatus.values.find(_.toString == text.toUpperCase)
@@ -38,5 +41,10 @@ object ApiStatus {
   def unsafeApply(text: String): ApiStatus =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Status"))
 
+  def displayText(apiStatus: ApiStatus): String = {
+    val txt = apiStatus.toString
+    txt.take(1).toUpperCase +txt.drop(1)
+  }
+  
   implicit val formatApiStatus = SealedTraitJsonFormatting.createFormatFor[ApiStatus]("API Status", apply)
 }
