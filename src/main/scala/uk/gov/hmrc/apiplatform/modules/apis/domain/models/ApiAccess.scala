@@ -30,7 +30,6 @@ object ApiAccess {
 
   def displayText(apiAccess: ApiAccess): String = apiAccess match {
     case PUBLIC => "Public"
-    case Private(_,Some(true)) => "Private(Trial)"
     case Private(_,_) => "Private"
   }
 

@@ -26,7 +26,7 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
     
     "display text correctly" in {
       ApiAccess.PUBLIC.displayText shouldBe "Public"
-      ApiAccess.Private(Nil, Some(true)).displayText shouldBe "Private(Trial)"
+      ApiAccess.Private(Nil, Some(true)).displayText shouldBe "Private"
       ApiAccess.Private(Nil, Some(false)).displayText shouldBe "Private"
       ApiAccess.Private(Nil, None).displayText shouldBe "Private"
     }
