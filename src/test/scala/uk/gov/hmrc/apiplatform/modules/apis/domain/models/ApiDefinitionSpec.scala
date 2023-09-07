@@ -18,10 +18,8 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import play.api.libs.json.Json
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccess, ApiCategory, ApiDefinition}
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiAccess
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
 
 class ApiDefinitionSpec extends HmrcSpec {
 
@@ -122,6 +120,5 @@ class ApiDefinitionSpec extends HmrcSpec {
       }
     }
   }
-
 
 }

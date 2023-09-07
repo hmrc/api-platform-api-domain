@@ -22,12 +22,12 @@ sealed trait ApiStatus
 
 object ApiStatus {
   case object PROTOTYPED extends ApiStatus
-  case object ALPHA extends ApiStatus
-  case object BETA extends ApiStatus
-  case object STABLE extends ApiStatus
-  case object PUBLISHED extends ApiStatus
+  case object ALPHA      extends ApiStatus
+  case object BETA       extends ApiStatus
+  case object STABLE     extends ApiStatus
+  case object PUBLISHED  extends ApiStatus
   case object DEPRECATED extends ApiStatus
-  case object RETIRED extends ApiStatus
+  case object RETIRED    extends ApiStatus
 
   final val values = Set(PROTOTYPED, ALPHA, BETA, STABLE, PUBLISHED, DEPRECATED, RETIRED)
 
@@ -35,7 +35,7 @@ object ApiStatus {
     ApiStatus.values.find(_.toString == text.toUpperCase)
   }
 
-  def unsafeApply(text: String): ApiStatus = 
+  def unsafeApply(text: String): ApiStatus =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Status"))
 
   implicit val formatApiStatus = SealedTraitJsonFormatting.createFormatFor[ApiStatus]("API Status", apply)

@@ -16,13 +16,15 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 import play.api.libs.json.Json
+
+import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 
 sealed trait ApiCategory
 
+// scalastyle:off cyclomatic.complexity
 object ApiCategory {
-  
+
   case object EXAMPLE                      extends ApiCategory
   case object AGENTS                       extends ApiCategory
   case object BUSINESS_RATES               extends ApiCategory
@@ -46,20 +48,38 @@ object ApiCategory {
   case object VAT                          extends ApiCategory
   case object VAT_MTD                      extends ApiCategory
   case object OTHER                        extends ApiCategory
-  
+
   final val values = Set(
-    EXAMPLE, AGENTS, BUSINESS_RATES, CHARITIES, CONSTRUCTION_INDUSTRY_SCHEME, 
-    CORPORATION_TAX, CUSTOMS, ESTATES, HELP_TO_SAVE, INCOME_TAX_MTD,
-    LIFETIME_ISA, MARRIAGE_ALLOWANCE, NATIONAL_INSURANCE, PAYE, PENSIONS,
-    PRIVATE_GOVERNMENT, RELIEF_AT_SOURCE, SELF_ASSESSMENT, STAMP_DUTY, TRUSTS,
-    VAT, VAT_MTD, OTHER
+    EXAMPLE,
+    AGENTS,
+    BUSINESS_RATES,
+    CHARITIES,
+    CONSTRUCTION_INDUSTRY_SCHEME,
+    CORPORATION_TAX,
+    CUSTOMS,
+    ESTATES,
+    HELP_TO_SAVE,
+    INCOME_TAX_MTD,
+    LIFETIME_ISA,
+    MARRIAGE_ALLOWANCE,
+    NATIONAL_INSURANCE,
+    PAYE,
+    PENSIONS,
+    PRIVATE_GOVERNMENT,
+    RELIEF_AT_SOURCE,
+    SELF_ASSESSMENT,
+    STAMP_DUTY,
+    TRUSTS,
+    VAT,
+    VAT_MTD,
+    OTHER
   )
 
   def apply(text: String): Option[ApiCategory] = {
     ApiCategory.values.find(_.toString == text.toUpperCase)
   }
 
-  def unsafeApply(text: String): ApiCategory = 
+  def unsafeApply(text: String): ApiCategory =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Category"))
 
   implicit val formatApiCategory = SealedTraitJsonFormatting.createFormatFor[ApiCategory]("API Category", apply)
@@ -68,6 +88,7 @@ object ApiCategory {
 case class ApiCategoryDetails(category: ApiCategory, name: String)
 
 object ApiCategoryDetails {
+
   def toApiCategoryDetails(category: ApiCategory): ApiCategoryDetails = {
     import ApiCategory._
     category match {
@@ -101,3 +122,4 @@ object ApiCategoryDetails {
 
   implicit val formatApiCategoryDetails = Json.format[ApiCategoryDetails]
 }
+// scalastyle:on cyclomatic.complexity

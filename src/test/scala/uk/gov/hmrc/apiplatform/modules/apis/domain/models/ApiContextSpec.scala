@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
-import play.api.libs.json._
 import scala.util.Random
 
+import play.api.libs.json._
+
+import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+
 class ApiContextSpec extends BaseJsonFormattersSpec {
-  
+
   "ApiContext" should {
     val example = ApiContext("misc/blah")
 

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-
 case class ApiAvailability(endpointsEnabled: Boolean, access: ApiAccess, loggedIn: Boolean, authorised: Boolean)
 
 object ApiAvailability {

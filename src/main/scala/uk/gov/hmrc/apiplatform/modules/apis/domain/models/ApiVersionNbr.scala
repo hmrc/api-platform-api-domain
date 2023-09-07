@@ -21,7 +21,7 @@ import scala.util.Random
 import play.api.libs.json.Json
 
 final case class ApiVersionNbr(value: String) extends AnyVal {
-    override def toString(): String = value
+  override def toString(): String = value
 }
 
 object ApiVersionNbr {

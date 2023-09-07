@@ -16,41 +16,42 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
-import play.api.libs.json.JsString
-import uk.gov.hmrc.apiplatform.modules.common.utils._
 import org.scalatest.prop.TableDrivenPropertyChecks
 
+import play.api.libs.json.{JsString, Json}
+
+import uk.gov.hmrc.apiplatform.modules.common.utils._
+
 class HttpMethodSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
-  
+
   "HttpMethod" should {
     val values =
       Table(
         ("Method", "text"),
-        ( HttpMethod.GET, "get"),
-        ( HttpMethod.POST, "post"),
-        ( HttpMethod.PUT, "put"),
-        ( HttpMethod.PATCH, "patch"),
-        ( HttpMethod.DELETE, "delete"),
-        ( HttpMethod.OPTIONS, "options"),
-        ( HttpMethod.HEAD, "head")
+        (HttpMethod.GET, "get"),
+        (HttpMethod.POST, "post"),
+        (HttpMethod.PUT, "put"),
+        (HttpMethod.PATCH, "patch"),
+        (HttpMethod.DELETE, "delete"),
+        (HttpMethod.OPTIONS, "options"),
+        (HttpMethod.HEAD, "head")
       )
 
     "convert to string correctly" in {
-      forAll(values) { (s,t) =>
+      forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()
       }
     }
 
     "convert lower case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         HttpMethod.apply(t) shouldBe Some(s)
         HttpMethod.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         HttpMethod.apply(t.toUpperCase()) shouldBe Some(s)
         HttpMethod.unsafeApply(t.toUpperCase()) shouldBe s
       }
@@ -60,11 +61,11 @@ class HttpMethodSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChec
       HttpMethod.apply("rubbish") shouldBe None
       HttpMethod.apply("") shouldBe None
     }
-      
+
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
         HttpMethod.unsafeApply("rubbish")
-      }.getMessage() should include ("Http Method")
+      }.getMessage() should include("Http Method")
     }
 
     "read from Json" in {
@@ -86,4 +87,3 @@ class HttpMethodSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChec
     }
   }
 }
-

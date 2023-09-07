@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
-import play.api.libs.json.JsString
-import uk.gov.hmrc.apiplatform.modules.common.utils._
 import org.scalatest.prop.TableDrivenPropertyChecks
+
+import play.api.libs.json.{JsString, Json}
+
+import uk.gov.hmrc.apiplatform.modules.common.utils._
 
 class AuthTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
@@ -27,26 +28,26 @@ class AuthTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks
     val values =
       Table(
         ("AuthType", "text"),
-        ( AuthType.NONE, "none"),
-        ( AuthType.USER, "user"),
-        ( AuthType.APPLICATION, "application")
+        (AuthType.NONE, "none"),
+        (AuthType.USER, "user"),
+        (AuthType.APPLICATION, "application")
       )
 
     "convert to string correctly" in {
-      forAll(values) { (s,t) =>
+      forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()
       }
     }
 
     "convert lower case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         AuthType.apply(t) shouldBe Some(s)
         AuthType.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         AuthType.apply(t.toUpperCase()) shouldBe Some(s)
         AuthType.unsafeApply(t.toUpperCase()) shouldBe s
       }
@@ -56,11 +57,11 @@ class AuthTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks
       AuthType.apply("rubbish") shouldBe None
       AuthType.apply("") shouldBe None
     }
-      
+
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
         AuthType.unsafeApply("rubbish")
-      }.getMessage() should include ("Auth Type")
+      }.getMessage() should include("Auth Type")
     }
 
     "read from Json" in {
@@ -76,4 +77,3 @@ class AuthTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks
     }
   }
 }
-

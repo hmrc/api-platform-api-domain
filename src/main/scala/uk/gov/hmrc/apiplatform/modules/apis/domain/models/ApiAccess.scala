@@ -16,23 +16,23 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
+import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
-import play.api.libs.functional.syntax._
 
 sealed trait ApiAccess
 
 object ApiAccess {
-  case object PUBLIC extends ApiAccess
+  case object PUBLIC                                                                           extends ApiAccess
   case class Private(whitelistedApplicationIds: List[String], isTrial: Option[Boolean] = None) extends ApiAccess
 
   private implicit val formatPublicApiAccess = Json.format[PUBLIC.type]
 
   private implicit val readsPrivateApiAccess: Reads[Private] = (
-      ((JsPath \ "whitelistedApplicationIds").read[List[String]] or Reads.pure(List.empty[String])) and
+    ((JsPath \ "whitelistedApplicationIds").read[List[String]] or Reads.pure(List.empty[String])) and
       (JsPath \ "isTrial").readNullable[Boolean]
-    )(Private.apply _)
-  
+  )(Private.apply _)
+
   private implicit val writesPrivateApiAccess: OWrites[Private] = Json.writes[Private]
 
   implicit val formatApiAccess: Format[ApiAccess] = Union.from[ApiAccess]("type")

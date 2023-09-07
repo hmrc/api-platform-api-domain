@@ -17,8 +17,8 @@
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import play.api.libs.json.Format
-import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 
+import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 
 sealed trait ResourceThrottlingTier
 

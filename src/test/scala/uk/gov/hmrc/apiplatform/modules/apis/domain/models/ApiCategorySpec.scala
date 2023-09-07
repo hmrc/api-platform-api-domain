@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
-import play.api.libs.json.JsString
-import uk.gov.hmrc.apiplatform.modules.common.utils._
 import org.scalatest.prop.TableDrivenPropertyChecks
+
+import play.api.libs.json.{JsString, Json}
+
+import uk.gov.hmrc.apiplatform.modules.common.utils._
 
 class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
@@ -27,25 +28,25 @@ class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChe
     val values =
       Table(
         ("Category", "text"),
-        ( ApiCategory.AGENTS, "agents"),
-        ( ApiCategory.BUSINESS_RATES, "business_rates")
+        (ApiCategory.AGENTS, "agents"),
+        (ApiCategory.BUSINESS_RATES, "business_rates")
       )
 
     "convert to string correctly" in {
-      forAll(values) { (s,t) =>
+      forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()
       }
     }
 
     "convert lower case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         ApiCategory.apply(t) shouldBe Some(s)
         ApiCategory.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         ApiCategory.apply(t.toUpperCase()) shouldBe Some(s)
         ApiCategory.unsafeApply(t.toUpperCase()) shouldBe s
       }
@@ -55,11 +56,11 @@ class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChe
       ApiCategory.apply("rubbish") shouldBe None
       ApiCategory.apply("") shouldBe None
     }
-      
+
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
         ApiCategory.unsafeApply("rubbish")
-      }.getMessage() should include ("API Category")
+      }.getMessage() should include("API Category")
     }
 
     "read from Json" in {
@@ -75,4 +76,3 @@ class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChe
     }
   }
 }
-

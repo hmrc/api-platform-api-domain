@@ -20,13 +20,13 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 // Not used in Api Definition
 case class ExtendedAPIVersion(
-  version: ApiVersionNbr,
-  status: ApiStatus,
-  endpoints: List[Endpoint],
-  productionAvailability: Option[ApiAvailability],
-  sandboxAvailability: Option[ApiAvailability]
+    version: ApiVersionNbr,
+    status: ApiStatus,
+    endpoints: List[Endpoint],
+    productionAvailability: Option[ApiAvailability],
+    sandboxAvailability: Option[ApiAvailability]
   )
-  
+
 object ExtendedAPIVersion {
   import play.api.libs.json.Json
   implicit val formatExtendedAPIVersion = Json.format[ExtendedAPIVersion]

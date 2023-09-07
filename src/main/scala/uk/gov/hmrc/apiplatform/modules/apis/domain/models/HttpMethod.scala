@@ -21,13 +21,13 @@ import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 sealed trait HttpMethod
 
 object HttpMethod {
-  case object GET extends HttpMethod
-  case object POST extends HttpMethod
-  case object PUT extends HttpMethod
-  case object PATCH extends HttpMethod
-  case object DELETE extends HttpMethod
+  case object GET     extends HttpMethod
+  case object POST    extends HttpMethod
+  case object PUT     extends HttpMethod
+  case object PATCH   extends HttpMethod
+  case object DELETE  extends HttpMethod
   case object OPTIONS extends HttpMethod
-  case object HEAD extends HttpMethod
+  case object HEAD    extends HttpMethod
 
   final val values = Set(GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD)
 
@@ -35,7 +35,7 @@ object HttpMethod {
     HttpMethod.values.find(_.toString == text.toUpperCase)
   }
 
-  def unsafeApply(text: String): HttpMethod = 
+  def unsafeApply(text: String): HttpMethod =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Http Method"))
 
   implicit val formatHttpMethod = SealedTraitJsonFormatting.createFormatFor[HttpMethod]("API Http Method", apply)

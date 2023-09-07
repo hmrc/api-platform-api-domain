@@ -16,18 +16,17 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-
 case class Endpoint(
-  uriPattern: String,
-  endpointName: String,
-  method: HttpMethod,
-  authType: AuthType,
-  throttlingTier: ResourceThrottlingTier,
-  scope: Option[String] = None,
-  queryParameters: Option[List[QueryParameter]] = None
+    uriPattern: String,
+    endpointName: String,
+    method: HttpMethod,
+    authType: AuthType,
+    throttlingTier: ResourceThrottlingTier,
+    scope: Option[String] = None,
+    queryParameters: Option[List[QueryParameter]] = None
   )
-  
-  object Endpoint {
-    import play.api.libs.json.Json
-    implicit val formatEndpoint  = Json.format[Endpoint]
-  }
+
+object Endpoint {
+  import play.api.libs.json.Json
+  implicit val formatEndpoint = Json.format[Endpoint]
+}

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-
 case class QueryParameter(name: String, required: Boolean = false)
 
 object QueryParameter {

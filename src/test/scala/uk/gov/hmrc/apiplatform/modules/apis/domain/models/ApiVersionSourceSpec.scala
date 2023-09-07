@@ -16,37 +16,38 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
-import play.api.libs.json.JsString
-import uk.gov.hmrc.apiplatform.modules.common.utils._
 import org.scalatest.prop.TableDrivenPropertyChecks
 
+import play.api.libs.json.{JsString, Json}
+
+import uk.gov.hmrc.apiplatform.modules.common.utils._
+
 class ApiVersionSourceSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
-  
+
   "ApiVersionSource" should {
     val values =
       Table(
         ("Source", "text"),
-        ( ApiVersionSource.OAS, "oas"),
-        ( ApiVersionSource.RAML, "raml"),
-        ( ApiVersionSource.UNKNOWN, "unknown")
+        (ApiVersionSource.OAS, "oas"),
+        (ApiVersionSource.RAML, "raml"),
+        (ApiVersionSource.UNKNOWN, "unknown")
       )
 
     "convert to string correctly" in {
-      forAll(values) { (s,t) =>
+      forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()
       }
     }
 
     "convert lower case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         ApiVersionSource.apply(t) shouldBe Some(s)
         ApiVersionSource.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         ApiVersionSource.apply(t.toUpperCase()) shouldBe Some(s)
         ApiVersionSource.unsafeApply(t.toUpperCase()) shouldBe s
       }
@@ -56,11 +57,11 @@ class ApiVersionSourceSpec extends BaseJsonFormattersSpec with TableDrivenProper
       ApiVersionSource.apply("rubbish") shouldBe None
       ApiVersionSource.apply("") shouldBe None
     }
-      
+
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
         ApiVersionSource.unsafeApply("rubbish")
-      }.getMessage() should include ("API Version Source")
+      }.getMessage() should include("API Version Source")
     }
 
     "read from Json" in {
@@ -76,4 +77,3 @@ class ApiVersionSourceSpec extends BaseJsonFormattersSpec with TableDrivenProper
     }
   }
 }
-

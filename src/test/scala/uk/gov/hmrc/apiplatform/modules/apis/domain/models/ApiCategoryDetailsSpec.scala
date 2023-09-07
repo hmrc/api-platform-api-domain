@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 import play.api.libs.json._
 
+import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+
 class ApiCategoryDetailsSpec extends BaseJsonFormattersSpec {
-  
+
   "ApiCategoryDetails" should {
     val details = ApiCategoryDetails.toApiCategoryDetails(ApiCategory.BUSINESS_RATES)
-    
+
     "return details for a given category" in {
 
       details.category shouldBe ApiCategory.BUSINESS_RATES
@@ -44,8 +45,8 @@ class ApiCategoryDetailsSpec extends BaseJsonFormattersSpec {
     "write to Json" in {
       Json.toJson[ApiCategoryDetails](details) shouldBe Json.obj(
         "category" -> "BUSINESS_RATES",
-        "name" -> "Business Rates"
+        "name"     -> "Business Rates"
       )
-    }    
+    }
   }
 }

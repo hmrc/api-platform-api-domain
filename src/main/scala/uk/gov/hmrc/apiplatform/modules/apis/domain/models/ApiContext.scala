@@ -21,9 +21,9 @@ import scala.util.Random
 import play.api.libs.json.Json
 
 final case class ApiContext(value: String) extends AnyVal {
-  
+
   def segments(): Array[String] = value.split("/")
-  
+
   def topLevelContext(): ApiContext = ApiContext(segments().head)
 
   override def toString(): String = value

@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
 import java.time.Instant
+
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
 
 case class ApiDefinition(
     serviceName: String,

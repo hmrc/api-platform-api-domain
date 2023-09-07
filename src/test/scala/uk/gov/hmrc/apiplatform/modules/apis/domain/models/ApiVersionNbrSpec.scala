@@ -17,11 +17,13 @@
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import scala.util.Random
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+
 import play.api.libs.json._
 
+import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+
 class ApiVersionNbrSpec extends BaseJsonFormattersSpec {
-  
+
   "ApiVersionNbr" should {
     val example = ApiVersionNbr("1.5")
 
@@ -46,7 +48,7 @@ class ApiVersionNbrSpec extends BaseJsonFormattersSpec {
     "read from Json" in {
       testFromJson[ApiVersionNbr](s""""1.5"""")(example)
     }
-    
+
     "write to Json" in {
       Json.toJson[ApiVersionNbr](example) shouldBe JsString("1.5")
     }

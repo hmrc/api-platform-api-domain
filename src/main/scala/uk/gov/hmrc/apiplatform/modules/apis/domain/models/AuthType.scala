@@ -21,9 +21,9 @@ import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 sealed trait AuthType
 
 object AuthType {
-  case object NONE extends AuthType
+  case object NONE        extends AuthType
   case object APPLICATION extends AuthType
-  case object USER extends AuthType
+  case object USER        extends AuthType
 
   val values = Set(NONE, APPLICATION, USER)
 
@@ -31,7 +31,7 @@ object AuthType {
     AuthType.values.find(_.toString == text.toUpperCase())
   }
 
-  def unsafeApply(text: String): AuthType = 
+  def unsafeApply(text: String): AuthType =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Auth Type"))
 
   implicit val formatAuthType = SealedTraitJsonFormatting.createFormatFor[AuthType]("AuthType", apply)

@@ -18,10 +18,10 @@ package uk.gov.hmrc.apiplatform.modules.common.domain.services
 
 import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 import java.time.temporal.ChronoField._
+import java.time.temporal.ChronoUnit
 import java.time.{Instant, ZoneId}
 
 import play.api.libs.json._
-import java.time.temporal.ChronoUnit
 
 object InstantJsonFormatter {
 

@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 import play.api.libs.json.Json
 
+import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+
 class ApiAccessSpec extends BaseJsonFormattersSpec {
-  
+
   "ApiAccess" should {
     "read public access from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PUBLIC"}""")(ApiAccess.PUBLIC)

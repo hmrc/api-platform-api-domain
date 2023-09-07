@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
-import play.api.libs.json.JsString
-import uk.gov.hmrc.apiplatform.modules.common.utils._
 import org.scalatest.prop.TableDrivenPropertyChecks
+
+import play.api.libs.json.{JsString, Json}
+
+import uk.gov.hmrc.apiplatform.modules.common.utils._
 
 class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
@@ -27,30 +28,30 @@ class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyCheck
     val values =
       Table(
         ("Status", "text"),
-        ( ApiStatus.ALPHA, "alpha"),
-        ( ApiStatus.BETA, "beta"),
-        ( ApiStatus.DEPRECATED, "deprecated"),
-        ( ApiStatus.PROTOTYPED, "prototyped"),
-        ( ApiStatus.PUBLISHED, "published"),
-        ( ApiStatus.RETIRED, "retired"),
-        ( ApiStatus.STABLE, "stable")
+        (ApiStatus.ALPHA, "alpha"),
+        (ApiStatus.BETA, "beta"),
+        (ApiStatus.DEPRECATED, "deprecated"),
+        (ApiStatus.PROTOTYPED, "prototyped"),
+        (ApiStatus.PUBLISHED, "published"),
+        (ApiStatus.RETIRED, "retired"),
+        (ApiStatus.STABLE, "stable")
       )
 
     "convert to string correctly" in {
-      forAll(values) { (s,t) =>
+      forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()
       }
     }
 
     "convert lower case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         ApiStatus.apply(t) shouldBe Some(s)
         ApiStatus.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
-      forAll(values) { (s, t) => 
+      forAll(values) { (s, t) =>
         ApiStatus.apply(t.toUpperCase()) shouldBe Some(s)
         ApiStatus.unsafeApply(t.toUpperCase()) shouldBe s
       }
@@ -60,11 +61,11 @@ class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyCheck
       ApiStatus.apply("rubbish") shouldBe None
       ApiStatus.apply("") shouldBe None
     }
-      
+
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
         ApiStatus.unsafeApply("rubbish")
-      }.getMessage() should include ("API Status")
+      }.getMessage() should include("API Status")
     }
 
     "read from Json" in {
@@ -80,4 +81,3 @@ class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyCheck
     }
   }
 }
-

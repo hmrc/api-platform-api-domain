@@ -23,19 +23,19 @@ sealed trait SubscriptionThrottlingTier {
 }
 
 object SubscriptionThrottlingTier {
-  case object BRONZE_SUBSCRIPTION extends SubscriptionThrottlingTier
-  case object SILVER_SUBSCRIPTION extends SubscriptionThrottlingTier
-  case object GOLD_SUBSCRIPTION extends SubscriptionThrottlingTier
+  case object BRONZE_SUBSCRIPTION   extends SubscriptionThrottlingTier
+  case object SILVER_SUBSCRIPTION   extends SubscriptionThrottlingTier
+  case object GOLD_SUBSCRIPTION     extends SubscriptionThrottlingTier
   case object PLATINUM_SUBSCRIPTION extends SubscriptionThrottlingTier
-  case object RHODIUM_SUBSCRIPTION extends SubscriptionThrottlingTier
+  case object RHODIUM_SUBSCRIPTION  extends SubscriptionThrottlingTier
 
   val values = Set(BRONZE_SUBSCRIPTION, SILVER_SUBSCRIPTION, GOLD_SUBSCRIPTION, PLATINUM_SUBSCRIPTION, RHODIUM_SUBSCRIPTION)
 
   def apply(text: String): Option[SubscriptionThrottlingTier] = {
-    SubscriptionThrottlingTier.values.find(_.toString == text.toUpperCase()+"_SUBSCRIPTION" )
+    SubscriptionThrottlingTier.values.find(_.toString == text.toUpperCase() + "_SUBSCRIPTION")
   }
 
-  def unsafeApply(text: String): SubscriptionThrottlingTier = 
+  def unsafeApply(text: String): SubscriptionThrottlingTier =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Subscription Throttling Tier"))
 
   def description(tier: SubscriptionThrottlingTier): String = tier.description

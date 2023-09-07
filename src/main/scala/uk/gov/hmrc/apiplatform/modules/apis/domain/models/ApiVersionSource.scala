@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 import play.api.libs.json.Format
+
+import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 
 sealed trait ApiVersionSource
 
 object ApiVersionSource {
 
-  case object RAML extends ApiVersionSource
-  case object OAS  extends ApiVersionSource
+  case object RAML    extends ApiVersionSource
+  case object OAS     extends ApiVersionSource
   case object UNKNOWN extends ApiVersionSource
 
   val values = Set(RAML, OAS, UNKNOWN)
@@ -32,10 +33,10 @@ object ApiVersionSource {
   import cats.implicits._
 
   def apply(text: String): Option[ApiVersionSource] = text.toUpperCase match {
-    case "RAML" => ApiVersionSource.RAML.some
-    case "OAS" => ApiVersionSource.OAS.some
+    case "RAML"    => ApiVersionSource.RAML.some
+    case "OAS"     => ApiVersionSource.OAS.some
     case "UNKNOWN" => ApiVersionSource.UNKNOWN.some
-    case _ => None
+    case _         => None
   }
 
   def unsafeApply(text: String): ApiVersionSource = {
@@ -44,4 +45,3 @@ object ApiVersionSource {
 
   implicit val formatApiVersionSource: Format[ApiVersionSource] = SealedTraitJsonFormatting.createFormatFor[ApiVersionSource]("API Version Source", apply)
 }
-
