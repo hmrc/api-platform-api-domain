@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
-
 import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 
-sealed trait ApiCategory
+sealed trait ApiCategory {
+  lazy val displayText: String = {
+    ApiCategory.displayText(this)
+  }
+}
 
 // scalastyle:off cyclomatic.complexity
 object ApiCategory {
@@ -74,6 +76,7 @@ object ApiCategory {
     VAT_MTD,
     OTHER
   )
+  
 
   def apply(text: String): Option[ApiCategory] = {
     ApiCategory.values.find(_.toString == text.toUpperCase)
@@ -83,43 +86,35 @@ object ApiCategory {
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Category"))
 
   implicit val formatApiCategory = SealedTraitJsonFormatting.createFormatFor[ApiCategory]("API Category", apply)
-}
 
-case class ApiCategoryDetails(category: ApiCategory, name: String)
-
-object ApiCategoryDetails {
-
-  def toApiCategoryDetails(category: ApiCategory): ApiCategoryDetails = {
-    import ApiCategory._
+// $COVERAGE-OFF$
+  def displayText(category: ApiCategory): String = {
     category match {
-      case EXAMPLE                      => ApiCategoryDetails(EXAMPLE, "Example")
-      case AGENTS                       => ApiCategoryDetails(AGENTS, "Agents")
-      case BUSINESS_RATES               => ApiCategoryDetails(BUSINESS_RATES, "Business Rates")
-      case CHARITIES                    => ApiCategoryDetails(CHARITIES, "Charities")
-      case CONSTRUCTION_INDUSTRY_SCHEME => ApiCategoryDetails(CONSTRUCTION_INDUSTRY_SCHEME, "Construction Industry Scheme")
-      case CORPORATION_TAX              => ApiCategoryDetails(CORPORATION_TAX, "Corporation Tax")
-      case CUSTOMS                      => ApiCategoryDetails(CUSTOMS, "Customs")
-      case ESTATES                      => ApiCategoryDetails(ESTATES, "Estates")
-      case HELP_TO_SAVE                 => ApiCategoryDetails(HELP_TO_SAVE, "Help to Save")
-      case INCOME_TAX_MTD               => ApiCategoryDetails(INCOME_TAX_MTD, "Income Tax (Making Tax Digital)")
-      case LIFETIME_ISA                 => ApiCategoryDetails(LIFETIME_ISA, "Lifetime ISA")
-      case MARRIAGE_ALLOWANCE           => ApiCategoryDetails(MARRIAGE_ALLOWANCE, "Marriage Allowance")
-      case NATIONAL_INSURANCE           => ApiCategoryDetails(NATIONAL_INSURANCE, "National Insurance")
-      case PAYE                         => ApiCategoryDetails(PAYE, "PAYE")
-      case PENSIONS                     => ApiCategoryDetails(PENSIONS, "Pensions")
-      case PRIVATE_GOVERNMENT           => ApiCategoryDetails(PRIVATE_GOVERNMENT, "Private Government")
-      case RELIEF_AT_SOURCE             => ApiCategoryDetails(RELIEF_AT_SOURCE, "Relief at Source")
-      case SELF_ASSESSMENT              => ApiCategoryDetails(SELF_ASSESSMENT, "Self Assessment")
-      case STAMP_DUTY                   => ApiCategoryDetails(STAMP_DUTY, "Stamp Duty")
-      case TRUSTS                       => ApiCategoryDetails(TRUSTS, "Trusts")
-      case VAT                          => ApiCategoryDetails(VAT, "VAT")
-      case VAT_MTD                      => ApiCategoryDetails(VAT_MTD, "VAT (Making Tax Digital)")
-      case OTHER                        => ApiCategoryDetails(OTHER, "Other")
+      case EXAMPLE                      => "Example"
+      case AGENTS                       => "Agents"
+      case BUSINESS_RATES               => "Business Rates"
+      case CHARITIES                    => "Charities"
+      case CONSTRUCTION_INDUSTRY_SCHEME => "Construction Industry Scheme"
+      case CORPORATION_TAX              => "Corporation Tax"
+      case CUSTOMS                      => "Customs"
+      case ESTATES                      => "Estates"
+      case HELP_TO_SAVE                 => "Help to Save"
+      case INCOME_TAX_MTD               => "Income Tax (Making Tax Digital)"
+      case LIFETIME_ISA                 => "Lifetime ISA"
+      case MARRIAGE_ALLOWANCE           => "Marriage Allowance"
+      case NATIONAL_INSURANCE           => "National Insurance"
+      case PAYE                         => "PAYE"
+      case PENSIONS                     => "Pensions"
+      case PRIVATE_GOVERNMENT           => "Private Government"
+      case RELIEF_AT_SOURCE             => "Relief at Source"
+      case SELF_ASSESSMENT              => "Self Assessment"
+      case STAMP_DUTY                   => "Stamp Duty"
+      case TRUSTS                       => "Trusts"
+      case VAT                          => "VAT"
+      case VAT_MTD                      => "VAT (Making Tax Digital)"
+      case OTHER                        => "Other"
     }
   }
-
-  def allApiCategoryDetails = ApiCategory.values.map(toApiCategoryDetails)
-
-  implicit val formatApiCategoryDetails = Json.format[ApiCategoryDetails]
+// $COVERAGE-ON$
 }
 // scalastyle:on cyclomatic.complexity

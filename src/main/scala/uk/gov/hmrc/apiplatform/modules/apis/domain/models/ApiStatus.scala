@@ -40,11 +40,6 @@ object ApiStatus {
 
   def unsafeApply(text: String): ApiStatus =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Status"))
-
-  def displayText(apiStatus: ApiStatus): String = {
-    val txt = apiStatus.toString
-    txt.take(1).toUpperCase +txt.drop(1)
-  }
   
   implicit val formatApiStatus = SealedTraitJsonFormatting.createFormatFor[ApiStatus]("API Status", apply)
 }

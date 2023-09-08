@@ -27,26 +27,27 @@ class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChe
   "ApiCategorySpec" should {
     val values =
       Table(
-        ("Category", "text"),
-        (ApiCategory.AGENTS, "agents"),
-        (ApiCategory.BUSINESS_RATES, "business_rates")
+        ("Category", "text", "displayText"),
+        (ApiCategory.AGENTS, "agents", "Agents"),
+        (ApiCategory.BUSINESS_RATES, "business_rates", "Business Rates"),
+        (ApiCategory.INCOME_TAX_MTD, "income_tax_mtd", "Income Tax (Making Tax Digital)")
       )
 
     "convert to string correctly" in {
-      forAll(values) { (s, t) =>
+      forAll(values) { (s, t, _) =>
         s.toString() shouldBe t.toUpperCase()
       }
     }
 
     "convert lower case string to case object" in {
-      forAll(values) { (s, t) =>
+      forAll(values) { (s, t, _) =>
         ApiCategory.apply(t) shouldBe Some(s)
         ApiCategory.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
-      forAll(values) { (s, t) =>
+      forAll(values) { (s, t, _) =>
         ApiCategory.apply(t.toUpperCase()) shouldBe Some(s)
         ApiCategory.unsafeApply(t.toUpperCase()) shouldBe s
       }
@@ -63,14 +64,20 @@ class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChe
       }.getMessage() should include("API Category")
     }
 
+    "return display text for a given category" in {
+      forAll(values) { (s, _, expectedDisplayText) =>
+        s.displayText shouldBe expectedDisplayText
+      }
+    }
+
     "read from Json" in {
-      forAll(values) { (s, t) =>
+      forAll(values) { (s, t, _) =>
         testFromJson[ApiCategory](s""""$t"""")(s)
       }
     }
 
     "write to Json" in {
-      forAll(values) { (s, t) =>
+      forAll(values) { (s, t, _) =>
         Json.toJson[ApiCategory](s) shouldBe JsString(t.toUpperCase())
       }
     }
