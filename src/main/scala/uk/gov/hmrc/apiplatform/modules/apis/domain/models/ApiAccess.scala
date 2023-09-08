@@ -22,6 +22,7 @@ import uk.gov.hmrc.play.json.Union
 
 sealed trait ApiAccess {
   lazy val displayText: String = ApiAccess.displayText(this)
+  lazy val accessType: ApiAccessType = ApiAccess.accessType(this)
 }
 
 object ApiAccess {
@@ -46,4 +47,9 @@ object ApiAccess {
     .and[PUBLIC.type]("PUBLIC")
     .and[Private]("PRIVATE")
     .format
+
+  def accessType(apiAccess: ApiAccess) = apiAccess match {
+    case PUBLIC => ApiAccessType.PUBLIC
+    case Private(_,_) => ApiAccessType.PRIVATE
+  }
 }

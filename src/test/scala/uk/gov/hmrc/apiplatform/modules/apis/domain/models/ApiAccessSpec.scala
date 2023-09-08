@@ -19,6 +19,7 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import play.api.libs.json.Json
 
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+import play.api.libs.json.JsArray
 
 class ApiAccessSpec extends BaseJsonFormattersSpec {
 
@@ -31,6 +32,10 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
       ApiAccess.Private(Nil, None).displayText shouldBe "Private"
     }
 
+    "provide access type" in {
+      ApiAccess.PUBLIC.accessType shouldBe ApiAccessType.PUBLIC
+      ApiAccess.Private(Nil,None).accessType shouldBe ApiAccessType.PRIVATE
+    }
     "read public access from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PUBLIC"}""")(ApiAccess.PUBLIC)
     }
@@ -45,6 +50,12 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
 
     "write to Json" in {
       Json.toJson[ApiAccess](ApiAccess.PUBLIC) shouldBe Json.obj("type" -> "PUBLIC")
+      Json.toJson[ApiAccess](ApiAccess.Private(Nil, None)) shouldBe Json.obj(("type" -> "PRIVATE"), ("whitelistedApplicationIds" -> JsArray()))
+      Json.toJson[ApiAccess](ApiAccess.Private(Nil, Some(false))) shouldBe Json.obj(
+        ("type" -> "PRIVATE"),
+        ("whitelistedApplicationIds" -> JsArray()),
+        ("isTrial" -> false)
+      )
     }
   }
 }
