@@ -18,8 +18,8 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import play.api.libs.json.Json
 
-final case class ApiIdentifier(context: ApiContext, versionNbr: ApiVersionNbr) {
-  def asText(separator: String): String = s"${context.value}$separator${versionNbr.value}"
+final case class ApiIdentifier(context: ApiContext, version: ApiVersionNbr) {
+  def asText(separator: String): String = s"${context.value}$separator${version.value}"
 }
 
 object ApiIdentifier {
@@ -34,8 +34,8 @@ object ApiIdentifier {
   implicit val ordering: Ordering[ApiIdentifier] = new Ordering[ApiIdentifier] {
 
     override def compare(x: ApiIdentifier, y: ApiIdentifier): Int = Ordering.Tuple2[ApiContext, ApiVersionNbr].compare(
-      (x.context, x.versionNbr),
-      (y.context, y.versionNbr)
+      (x.context, x.version),
+      (y.context, y.version)
     )
   }
 }
