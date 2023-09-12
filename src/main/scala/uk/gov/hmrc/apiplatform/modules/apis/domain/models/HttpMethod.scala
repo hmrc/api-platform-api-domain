@@ -29,7 +29,7 @@ object HttpMethod {
   case object OPTIONS extends HttpMethod
   case object HEAD    extends HttpMethod
 
-  final val values = Set(GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD)
+  final val values = Set[HttpMethod](GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD)
 
   def apply(text: String): Option[HttpMethod] = {
     HttpMethod.values.find(_.toString == text.toUpperCase)

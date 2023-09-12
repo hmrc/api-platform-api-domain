@@ -24,7 +24,7 @@ sealed trait ApiAccessType {
 }
 
 object ApiAccessType {
-  val values = Set(PRIVATE, PUBLIC)
+  val values = Set[ApiAccessType](PRIVATE, PUBLIC)
   case object PRIVATE extends ApiAccessType
   case object PUBLIC  extends ApiAccessType
 

@@ -51,7 +51,7 @@ object ApiCategory {
   case object VAT_MTD                      extends ApiCategory
   case object OTHER                        extends ApiCategory
 
-  final val values = Set(
+  final val values = Set[ApiCategory](
     EXAMPLE,
     AGENTS,
     BUSINESS_RATES,
@@ -76,7 +76,6 @@ object ApiCategory {
     VAT_MTD,
     OTHER
   )
-  
 
   def apply(text: String): Option[ApiCategory] = {
     ApiCategory.values.find(_.toString == text.toUpperCase)

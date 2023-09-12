@@ -29,7 +29,7 @@ object SubscriptionThrottlingTier {
   case object PLATINUM_SUBSCRIPTION extends SubscriptionThrottlingTier
   case object RHODIUM_SUBSCRIPTION  extends SubscriptionThrottlingTier
 
-  val values = Set(BRONZE_SUBSCRIPTION, SILVER_SUBSCRIPTION, GOLD_SUBSCRIPTION, PLATINUM_SUBSCRIPTION, RHODIUM_SUBSCRIPTION)
+  val values = Set[SubscriptionThrottlingTier](BRONZE_SUBSCRIPTION, SILVER_SUBSCRIPTION, GOLD_SUBSCRIPTION, PLATINUM_SUBSCRIPTION, RHODIUM_SUBSCRIPTION)
 
   def apply(text: String): Option[SubscriptionThrottlingTier] = {
     SubscriptionThrottlingTier.values.find(_.toString == text.toUpperCase() + "_SUBSCRIPTION")

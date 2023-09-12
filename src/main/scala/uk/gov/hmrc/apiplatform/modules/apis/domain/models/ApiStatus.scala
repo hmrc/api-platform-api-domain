@@ -21,7 +21,7 @@ import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
 sealed trait ApiStatus {
   lazy val displayText: String = {
     val txt = this.toString
-    txt.take(1).toUpperCase +txt.drop(1).toLowerCase()
+    txt.take(1).toUpperCase + txt.drop(1).toLowerCase()
   }
 }
 
@@ -32,7 +32,7 @@ object ApiStatus {
   case object DEPRECATED extends ApiStatus
   case object RETIRED    extends ApiStatus
 
-  final val values = Set(ALPHA, BETA, STABLE, DEPRECATED, RETIRED)
+  final val values = Set[ApiStatus](ALPHA, BETA, STABLE, DEPRECATED, RETIRED)
 
   def apply(text: String): Option[ApiStatus] = {
     ApiStatus.values.find(_.toString == text.toUpperCase)

@@ -28,7 +28,7 @@ object ApiVersionSource {
   case object OAS     extends ApiVersionSource
   case object UNKNOWN extends ApiVersionSource
 
-  val values = Set(RAML, OAS, UNKNOWN)
+  val values = Set[ApiVersionSource](RAML, OAS, UNKNOWN)
 
   import cats.implicits._
 

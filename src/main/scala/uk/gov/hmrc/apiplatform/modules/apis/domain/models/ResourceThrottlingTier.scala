@@ -25,7 +25,7 @@ sealed trait ResourceThrottlingTier
 object ResourceThrottlingTier {
   case object UNLIMITED extends ResourceThrottlingTier
 
-  val values = Set(UNLIMITED)
+  val values = Set[ResourceThrottlingTier](UNLIMITED)
 
   def apply(text: String): Option[ResourceThrottlingTier] = {
     ResourceThrottlingTier.values.find(_.toString == text.toUpperCase)

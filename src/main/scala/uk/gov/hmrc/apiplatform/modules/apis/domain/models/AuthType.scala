@@ -25,7 +25,7 @@ object AuthType {
   case object APPLICATION extends AuthType
   case object USER        extends AuthType
 
-  val values = Set(NONE, APPLICATION, USER)
+  val values = Set[AuthType](NONE, APPLICATION, USER)
 
   def apply(text: String): Option[AuthType] = {
     AuthType.values.find(_.toString == text.toUpperCase())
