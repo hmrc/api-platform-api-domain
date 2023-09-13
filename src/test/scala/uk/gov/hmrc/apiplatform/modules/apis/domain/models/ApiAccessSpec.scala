@@ -29,23 +29,25 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
       ApiAccess.PUBLIC.displayText shouldBe "Public"
       ApiAccess.Private(Nil, true).displayText shouldBe "Private"
       ApiAccess.Private(Nil, false).displayText shouldBe "Private"
-
     }
 
     "provide access type" in {
       ApiAccess.PUBLIC.accessType shouldBe ApiAccessType.PUBLIC
       ApiAccess.Private(Nil, false).accessType shouldBe ApiAccessType.PRIVATE
     }
+
     "read public access from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PUBLIC"}""")(ApiAccess.PUBLIC)
     }
 
-    "read private access from Json" in {
-      testFromJson[ApiAccess]("""{ "type": "PRIVATE"}""")(ApiAccess.Private(List(), false))
-    }
-
     "read private access with fields from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PRIVATE", "whitelistedApplicationIds": ["123"], "isTrial": true}""")(ApiAccess.Private(List("123"), true))
+    }
+
+    "read private access is not tolerant without any fields" in {
+      intercept[RuntimeException] {
+        testFromJson[ApiAccess]("""{ "type": "PRIVATE"}""")(ApiAccess.Private(List(), false))
+      }
     }
 
     "write to Json" in {

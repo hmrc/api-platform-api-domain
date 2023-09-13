@@ -21,27 +21,15 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 case class ApiVersion(
     version: ApiVersionNbr,
     status: ApiStatus,
-    access: Option[ApiAccess] = Some(ApiAccess.PUBLIC),
+    access: ApiAccess = ApiAccess.PUBLIC,
     endpoints: List[Endpoint],
-    endpointsEnabled: Option[Boolean] = None,
+    endpointsEnabled: Boolean = true,
     awsRequestId: Option[String] = None,
     versionSource: ApiVersionSource = ApiVersionSource.UNKNOWN
   )
 
 object ApiVersion {
   import play.api.libs.json._
-  import play.api.libs.functional.syntax._ // Combinator syntax
 
-  val apiVersionReads: Reads[ApiVersion] = (
-    (JsPath \ "version").read[ApiVersionNbr] and
-      (JsPath \ "status").read[ApiStatus] and
-      (JsPath \ "access").readNullable[ApiAccess] and
-      (JsPath \ "endpoints").read[List[Endpoint]] and
-      (JsPath \ "endpointsEnabled").readNullable[Boolean] and
-      (JsPath \ "awsRequestId").readNullable[String] and
-      ((JsPath \ "versionSource").read[ApiVersionSource] or Reads.pure[ApiVersionSource](ApiVersionSource.UNKNOWN))
-  )(uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiVersion.apply _)
-
-  val apiVersionWrites: OWrites[ApiVersion] = Json.writes[ApiVersion]
-  implicit val formatApiVersion             = OFormat[ApiVersion](apiVersionReads, apiVersionWrites)
+  implicit val formatApiVersion             = Json.format[ApiVersion]
 }

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
 
@@ -34,22 +33,16 @@ object ApiAccess {
     case Private(_,_) => "Private"
   }
 
+  def accessType(apiAccess: ApiAccess) = apiAccess match {
+    case PUBLIC => ApiAccessType.PUBLIC
+    case Private(_,_) => ApiAccessType.PRIVATE
+  }
+
   private implicit val formatPublicApiAccess = Json.format[PUBLIC.type]
-
-  private implicit val readsPrivateApiAccess: Reads[Private] = (
-    ((JsPath \ "whitelistedApplicationIds").read[List[String]] or Reads.pure(List.empty[String])) and
-    ((JsPath \ "isTrial").read[Boolean] or Reads.pure(false))
-  )(Private.apply _)
-
-  private implicit val writesPrivateApiAccess: OWrites[Private] = Json.writes[Private]
+  private implicit val formatPrivateApiAccess = Json.format[Private]
 
   implicit val formatApiAccess: Format[ApiAccess] = Union.from[ApiAccess]("type")
     .and[PUBLIC.type]("PUBLIC")
     .and[Private]("PRIVATE")
     .format
-
-  def accessType(apiAccess: ApiAccess) = apiAccess match {
-    case PUBLIC => ApiAccessType.PUBLIC
-    case Private(_,_) => ApiAccessType.PRIVATE
-  }
 }

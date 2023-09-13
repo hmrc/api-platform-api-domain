@@ -29,12 +29,29 @@ case class ApiDefinition(
     versions: List[ApiVersion],
     requiresTrust: Boolean = false,
     isTestSupport: Boolean = false,
-    lastPublishedAt: Option[Instant] = None,
-    categories: List[ApiCategory] = List.empty
+    lastPublishedAt: Option[Instant] = None,        // Only None in very old records from APIs that have not been published since field was added
+    categories: List[ApiCategory]
   )
 
 object ApiDefinition {
   import play.api.libs.json._
   import InstantJsonFormatter.WithTimeZone._
-  implicit val formatAPIDefinition: OFormat[ApiDefinition] = Json.format[ApiDefinition]
+  import play.api.libs.functional.syntax._ // Combinator syntax
+
+  val apiDefinitionReads: Reads[ApiDefinition] = (
+    (JsPath \ "serviceName").read[String] and
+      (JsPath \ "serviceBaseUrl").read[String] and
+      (JsPath \ "name").read[String] and
+      (JsPath \ "description").read[String] and
+      (JsPath \ "context").read[ApiContext] and
+      (JsPath \ "versions").read[List[ApiVersion]] and
+      ((JsPath \ "requiresTrust").read[Boolean] or Reads.pure(false)) and
+      ((JsPath \ "isTestSupport").read[Boolean] or Reads.pure(false)) and
+      (JsPath \ "lastPublishedAt").readNullable[Instant] and
+      (JsPath \ "categories").read[List[ApiCategory]]
+    )(ApiDefinition.apply _)
+
+  val apiDefinitionWrites: OWrites[ApiDefinition] = Json.writes[ApiDefinition]
+
+  implicit val apiDefinitionFormat: OFormat[ApiDefinition] = OFormat[ApiDefinition](apiDefinitionReads, apiDefinitionWrites)
 }

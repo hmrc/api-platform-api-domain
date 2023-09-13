@@ -32,6 +32,11 @@ class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyC
         (ApiAccessType.PRIVATE, "private")
       )
 
+    "displayText correctly" in {
+      ApiAccessType.PUBLIC.displayText shouldBe "Public"
+      ApiAccessType.PRIVATE.displayText shouldBe "Private"
+    }
+    
     "convert to string correctly" in {
       forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()

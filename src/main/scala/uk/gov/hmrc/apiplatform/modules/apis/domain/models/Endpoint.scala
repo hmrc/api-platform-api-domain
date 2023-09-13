@@ -21,9 +21,9 @@ case class Endpoint(
     endpointName: String,
     method: HttpMethod,
     authType: AuthType,
-    throttlingTier: ResourceThrottlingTier,
+    throttlingTier: ResourceThrottlingTier = ResourceThrottlingTier.UNLIMITED,
     scope: Option[String] = None,
-    queryParameters: Option[List[QueryParameter]] = None
+    queryParameters: List[QueryParameter] = List.empty
   )
 
 object Endpoint {
