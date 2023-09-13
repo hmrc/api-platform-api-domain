@@ -27,7 +27,7 @@ sealed trait ApiAccess {
 
 object ApiAccess {
   case object PUBLIC                                                                           extends ApiAccess
-  case class Private(whitelistedApplicationIds: List[String], isTrial: Option[Boolean] = None) extends ApiAccess
+  case class Private(whitelistedApplicationIds: List[String], isTrial: Boolean = false)        extends ApiAccess
 
   def displayText(apiAccess: ApiAccess): String = apiAccess match {
     case PUBLIC => "Public"
@@ -38,7 +38,7 @@ object ApiAccess {
 
   private implicit val readsPrivateApiAccess: Reads[Private] = (
     ((JsPath \ "whitelistedApplicationIds").read[List[String]] or Reads.pure(List.empty[String])) and
-      (JsPath \ "isTrial").readNullable[Boolean]
+    ((JsPath \ "isTrial").read[Boolean] or Reads.pure(false))
   )(Private.apply _)
 
   private implicit val writesPrivateApiAccess: OWrites[Private] = Json.writes[Private]

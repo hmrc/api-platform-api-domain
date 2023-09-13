@@ -27,10 +27,10 @@ case class ApiDefinition(
     description: String,
     context: ApiContext,
     versions: List[ApiVersion],
-    requiresTrust: Option[Boolean],
-    isTestSupport: Option[Boolean] = None,
+    requiresTrust: Boolean = false,
+    isTestSupport: Boolean = false,
     lastPublishedAt: Option[Instant] = None,
-    categories: Option[List[ApiCategory]] = None
+    categories: List[ApiCategory] = List.empty
   )
 
 object ApiDefinition {

@@ -24,7 +24,7 @@ import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 class ApiDefinitionSpec extends HmrcSpec {
 
   "ApiDefinition" should {
-    def anApiDefinition(accessType: String = "PUBLIC", whitelistedApplicationIds: Option[String] = None, isTrial: Option[Boolean] = None, categories: Option[String] = None) = {
+    def anApiDefinition(accessType: String = "PUBLIC", whitelistedApplicationIds: Option[String] = None, isTrial: Boolean = false, requiresTrust: Boolean = false, isTestSupport: Boolean = false, categories: String = "[]") = {
 
       val body =
         s"""{
@@ -33,15 +33,17 @@ class ApiDefinitionSpec extends HmrcSpec {
            |   "description":"My Calendar API",
            |   "serviceBaseUrl":"http://calendar",
            |   "context":"calendar",
-           |   ${categories.fold("")(c => s""" "categories": $c,""")}
+           |   "categories": $categories,
+           |   "requiresTrust": $requiresTrust,
+           |   "isTestSupport": $isTestSupport,
            |   "versions":[
            |      {
            |         "version":"1.0",
            |         "status":"STABLE",
            |         "access": {
-           |           "type": "$accessType"
-           |            ${whitelistedApplicationIds.fold("")(w => s""" ,"whitelistedApplicationIds": $w""")}
-           |            ${isTrial.fold("")(t => s""","isTrial": $t""")}
+           |           "type": "$accessType",
+           |            ${whitelistedApplicationIds.fold("")(w => s""" "whitelistedApplicationIds": $w,""")}
+           |            "isTrial": $isTrial
            |         },
            |         "endpoints":[
            |            {
@@ -84,10 +86,12 @@ class ApiDefinitionSpec extends HmrcSpec {
       val apiDefinition = anApiDefinition(
         accessType = "PRIVATE",
         whitelistedApplicationIds = Some("[]"),
-        isTrial = Some(true)
+        isTrial = true,
+        requiresTrust = true
       )
 
-      apiDefinition.versions.head.access shouldBe Some(ApiAccess.Private(Nil, Some(true)))
+      apiDefinition.requiresTrust shouldBe true
+      apiDefinition.versions.head.access shouldBe Some(ApiAccess.Private(Nil, true))
     }
 
     "read from JSON when the API access type is PRIVATE and there is a non-empty whitelist" in {
@@ -103,20 +107,20 @@ class ApiDefinitionSpec extends HmrcSpec {
     }
 
     "read from JSON when the API categories are defined but empty" in {
-      val apiDefinition = anApiDefinition(categories = Some("[]"))
+      val apiDefinition = anApiDefinition(categories = "[]")
 
-      apiDefinition.categories shouldBe Some(Nil)
+      apiDefinition.categories shouldBe Nil
     }
 
     "read from JSON when the API categories are defined with correct values" in {
-      val apiDefinition = anApiDefinition(categories = Some("[\"CUSTOMS\", \"VAT\"]"))
+      val apiDefinition = anApiDefinition(categories = "[\"CUSTOMS\", \"VAT\"]")
 
-      apiDefinition.categories shouldBe Some(Seq(ApiCategory.CUSTOMS, ApiCategory.VAT))
+      apiDefinition.categories shouldBe Seq(ApiCategory.CUSTOMS, ApiCategory.VAT)
     }
 
     "fail to read from JSON when the API categories are defined with incorrect values" in {
       intercept[RuntimeException] {
-        anApiDefinition(categories = Some("[\"NOT_A_VALID_CATEGORY\"]"))
+        anApiDefinition(categories = "[\"NOT_A_VALID_CATEGORY\"]")
       }
     }
   }

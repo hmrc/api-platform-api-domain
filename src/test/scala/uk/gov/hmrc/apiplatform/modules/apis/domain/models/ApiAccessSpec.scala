@@ -27,31 +27,30 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
     
     "display text correctly" in {
       ApiAccess.PUBLIC.displayText shouldBe "Public"
-      ApiAccess.Private(Nil, Some(true)).displayText shouldBe "Private"
-      ApiAccess.Private(Nil, Some(false)).displayText shouldBe "Private"
-      ApiAccess.Private(Nil, None).displayText shouldBe "Private"
+      ApiAccess.Private(Nil, true).displayText shouldBe "Private"
+      ApiAccess.Private(Nil, false).displayText shouldBe "Private"
+
     }
 
     "provide access type" in {
       ApiAccess.PUBLIC.accessType shouldBe ApiAccessType.PUBLIC
-      ApiAccess.Private(Nil,None).accessType shouldBe ApiAccessType.PRIVATE
+      ApiAccess.Private(Nil, false).accessType shouldBe ApiAccessType.PRIVATE
     }
     "read public access from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PUBLIC"}""")(ApiAccess.PUBLIC)
     }
 
     "read private access from Json" in {
-      testFromJson[ApiAccess]("""{ "type": "PRIVATE"}""")(ApiAccess.Private(List(), None))
+      testFromJson[ApiAccess]("""{ "type": "PRIVATE"}""")(ApiAccess.Private(List(), false))
     }
 
     "read private access with fields from Json" in {
-      testFromJson[ApiAccess]("""{ "type": "PRIVATE", "whitelistedApplicationIds": ["123"], "isTrial": true}""")(ApiAccess.Private(List("123"), Some(true)))
+      testFromJson[ApiAccess]("""{ "type": "PRIVATE", "whitelistedApplicationIds": ["123"], "isTrial": true}""")(ApiAccess.Private(List("123"), true))
     }
 
     "write to Json" in {
       Json.toJson[ApiAccess](ApiAccess.PUBLIC) shouldBe Json.obj("type" -> "PUBLIC")
-      Json.toJson[ApiAccess](ApiAccess.Private(Nil, None)) shouldBe Json.obj(("type" -> "PRIVATE"), ("whitelistedApplicationIds" -> JsArray()))
-      Json.toJson[ApiAccess](ApiAccess.Private(Nil, Some(false))) shouldBe Json.obj(
+      Json.toJson[ApiAccess](ApiAccess.Private(Nil, false)) shouldBe Json.obj(
         ("type" -> "PRIVATE"),
         ("whitelistedApplicationIds" -> JsArray()),
         ("isTrial" -> false)

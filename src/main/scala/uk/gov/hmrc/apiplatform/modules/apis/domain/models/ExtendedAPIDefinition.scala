@@ -31,6 +31,7 @@ case class ExtendedAPIDefinition(
     requiresTrust: Boolean,
     isTestSupport: Boolean,
     versions: List[ExtendedAPIVersion],
+    categories: List[ApiCategory] = List.empty,
     lastPublishedAt: Option[Instant]
   )
 
