@@ -17,6 +17,7 @@
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.common.domain.models._
 
 case class ApiVersion(
     version: ApiVersionNbr,
