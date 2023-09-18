@@ -19,8 +19,8 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import java.time.Instant
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
-import uk.gov.hmrc.apiplatform.common.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.services.InstantJsonFormatter
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 
 // Not used in Api Definition
 case class ExtendedAPIDefinition(
