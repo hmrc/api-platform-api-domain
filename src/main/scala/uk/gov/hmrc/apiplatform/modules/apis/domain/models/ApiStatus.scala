@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
 sealed trait ApiStatus {
   lazy val displayText: String = {
@@ -40,6 +40,6 @@ object ApiStatus {
 
   def unsafeApply(text: String): ApiStatus =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Status"))
-  
+
   implicit val formatApiStatus = SealedTraitJsonFormatting.createFormatFor[ApiStatus]("API Status", apply)
 }

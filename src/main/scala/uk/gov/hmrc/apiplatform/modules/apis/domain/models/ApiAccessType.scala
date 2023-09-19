@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.SealedTraitJsonFormatting
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 import play.api.libs.json.Format
 
 sealed trait ApiAccessType {
@@ -40,5 +40,5 @@ object ApiAccessType {
   def unsafeApply(text: String): ApiAccessType =
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
 
-  implicit val formatApiAccess: Format[ApiAccessType] =SealedTraitJsonFormatting.createFormatFor[ApiAccessType]("API Access Type", apply)
+  implicit val formatApiAccess: Format[ApiAccessType] = SealedTraitJsonFormatting.createFormatFor[ApiAccessType]("API Access Type", apply)
 }
