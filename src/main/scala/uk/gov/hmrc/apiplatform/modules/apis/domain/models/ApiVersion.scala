@@ -35,25 +35,25 @@ object ApiVersion {
 
   private val readsApiVersion: Reads[ApiVersion] = (
     (
-      (JsPath \ "version").read[ApiVersionNbr] or           // Existing field name
-        (JsPath \ "versionNbr").read[ApiVersionNbr]         // TODO - Future aim to be this field name
+      (JsPath \ "version").read[ApiVersionNbr] or   // Existing field name
+        (JsPath \ "versionNbr").read[ApiVersionNbr] // TODO - Future aim to be this field name
     ) and
-    (JsPath \ "status").read[ApiStatus] and
-    (JsPath \ "access").read[ApiAccess] and
-    (JsPath \ "endpoints").read[List[Endpoint]] and
-    (JsPath \ "endpointsEnabled").read[Boolean] and
-    (JsPath \ "awsRequestId").readNullable[String] and
-    (JsPath \ "versionSource").read[ApiVersionSource]
+      (JsPath \ "status").read[ApiStatus] and
+      (JsPath \ "access").read[ApiAccess] and
+      (JsPath \ "endpoints").read[List[Endpoint]] and
+      (JsPath \ "endpointsEnabled").read[Boolean] and
+      (JsPath \ "awsRequestId").readNullable[String] and
+      (JsPath \ "versionSource").read[ApiVersionSource]
   )(ApiVersion.apply _)
 
   private val writesApiVersion: OWrites[ApiVersion] = (
-    (JsPath \ "version").write[ApiVersionNbr] and           // TODO - change to versionNbr once all readers are safe
-    (JsPath \ "status").write[ApiStatus] and
-    (JsPath \ "access").write[ApiAccess] and
-    (JsPath \ "endpoints").write[List[Endpoint]] and
-    (JsPath \ "endpointsEnabled").write[Boolean] and
-    (JsPath \ "awsRequestId").writeNullable[String] and
-    (JsPath \ "versionSource").write[ApiVersionSource]
+    (JsPath \ "version").write[ApiVersionNbr] and // TODO - change to versionNbr once all readers are safe
+      (JsPath \ "status").write[ApiStatus] and
+      (JsPath \ "access").write[ApiAccess] and
+      (JsPath \ "endpoints").write[List[Endpoint]] and
+      (JsPath \ "endpointsEnabled").write[Boolean] and
+      (JsPath \ "awsRequestId").writeNullable[String] and
+      (JsPath \ "versionSource").write[ApiVersionSource]
   )(unlift(ApiVersion.unapply))
 
   implicit val formatApiVersion: OFormat[ApiVersion] = OFormat(readsApiVersion, writesApiVersion)

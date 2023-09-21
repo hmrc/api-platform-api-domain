@@ -18,8 +18,8 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import play.api.libs.json.{JsArray, Json}
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApplicationId
+import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 
 class ApiAccessSpec extends BaseJsonFormattersSpec {
 

@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import play.api.libs.json.Json
+
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
+import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 
 class ApiVersionSpec extends BaseJsonFormattersSpec {
 
-  val example = ApiVersion(
+  val example      = ApiVersion(
     versionNbr = ApiVersionNbr("1.0"),
     status = ApiStatus.STABLE,
     access = ApiAccess.PUBLIC,
@@ -39,8 +40,9 @@ class ApiVersionSpec extends BaseJsonFormattersSpec {
     awsRequestId = None,
     versionSource = ApiVersionSource.OAS
   )
-  val expectedJson = """{"version":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
 
+  val expectedJson =
+    """{"version":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
 
   "ApiVersion" should {
     "read from Json" in {
@@ -48,7 +50,8 @@ class ApiVersionSpec extends BaseJsonFormattersSpec {
     }
 
     "read from Json with new field name" in {
-      val newExpectedJson = """{"versionNbr":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
+      val newExpectedJson =
+        """{"versionNbr":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
       testFromJson(newExpectedJson)(example)
     }
 

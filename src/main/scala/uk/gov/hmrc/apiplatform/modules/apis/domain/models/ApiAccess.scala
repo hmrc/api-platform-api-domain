@@ -19,23 +19,23 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApplicationId
 
 sealed trait ApiAccess {
-  lazy val displayText: String = ApiAccess.displayText(this)
+  lazy val displayText: String       = ApiAccess.displayText(this)
   lazy val accessType: ApiAccessType = ApiAccess.accessType(this)
 }
 
 object ApiAccess {
-  case object PUBLIC                                                                           extends ApiAccess
+  case object PUBLIC extends ApiAccess
 
   case class Private(allowlistedApplicationIds: List[ApplicationId], isTrial: Boolean = false) extends ApiAccess
 
   def displayText(apiAccess: ApiAccess): String = apiAccess match {
-    case PUBLIC => "Public"
-    case Private(_,_) => "Private"
+    case PUBLIC        => "Public"
+    case Private(_, _) => "Private"
   }
 
   def accessType(apiAccess: ApiAccess) = apiAccess match {
-    case PUBLIC => ApiAccessType.PUBLIC
-    case Private(_,_) => ApiAccessType.PRIVATE
+    case PUBLIC        => ApiAccessType.PUBLIC
+    case Private(_, _) => ApiAccessType.PRIVATE
   }
 
   import play.api.libs.json._
@@ -44,18 +44,18 @@ object ApiAccess {
 
   private val readsPrivateApiAccess: Reads[Private] = (
     (
-      (JsPath \ "whitelistedApplicationIds").read[List[ApplicationId]] or       // Existing field name
-        (JsPath \ "allowlistedApplicationIds").read[List[ApplicationId]]        // TODO - Future aim to be this field name
+      (JsPath \ "whitelistedApplicationIds").read[List[ApplicationId]] or // Existing field name
+        (JsPath \ "allowlistedApplicationIds").read[List[ApplicationId]]  // TODO - Future aim to be this field name
     ) and
-    (JsPath \ "isTrial").read[Boolean]
+      (JsPath \ "isTrial").read[Boolean]
   )(Private.apply _)
 
   private val writesPrivateApiAccess: OWrites[Private] = (
-    (JsPath \ "whitelistedApplicationIds").write[List[ApplicationId]] and       // TODO - change to allowlisted once all readers are safe
+    (JsPath \ "whitelistedApplicationIds").write[List[ApplicationId]] and // TODO - change to allowlisted once all readers are safe
       (JsPath \ "isTrial").write[Boolean]
   )(unlift(Private.unapply))
 
-  private implicit val formatPublicApiAccess = Json.format[PUBLIC.type]
+  private implicit val formatPublicApiAccess                    = Json.format[PUBLIC.type]
   private implicit val formatPrivateApiAccess: OFormat[Private] = OFormat[Private](readsPrivateApiAccess, writesPrivateApiAccess)
 
   implicit val formatApiAccess: Format[ApiAccess] = Union.from[ApiAccess]("type")
