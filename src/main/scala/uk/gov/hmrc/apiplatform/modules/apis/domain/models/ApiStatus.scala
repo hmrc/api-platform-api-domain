@@ -19,6 +19,7 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
 sealed trait ApiStatus {
+
   lazy val displayText: String = {
     val txt = this.toString
     txt.take(1).toUpperCase + txt.drop(1).toLowerCase()

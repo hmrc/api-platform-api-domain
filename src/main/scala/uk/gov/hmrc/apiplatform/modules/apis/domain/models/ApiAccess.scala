@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json._
-import uk.gov.hmrc.play.json.Union
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApplicationId
 
 sealed trait ApiAccess {
   lazy val displayText: String = ApiAccess.displayText(this)
@@ -26,7 +25,8 @@ sealed trait ApiAccess {
 
 object ApiAccess {
   case object PUBLIC                                                                           extends ApiAccess
-  case class Private(whitelistedApplicationIds: List[String], isTrial: Boolean = false)        extends ApiAccess
+
+  case class Private(allowlistedApplicationIds: List[ApplicationId], isTrial: Boolean = false) extends ApiAccess
 
   def displayText(apiAccess: ApiAccess): String = apiAccess match {
     case PUBLIC => "Public"
@@ -38,8 +38,25 @@ object ApiAccess {
     case Private(_,_) => ApiAccessType.PRIVATE
   }
 
+  import play.api.libs.json._
+  import play.api.libs.functional.syntax._
+  import uk.gov.hmrc.play.json.Union
+
+  private val readsPrivateApiAccess: Reads[Private] = (
+    (
+      (JsPath \ "whitelistedApplicationIds").read[List[ApplicationId]] or       // Existing field name
+        (JsPath \ "allowlistedApplicationIds").read[List[ApplicationId]]        // TODO - Future aim to be this field name
+    ) and
+    (JsPath \ "isTrial").read[Boolean]
+  )(Private.apply _)
+
+  private val writesPrivateApiAccess: OWrites[Private] = (
+    (JsPath \ "whitelistedApplicationIds").write[List[ApplicationId]] and       // TODO - change to allowlisted once all readers are safe
+      (JsPath \ "isTrial").write[Boolean]
+  )(unlift(Private.unapply))
+
   private implicit val formatPublicApiAccess = Json.format[PUBLIC.type]
-  private implicit val formatPrivateApiAccess = Json.format[Private]
+  private implicit val formatPrivateApiAccess: OFormat[Private] = OFormat[Private](readsPrivateApiAccess, writesPrivateApiAccess)
 
   implicit val formatApiAccess: Format[ApiAccess] = Union.from[ApiAccess]("type")
     .and[PUBLIC.type]("PUBLIC")

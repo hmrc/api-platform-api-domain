@@ -16,15 +16,17 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, Json}
 
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
-import play.api.libs.json.JsArray
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApplicationId
 
 class ApiAccessSpec extends BaseJsonFormattersSpec {
 
+  val applicationId = ApplicationId.random
+
   "ApiAccess" should {
-    
+
     "display text correctly" in {
       ApiAccess.PUBLIC.displayText shouldBe "Public"
       ApiAccess.Private(Nil, true).displayText shouldBe "Private"
@@ -41,7 +43,11 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
     }
 
     "read private access with fields from Json" in {
-      testFromJson[ApiAccess]("""{ "type": "PRIVATE", "whitelistedApplicationIds": ["123"], "isTrial": true}""")(ApiAccess.Private(List("123"), true))
+      testFromJson[ApiAccess](s"""{ "type": "PRIVATE", "whitelistedApplicationIds": ["${applicationId}"], "isTrial": true}""")(ApiAccess.Private(List(applicationId), true))
+    }
+
+    "read private access with fields from Json with planned field name" in {
+      testFromJson[ApiAccess](s"""{ "type": "PRIVATE", "allowlistedApplicationIds": ["${applicationId}"], "isTrial": true}""")(ApiAccess.Private(List(applicationId), true))
     }
 
     "read private access is not tolerant without any fields" in {
@@ -53,9 +59,9 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
     "write to Json" in {
       Json.toJson[ApiAccess](ApiAccess.PUBLIC) shouldBe Json.obj("type" -> "PUBLIC")
       Json.toJson[ApiAccess](ApiAccess.Private(Nil, false)) shouldBe Json.obj(
-        ("type" -> "PRIVATE"),
+        ("type"                      -> "PRIVATE"),
         ("whitelistedApplicationIds" -> JsArray()),
-        ("isTrial" -> false)
+        ("isTrial"                   -> false)
       )
     }
   }

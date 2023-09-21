@@ -19,6 +19,7 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
 sealed trait ApiCategory {
+
   lazy val displayText: String = {
     ApiCategory.displayText(this)
   }

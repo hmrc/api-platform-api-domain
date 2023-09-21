@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Json
+import org.scalatest.prop.TableDrivenPropertyChecks
+
+import play.api.libs.json.{JsString, Json}
 
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
-import play.api.libs.json.JsString
-import org.scalatest.prop.TableDrivenPropertyChecks
 
 class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
@@ -36,7 +36,7 @@ class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyC
       ApiAccessType.PUBLIC.displayText shouldBe "Public"
       ApiAccessType.PRIVATE.displayText shouldBe "Private"
     }
-    
+
     "convert to string correctly" in {
       forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()

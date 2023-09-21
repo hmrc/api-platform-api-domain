@@ -18,8 +18,8 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import java.time.Instant
 
-import uk.gov.hmrc.apiplatform.modules.common.services.InstantJsonFormatter
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.services.InstantJsonFormatter
 
 case class ApiDefinition(
     serviceName: String,
@@ -30,7 +30,7 @@ case class ApiDefinition(
     versions: List[ApiVersion],
     requiresTrust: Boolean = false,
     isTestSupport: Boolean = false,
-    lastPublishedAt: Option[Instant] = None,        // Only None in very old records from APIs that have not been published since field was added
+    lastPublishedAt: Option[Instant] = None, // Only None in very old records from APIs that have not been published since field was added
     categories: List[ApiCategory]
   )
 
@@ -50,7 +50,7 @@ object ApiDefinition {
       ((JsPath \ "isTestSupport").read[Boolean] or Reads.pure(false)) and
       (JsPath \ "lastPublishedAt").readNullable[Instant] and
       (JsPath \ "categories").read[List[ApiCategory]]
-    )(ApiDefinition.apply _)
+  )(ApiDefinition.apply _)
 
   val apiDefinitionWrites: OWrites[ApiDefinition] = Json.writes[ApiDefinition]
 

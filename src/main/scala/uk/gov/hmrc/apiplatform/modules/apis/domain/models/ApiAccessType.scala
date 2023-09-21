@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 import play.api.libs.json.Format
+
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
 sealed trait ApiAccessType {
   lazy val displayText: String = ApiAccessType.displayText(this)
@@ -29,7 +30,7 @@ object ApiAccessType {
   case object PUBLIC  extends ApiAccessType
 
   def displayText(apiAccessType: ApiAccessType): String = apiAccessType match {
-    case PUBLIC => "Public"
+    case PUBLIC  => "Public"
     case PRIVATE => "Private"
   }
 

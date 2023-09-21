@@ -32,7 +32,7 @@ class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyCheck
         (ApiStatus.BETA, "Beta"),
         (ApiStatus.STABLE, "Stable"),
         (ApiStatus.DEPRECATED, "Deprecated"),
-        (ApiStatus.RETIRED, "Retired"),
+        (ApiStatus.RETIRED, "Retired")
       )
 
     "display text correctly" in {
@@ -40,7 +40,7 @@ class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyCheck
         s.displayText shouldBe t
       }
     }
-    
+
     "convert to string correctly" in {
       forAll(values) { (s, t) =>
         s.toString() shouldBe t.toUpperCase()

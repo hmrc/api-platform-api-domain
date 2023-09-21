@@ -25,12 +25,12 @@ class ApiDefinitionSpec extends HmrcSpec {
 
   "ApiDefinition" should {
     def anApiDefinition(
-      accessType: String = "PUBLIC",
-      isTrial: Boolean = false,
-      requiresTrust: Boolean = false,
-      isTestSupport: Boolean = false,
-      categories: String = """[ "AGENTS" ]"""
-    ) = {
+        accessType: String = "PUBLIC",
+        isTrial: Boolean = false,
+        requiresTrust: Boolean = false,
+        isTestSupport: Boolean = false,
+        categories: String = """[ "AGENTS" ]"""
+      ) = {
 
       val body =
         s"""{
