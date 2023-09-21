@@ -1,7 +1,11 @@
 
 # api-platform-api-domain
 
-This is a placeholder README.md for a new repository
+Library of common Api Platform api models currently used in api definition, api platform microservice and several front ends with API Plaform.
+
+## Running the tests
+
+    run_all_tests.sh
 
 ### License
 
