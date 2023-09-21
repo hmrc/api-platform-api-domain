@@ -17,7 +17,8 @@ lazy val library = Project(appName, file("."))
   .settings(
     scalaVersion                     := scala213,
     name                             := appName,
-    majorVersion                     := 1,
+    majorVersion                     := 0,
+    minorVersion                     := 12,
     isPublicArtefact                 := true,
     libraryDependencies ++= LibraryDependencies()
   )
