@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.{JsArray, Json}
-
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApplicationId
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+import play.api.libs.json.Json
 
 class ApiAccessSpec extends BaseJsonFormattersSpec {
 
@@ -29,38 +28,38 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
 
     "display text correctly" in {
       ApiAccess.PUBLIC.displayText shouldBe "Public"
-      ApiAccess.Private(Nil, true).displayText shouldBe "Private"
-      ApiAccess.Private(Nil, false).displayText shouldBe "Private"
+      ApiAccess.Private(true).displayText shouldBe "Private"
+      ApiAccess.Private(false).displayText shouldBe "Private"
     }
 
     "provide access type" in {
       ApiAccess.PUBLIC.accessType shouldBe ApiAccessType.PUBLIC
-      ApiAccess.Private(Nil, false).accessType shouldBe ApiAccessType.PRIVATE
+      ApiAccess.Private(true).accessType shouldBe ApiAccessType.PRIVATE
+      ApiAccess.Private(false).accessType shouldBe ApiAccessType.PRIVATE
     }
 
     "read public access from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PUBLIC"}""")(ApiAccess.PUBLIC)
     }
 
-    "read private access with fields from Json" in {
-      testFromJson[ApiAccess](s"""{ "type": "PRIVATE", "whitelistedApplicationIds": ["${applicationId}"], "isTrial": true}""")(ApiAccess.Private(List(applicationId), true))
+    "read private access from Json" in {
+      testFromJson[ApiAccess]("""{ "type": "PRIVATE", "isTrial": false }""")(ApiAccess.Private(false))
     }
 
-    "read private access with fields from Json with planned field name" in {
-      testFromJson[ApiAccess](s"""{ "type": "PRIVATE", "allowlistedApplicationIds": ["${applicationId}"], "isTrial": true}""")(ApiAccess.Private(List(applicationId), true))
+    "read private access from Json for trial" in {
+      testFromJson[ApiAccess]("""{ "type": "PRIVATE", "isTrial": true }""")(ApiAccess.Private(true))
     }
 
     "read private access is not tolerant without any fields" in {
       intercept[RuntimeException] {
-        testFromJson[ApiAccess]("""{ "type": "PRIVATE"}""")(ApiAccess.Private(List(), false))
+        testFromJson[ApiAccess]("""{ "type": "PRIVATE"}""")(ApiAccess.Private(false))
       }
     }
 
     "write to Json" in {
       Json.toJson[ApiAccess](ApiAccess.PUBLIC) shouldBe Json.obj("type" -> "PUBLIC")
-      Json.toJson[ApiAccess](ApiAccess.Private(Nil, false)) shouldBe Json.obj(
+      Json.toJson[ApiAccess](ApiAccess.Private(false)) shouldBe Json.obj(
         ("type"                      -> "PRIVATE"),
-        ("whitelistedApplicationIds" -> JsArray()),
         ("isTrial"                   -> false)
       )
     }

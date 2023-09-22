@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApplicationId
-
 sealed trait ApiAccess {
   lazy val displayText: String       = ApiAccess.displayText(this)
   lazy val accessType: ApiAccessType = ApiAccess.accessType(this)
@@ -26,37 +24,23 @@ sealed trait ApiAccess {
 object ApiAccess {
   case object PUBLIC extends ApiAccess
 
-  case class Private(allowlistedApplicationIds: List[ApplicationId], isTrial: Boolean = false) extends ApiAccess
+  case class Private(isTrial: Boolean = false) extends ApiAccess
 
   def displayText(apiAccess: ApiAccess): String = apiAccess match {
     case PUBLIC        => "Public"
-    case Private(_, _) => "Private"
+    case Private(_) => "Private"
   }
 
   def accessType(apiAccess: ApiAccess) = apiAccess match {
     case PUBLIC        => ApiAccessType.PUBLIC
-    case Private(_, _) => ApiAccessType.PRIVATE
+    case Private(_) => ApiAccessType.PRIVATE
   }
 
   import play.api.libs.json._
-  import play.api.libs.functional.syntax._
   import uk.gov.hmrc.play.json.Union
 
-  private val readsPrivateApiAccess: Reads[Private] = (
-    (
-      (JsPath \ "whitelistedApplicationIds").read[List[ApplicationId]] or // Existing field name
-        (JsPath \ "allowlistedApplicationIds").read[List[ApplicationId]]  // TODO - Future aim to be this field name
-    ) and
-      (JsPath \ "isTrial").read[Boolean]
-  )(Private.apply _)
-
-  private val writesPrivateApiAccess: OWrites[Private] = (
-    (JsPath \ "whitelistedApplicationIds").write[List[ApplicationId]] and // TODO - change to allowlisted once all readers are safe
-      (JsPath \ "isTrial").write[Boolean]
-  )(unlift(Private.unapply))
-
   private implicit val formatPublicApiAccess                    = Json.format[PUBLIC.type]
-  private implicit val formatPrivateApiAccess: OFormat[Private] = OFormat[Private](readsPrivateApiAccess, writesPrivateApiAccess)
+  private implicit val formatPrivateApiAccess                    = Json.format[Private]
 
   implicit val formatApiAccess: Format[ApiAccess] = Union.from[ApiAccess]("type")
     .and[PUBLIC.type]("PUBLIC")
