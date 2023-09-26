@@ -33,6 +33,13 @@ class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChe
         (ApiCategory.INCOME_TAX_MTD, "income_tax_mtd", "Income Tax (Making Tax Digital)")
       )
 
+    "values are in a fixed order" in {
+      ApiCategory.values.head shouldBe ApiCategory.EXAMPLE
+      ApiCategory.values.last shouldBe ApiCategory.OTHER
+      val others: List[ApiCategory] = ApiCategory.values.drop(1).dropRight(1).toList
+      others.sortBy(_.toString) shouldBe others
+    }
+
     "convert to string correctly" in {
       forAll(values) { (s, t, _) =>
         s.toString() shouldBe t.toUpperCase()
