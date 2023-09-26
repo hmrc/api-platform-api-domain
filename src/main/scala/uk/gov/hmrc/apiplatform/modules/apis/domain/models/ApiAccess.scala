@@ -39,7 +39,7 @@ object ApiAccess {
   import play.api.libs.json._
   import uk.gov.hmrc.play.json.Union
 
-  private implicit val formatPublicApiAccess                    = Json.format[PUBLIC.type]
+  private implicit val formatPublicApiAccess                     = Json.format[PUBLIC.type]
   private implicit val formatPrivateApiAccess                    = Json.format[Private]
 
   implicit val formatApiAccess: Format[ApiAccess] = Union.from[ApiAccess]("type")

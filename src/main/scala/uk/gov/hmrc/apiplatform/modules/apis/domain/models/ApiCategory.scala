@@ -17,6 +17,7 @@
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
+import scala.collection.immutable.ListSet
 
 sealed trait ApiCategory {
 
@@ -52,7 +53,7 @@ object ApiCategory {
   case object VAT_MTD                      extends ApiCategory
   case object OTHER                        extends ApiCategory
 
-  final val values = Set[ApiCategory](
+  final val values: ListSet[ApiCategory] = ListSet.from(List[ApiCategory](
     EXAMPLE,
     AGENTS,
     BUSINESS_RATES,
@@ -76,7 +77,7 @@ object ApiCategory {
     VAT,
     VAT_MTD,
     OTHER
-  )
+  ))
 
   def apply(text: String): Option[ApiCategory] = {
     ApiCategory.values.find(_.toString == text.toUpperCase)
