@@ -30,5 +30,5 @@ case class ExtendedAPIVersion(
 
 object ExtendedAPIVersion {
   import play.api.libs.json.Json
-  implicit val formatExtendedAPIVersion = Json.format[ExtendedAPIVersion]
+  implicit val format = Json.format[ExtendedAPIVersion]
 }

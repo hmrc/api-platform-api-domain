@@ -27,13 +27,9 @@ object ResourceThrottlingTier {
 
   val values = Set[ResourceThrottlingTier](UNLIMITED)
 
-  def apply(text: String): Option[ResourceThrottlingTier] = {
-    ResourceThrottlingTier.values.find(_.toString == text.toUpperCase)
-  }
+  def apply(text: String): Option[ResourceThrottlingTier] = ResourceThrottlingTier.values.find(_.toString == text.toUpperCase)
 
-  def unsafeApply(text: String): ResourceThrottlingTier = {
-    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Resource Throttling Tier"))
-  }
+  def unsafeApply(text: String): ResourceThrottlingTier = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Resource Throttling Tier"))
 
-  implicit val formatResourceThrottlingTier: Format[ResourceThrottlingTier] = SealedTraitJsonFormatting.createFormatFor[ResourceThrottlingTier]("Resource Throttling Tier", apply)
+  implicit val format: Format[ResourceThrottlingTier] = SealedTraitJsonFormatting.createFormatFor[ResourceThrottlingTier]("Resource Throttling Tier", apply)
 }

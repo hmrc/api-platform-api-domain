@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
+import play.api.libs.json.Json
+
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApplicationId
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
-import play.api.libs.json.Json
 
 class ApiAccessSpec extends BaseJsonFormattersSpec {
 
@@ -59,8 +60,8 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
     "write to Json" in {
       Json.toJson[ApiAccess](ApiAccess.PUBLIC) shouldBe Json.obj("type" -> "PUBLIC")
       Json.toJson[ApiAccess](ApiAccess.Private(false)) shouldBe Json.obj(
-        ("type"                      -> "PRIVATE"),
-        ("isTrial"                   -> false)
+        ("type"    -> "PRIVATE"),
+        ("isTrial" -> false)
       )
     }
   }

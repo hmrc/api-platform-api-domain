@@ -33,7 +33,7 @@ object ApiVersion {
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
 
-  private val readsApiVersion: Reads[ApiVersion] = (
+  private val reads: Reads[ApiVersion] = (
     (
       (JsPath \ "version").read[ApiVersionNbr] or   // Existing field name
         (JsPath \ "versionNbr").read[ApiVersionNbr] // TODO - Future aim to be this field name
@@ -46,7 +46,7 @@ object ApiVersion {
       (JsPath \ "versionSource").read[ApiVersionSource]
   )(ApiVersion.apply _)
 
-  private val writesApiVersion: OWrites[ApiVersion] = (
+  private val writes: OWrites[ApiVersion] = (
     (JsPath \ "version").write[ApiVersionNbr] and // TODO - change to versionNbr once all readers are safe
       (JsPath \ "status").write[ApiStatus] and
       (JsPath \ "access").write[ApiAccess] and
@@ -56,5 +56,7 @@ object ApiVersion {
       (JsPath \ "versionSource").write[ApiVersionSource]
   )(unlift(ApiVersion.unapply))
 
-  implicit val formatApiVersion: OFormat[ApiVersion] = OFormat(readsApiVersion, writesApiVersion)
+  implicit val ordering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiVersionNbr](_.versionNbr)
+
+  implicit val format: OFormat[ApiVersion] = OFormat(reads, writes)
 }

@@ -27,13 +27,10 @@ object AuthType {
 
   val values = Set[AuthType](NONE, APPLICATION, USER)
 
-  def apply(text: String): Option[AuthType] = {
-    AuthType.values.find(_.toString == text.toUpperCase())
-  }
+  def apply(text: String): Option[AuthType] = AuthType.values.find(_.toString == text.toUpperCase())
 
-  def unsafeApply(text: String): AuthType =
-    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Auth Type"))
+  def unsafeApply(text: String): AuthType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Auth Type"))
 
-  implicit val formatAuthType = SealedTraitJsonFormatting.createFormatFor[AuthType]("AuthType", apply)
+  implicit val format = SealedTraitJsonFormatting.createFormatFor[AuthType]("AuthType", apply)
 
 }

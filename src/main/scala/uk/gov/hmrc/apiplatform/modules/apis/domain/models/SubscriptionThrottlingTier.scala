@@ -31,14 +31,11 @@ object SubscriptionThrottlingTier {
 
   val values = Set[SubscriptionThrottlingTier](BRONZE_SUBSCRIPTION, SILVER_SUBSCRIPTION, GOLD_SUBSCRIPTION, PLATINUM_SUBSCRIPTION, RHODIUM_SUBSCRIPTION)
 
-  def apply(text: String): Option[SubscriptionThrottlingTier] = {
-    SubscriptionThrottlingTier.values.find(_.toString == text.toUpperCase() + "_SUBSCRIPTION")
-  }
+  def apply(text: String): Option[SubscriptionThrottlingTier] = SubscriptionThrottlingTier.values.find(_.toString == text.toUpperCase() + "_SUBSCRIPTION")
 
-  def unsafeApply(text: String): SubscriptionThrottlingTier =
-    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Subscription Throttling Tier"))
+  def unsafeApply(text: String): SubscriptionThrottlingTier = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Subscription Throttling Tier"))
 
   def description(tier: SubscriptionThrottlingTier): String = tier.description
 
-  implicit val formatSubscriptionThrottlingTier = SealedTraitJsonFormatting.createFormatFor[SubscriptionThrottlingTier]("Subscription Throttling Tier", apply, description)
+  implicit val format = SealedTraitJsonFormatting.createFormatFor[SubscriptionThrottlingTier]("Subscription Throttling Tier", apply, description)
 }

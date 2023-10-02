@@ -19,10 +19,10 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import java.time.Instant
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.services.InstantJsonFormatter
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
 
 case class ApiDefinition(
-    serviceName: String,
+    serviceName: ServiceName,
     serviceBaseUrl: String,
     name: String,
     description: String,
@@ -39,8 +39,8 @@ object ApiDefinition {
   import InstantJsonFormatter.WithTimeZone._
   import play.api.libs.functional.syntax._ // Combinator syntax
 
-  val apiDefinitionReads: Reads[ApiDefinition] = (
-    (JsPath \ "serviceName").read[String] and
+  val reads: Reads[ApiDefinition] = (
+    (JsPath \ "serviceName").read[ServiceName] and
       (JsPath \ "serviceBaseUrl").read[String] and
       (JsPath \ "name").read[String] and
       (JsPath \ "description").read[String] and
@@ -52,7 +52,7 @@ object ApiDefinition {
       (JsPath \ "categories").read[List[ApiCategory]]
   )(ApiDefinition.apply _)
 
-  val apiDefinitionWrites: OWrites[ApiDefinition] = Json.writes[ApiDefinition]
+  val writes: OWrites[ApiDefinition] = Json.writes[ApiDefinition]
 
-  implicit val apiDefinitionFormat: OFormat[ApiDefinition] = OFormat[ApiDefinition](apiDefinitionReads, apiDefinitionWrites)
+  implicit val api: OFormat[ApiDefinition] = OFormat[ApiDefinition](reads, writes)
 }

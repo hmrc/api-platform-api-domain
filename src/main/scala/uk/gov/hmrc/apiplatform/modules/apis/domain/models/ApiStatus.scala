@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
+import scala.collection.immutable.ListSet
+
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
 sealed trait ApiStatus {
 
   lazy val displayText: String = {
-    val txt = this.toString
-    txt.take(1).toUpperCase + txt.drop(1).toLowerCase()
+    this.toString().toLowerCase().capitalize
   }
 }
 
@@ -33,14 +34,15 @@ object ApiStatus {
   case object DEPRECATED extends ApiStatus
   case object RETIRED    extends ApiStatus
 
-  final val values = Set[ApiStatus](ALPHA, BETA, STABLE, DEPRECATED, RETIRED)
+  final val values = ListSet[ApiStatus](ALPHA, BETA, STABLE, DEPRECATED, RETIRED)
 
-  def apply(text: String): Option[ApiStatus] = {
-    ApiStatus.values.find(_.toString == text.toUpperCase)
-  }
+  def apply(text: String): Option[ApiStatus] = ApiStatus.values.find(_.toString == text.toUpperCase)
 
-  def unsafeApply(text: String): ApiStatus =
-    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Status"))
+  def unsafeApply(text: String): ApiStatus = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Status"))
 
-  implicit val formatApiStatus = SealedTraitJsonFormatting.createFormatFor[ApiStatus]("API Status", apply)
+  implicit val ordering: Ordering[ApiStatus] = Ordering.by[ApiStatus, Int](values.toList.indexOf)
+
+  import play.api.libs.json.Format
+
+  implicit val format: Format[ApiStatus] = SealedTraitJsonFormatting.createFormatFor[ApiStatus]("API Status", apply)
 }

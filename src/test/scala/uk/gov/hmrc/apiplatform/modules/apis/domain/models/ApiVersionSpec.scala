@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
+import scala.util.Random
+
 import play.api.libs.json.Json
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
@@ -23,7 +25,7 @@ import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 
 class ApiVersionSpec extends BaseJsonFormattersSpec {
 
-  val example      = ApiVersion(
+  val example = ApiVersion(
     versionNbr = ApiVersionNbr("1.0"),
     status = ApiStatus.STABLE,
     access = ApiAccess.PUBLIC,
@@ -57,6 +59,13 @@ class ApiVersionSpec extends BaseJsonFormattersSpec {
 
     "write to Json" in {
       Json.toJson[ApiVersion](example).toString shouldBe expectedJson
+    }
+
+    "ordering" in {
+      val nbrs     = List("1.0", "1.1", "2.0", "3.0", "4.0", "5.0", "5.1")
+      val versions = nbrs.map(v => example.copy(versionNbr = ApiVersionNbr(v)))
+
+      Random.shuffle(versions).sorted shouldBe versions
     }
   }
 }

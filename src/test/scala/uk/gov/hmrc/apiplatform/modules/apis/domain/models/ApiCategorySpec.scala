@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
+import scala.util.Random
+
 import org.scalatest.prop.TableDrivenPropertyChecks
 
 import play.api.libs.json.{JsString, Json}
@@ -87,6 +89,12 @@ class ApiCategorySpec extends BaseJsonFormattersSpec with TableDrivenPropertyChe
       forAll(values) { (s, t, _) =>
         Json.toJson[ApiCategory](s) shouldBe JsString(t.toUpperCase())
       }
+    }
+
+    "orders correctly" in {
+      val items: List[ApiCategory] = List(ApiCategory.AGENTS, ApiCategory.EXAMPLE, ApiCategory.INCOME_TAX_MTD, ApiCategory.OTHER, ApiCategory.VAT)
+
+      Random.shuffle(items).sorted shouldBe items
     }
   }
 }
