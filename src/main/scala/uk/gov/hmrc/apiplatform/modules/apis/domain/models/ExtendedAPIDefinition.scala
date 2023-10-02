@@ -24,7 +24,7 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatt
 
 // Not used in Api Definition
 case class ExtendedAPIDefinition(
-    serviceName: String,
+    serviceName: ServiceName,
     serviceBaseUrl: String,
     name: String,
     description: String,

@@ -27,11 +27,11 @@ case class ApiDefinition(
     name: String,
     description: String,
     context: ApiContext,
-    versions: List[ApiVersion],
-    requiresTrust: Boolean = false,
+    versions: List[ApiVersion],                     // Should be NonEmpty
+    requiresTrust: Boolean = false,                 // Should be removed
     isTestSupport: Boolean = false,
-    lastPublishedAt: Option[Instant] = None, // Only None in very old records from APIs that have not been published since field was added
-    categories: List[ApiCategory]
+    lastPublishedAt: Option[Instant] = None,        // Only None in very old records from APIs that have not been published since field was added
+    categories: List[ApiCategory]                   // Should be NonEmpty
   )
 
 object ApiDefinition {
