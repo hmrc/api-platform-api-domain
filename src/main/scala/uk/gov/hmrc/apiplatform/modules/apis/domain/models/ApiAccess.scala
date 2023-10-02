@@ -26,23 +26,20 @@ object ApiAccess {
 
   case class Private(isTrial: Boolean = false) extends ApiAccess
 
-  def displayText(apiAccess: ApiAccess): String = apiAccess match {
-    case PUBLIC        => "Public"
-    case Private(_) => "Private"
-  }
+  def displayText(apiAccess: ApiAccess): String = apiAccess.accessType.displayText
 
   def accessType(apiAccess: ApiAccess) = apiAccess match {
-    case PUBLIC        => ApiAccessType.PUBLIC
+    case PUBLIC     => ApiAccessType.PUBLIC
     case Private(_) => ApiAccessType.PRIVATE
   }
 
   import play.api.libs.json._
   import uk.gov.hmrc.play.json.Union
 
-  private implicit val formatPublicApiAccess                     = Json.format[PUBLIC.type]
-  private implicit val formatPrivateApiAccess                    = Json.format[Private]
+  private implicit val formatPublicApiAccess: OFormat[PUBLIC.type] = Json.format[PUBLIC.type]
+  private implicit val formatPrivateApiAccess: OFormat[Private]    = Json.format[Private]
 
-  implicit val formatApiAccess: Format[ApiAccess] = Union.from[ApiAccess]("type")
+  implicit val format: Format[ApiAccess] = Union.from[ApiAccess]("type")
     .and[PUBLIC.type]("PUBLIC")
     .and[Private]("PRIVATE")
     .format

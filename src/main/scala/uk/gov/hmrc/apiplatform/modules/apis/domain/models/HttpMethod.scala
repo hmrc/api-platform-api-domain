@@ -31,12 +31,9 @@ object HttpMethod {
 
   final val values = Set[HttpMethod](GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD)
 
-  def apply(text: String): Option[HttpMethod] = {
-    HttpMethod.values.find(_.toString == text.toUpperCase)
-  }
+  def apply(text: String): Option[HttpMethod] = HttpMethod.values.find(_.toString == text.toUpperCase)
 
-  def unsafeApply(text: String): HttpMethod =
-    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Http Method"))
+  def unsafeApply(text: String): HttpMethod = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid HTTP Method"))
 
-  implicit val formatHttpMethod = SealedTraitJsonFormatting.createFormatFor[HttpMethod]("API Http Method", apply)
+  implicit val format = SealedTraitJsonFormatting.createFormatFor[HttpMethod]("HTTP Method", apply)
 }

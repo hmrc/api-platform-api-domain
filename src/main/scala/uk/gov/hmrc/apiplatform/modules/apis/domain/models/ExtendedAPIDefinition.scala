@@ -20,11 +20,11 @@ import java.time.Instant
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.services.InstantJsonFormatter
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
 
 // Not used in Api Definition
 case class ExtendedAPIDefinition(
-    serviceName: String,
+    serviceName: String,              // TODO : Should be ServiceName but breaking change to APM
     serviceBaseUrl: String,
     name: String,
     description: String,
@@ -39,5 +39,5 @@ case class ExtendedAPIDefinition(
 object ExtendedAPIDefinition {
   import play.api.libs.json.Json
   import InstantJsonFormatter.WithTimeZone._
-  implicit val formatExtendedAPIDefinition = Json.format[ExtendedAPIDefinition]
+  implicit val format = Json.format[ExtendedAPIDefinition]
 }

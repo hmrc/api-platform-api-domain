@@ -19,6 +19,7 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 case class ApiAvailability(endpointsEnabled: Boolean, access: ApiAccess, loggedIn: Boolean, authorised: Boolean)
 
 object ApiAvailability {
-  import play.api.libs.json.Json
-  implicit val formatAPIAvailability = Json.format[ApiAvailability]
+  import play.api.libs.json.{Format, Json}
+
+  implicit val format: Format[ApiAvailability] = Json.format[ApiAvailability]
 }

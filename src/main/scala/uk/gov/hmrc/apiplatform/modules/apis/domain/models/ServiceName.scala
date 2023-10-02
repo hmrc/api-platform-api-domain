@@ -16,10 +16,14 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-case class QueryParameter(name: String, required: Boolean = false)
+import play.api.libs.json._
 
-object QueryParameter {
-  import play.api.libs.json.Json
+final case class ServiceName(value: String) extends AnyVal {
+  override def toString(): String = value
+}
 
-  implicit val format = Json.format[QueryParameter]
+object ServiceName {
+  implicit val format: Format[ServiceName] = Json.valueFormat[ServiceName]
+
+  implicit val ordering: Ordering[ServiceName] = Ordering.by[ServiceName, String](_.value)
 }

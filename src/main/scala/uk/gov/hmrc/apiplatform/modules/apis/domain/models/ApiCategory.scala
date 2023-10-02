@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 import scala.collection.immutable.ListSet
+
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
 sealed trait ApiCategory {
 
@@ -79,14 +80,9 @@ object ApiCategory {
     OTHER
   ))
 
-  def apply(text: String): Option[ApiCategory] = {
-    ApiCategory.values.find(_.toString == text.toUpperCase)
-  }
+  def apply(text: String): Option[ApiCategory] = ApiCategory.values.find(_.toString == text.toUpperCase)
 
-  def unsafeApply(text: String): ApiCategory =
-    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Category"))
-
-  implicit val formatApiCategory = SealedTraitJsonFormatting.createFormatFor[ApiCategory]("API Category", apply)
+  def unsafeApply(text: String): ApiCategory = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Category"))
 
 // $COVERAGE-OFF$
   def displayText(category: ApiCategory): String = {
@@ -117,5 +113,12 @@ object ApiCategory {
     }
   }
 // $COVERAGE-ON$
+
+  implicit val ordering: Ordering[ApiCategory] = Ordering.by[ApiCategory, String](_.displayText)
+
+  import play.api.libs.json.Format
+
+  implicit val format: Format[ApiCategory] = SealedTraitJsonFormatting.createFormatFor[ApiCategory]("API Category", apply)
+
 }
 // scalastyle:on cyclomatic.complexity

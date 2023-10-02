@@ -39,9 +39,7 @@ object ApiVersionSource {
     case _         => None
   }
 
-  def unsafeApply(text: String): ApiVersionSource = {
-    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Version Source"))
-  }
+  def unsafeApply(text: String): ApiVersionSource = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Version Source"))
 
   implicit val formatApiVersionSource: Format[ApiVersionSource] = SealedTraitJsonFormatting.createFormatFor[ApiVersionSource]("API Version Source", apply)
 }

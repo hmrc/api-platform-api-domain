@@ -65,7 +65,7 @@ class HttpMethodSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChec
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
         HttpMethod.unsafeApply("rubbish")
-      }.getMessage() should include("Http Method")
+      }.getMessage() should include("HTTP Method")
     }
 
     "read from Json" in {
@@ -77,7 +77,7 @@ class HttpMethodSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChec
     "read with error from Json" in {
       intercept[Exception] {
         testFromJson[HttpMethod](s"""123""")(HttpMethod.GET)
-      }.getMessage() should include("Cannot parse API Http Method from '123'")
+      }.getMessage() should include("Cannot parse HTTP Method from '123'")
     }
 
     "write to Json" in {
