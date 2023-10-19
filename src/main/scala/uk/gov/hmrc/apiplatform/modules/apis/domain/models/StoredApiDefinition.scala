@@ -16,66 +16,43 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.{ApiContext, ApiVersionNbr}
-
 import java.time.Instant
 
-case class ApiData(
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
+
+case class StoredApiDefinition(
     serviceName: ServiceName,
     serviceBaseUrl: String,
     name: String,
     description: String,
     context: ApiContext,
-    versions: Map[ApiVersionNbr, ApiVersion],
-    requiresTrust: Boolean = false,
+    versions: List[ApiVersion],              // Should be NonEmpty
+    requiresTrust: Boolean = false,          // Should be removed
     isTestSupport: Boolean = false,
-    lastPublishedAt: Option[Instant] = None,
-    categories: List[ApiCategory]
+    lastPublishedAt: Option[Instant] = None, // Only None in very old records from APIs that have not been published since field was added
+    categories: List[ApiCategory]            // Should be NonEmpty
   )
 
-object ApiData {
+object StoredApiDefinition {
   import play.api.libs.json._
-  import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter.WithTimeZone._
+  import InstantJsonFormatter.WithTimeZone._
   import play.api.libs.functional.syntax._ // Combinator syntax
 
-  val reads: Reads[ApiData] = (
+  val reads: Reads[StoredApiDefinition] = (
     (JsPath \ "serviceName").read[ServiceName] and
       (JsPath \ "serviceBaseUrl").read[String] and
       (JsPath \ "name").read[String] and
       (JsPath \ "description").read[String] and
       (JsPath \ "context").read[ApiContext] and
-      (JsPath \ "versions").read[Map[ApiVersionNbr, ApiVersion]] and
+      (JsPath \ "versions").read[List[ApiVersion]] and
       ((JsPath \ "requiresTrust").read[Boolean] or Reads.pure(false)) and
       ((JsPath \ "isTestSupport").read[Boolean] or Reads.pure(false)) and
       (JsPath \ "lastPublishedAt").readNullable[Instant] and
       (JsPath \ "categories").read[List[ApiCategory]]
-  )(ApiData.apply _)
+  )(StoredApiDefinition.apply _)
 
-  val writes: OWrites[ApiData]                 = Json.writes[ApiData]
-  implicit val formatApiData: OFormat[ApiData] = OFormat[ApiData](reads, writes)
+  val writes: OWrites[StoredApiDefinition] = Json.writes[StoredApiDefinition]
 
-  type ApiDefinitionMap = Map[ApiContext, ApiData]
-
-  def from(in: List[ApiDefinition]): ApiDefinitionMap = {
-    in.map(definition => definition.context -> from(definition)).toMap
-  }
-
-  def fromVersions(in: List[ApiVersion]): Map[ApiVersionNbr, ApiVersion] = {
-    in.map(version => version.versionNbr -> version).toMap
-  }
-
-  def from(in: ApiDefinition): ApiData = {
-    ApiData(
-      in.serviceName,
-      in.serviceBaseUrl,
-      in.name,
-      in.description,
-      in.context,
-      fromVersions(in.versions),
-      in.requiresTrust,
-      in.isTestSupport,
-      in.lastPublishedAt,
-      in.categories
-    )
-  }
+  implicit val api: OFormat[StoredApiDefinition] = OFormat[StoredApiDefinition](reads, writes)
 }

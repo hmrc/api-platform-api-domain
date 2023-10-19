@@ -19,76 +19,139 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import play.api.libs.json.Json
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiContext
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
 class ApiDefinitionSpec extends HmrcSpec {
 
-  "ApiDefinition" should {
-    def anApiDefinition(
-        accessType: String = "PUBLIC",
-        isTrial: Boolean = false,
+  "ApiDefinition2" should {
+    def aStoredApiDefinitionJson(
         requiresTrust: Boolean = false,
         isTestSupport: Boolean = false,
         categories: String = """[ "AGENTS" ]"""
-      ) = {
+      ): String = {
 
-      val body =
-        s"""{
-           |   "serviceName":"calendar",
-           |   "name":"Calendar API",
-           |   "description":"My Calendar API",
-           |   "serviceBaseUrl":"http://calendar",
-           |   "context":"calendar",
-           |   "categories": $categories,
-           |   "requiresTrust": $requiresTrust,
-           |   "isTestSupport": $isTestSupport,
-           |   "versions":[
-           |      {
-           |         "version":"1.0",
-           |         "status":"STABLE",
-           |         "endpointsEnabled": true,
-           |         "versionSource": "OAS",
-           |         "access": {
-           |           "type": "PRIVATE",
-           |           "whitelistedApplicationIds": [],
-           |           "isTrial": false
-           |         },
-           |         "endpoints":[
-           |            {
-           |               "uriPattern":"/today",
-           |               "endpointName":"Get Today's Date",
-           |               "method":"GET",
-           |               "authType":"NONE",
-           |               "throttlingTier":"UNLIMITED",
-           |               "queryParameters": []
-           |            }
-           |         ]
-           |      }
-           |   ]
-           |}""".stripMargin.replaceAll("\n", " ")
-
-      Json.parse(body).as[ApiDefinition]
+      s"""{
+         |   "serviceName":"calendar",
+         |   "name":"Calendar API",
+         |   "description":"My Calendar API",
+         |   "serviceBaseUrl":"http://calendar",
+         |   "context":"calendar",
+         |   "categories": $categories,
+         |   "requiresTrust": $requiresTrust,
+         |   "isTestSupport": $isTestSupport,
+         |   "versions":[
+         |      {
+         |         "version":"1.0",
+         |         "status":"STABLE",
+         |         "endpointsEnabled": true,
+         |         "versionSource": "OAS",
+         |         "access": {
+         |           "type": "PRIVATE",
+         |           "whitelistedApplicationIds": [],
+         |           "isTrial": false
+         |         },
+         |         "endpoints":[
+         |            {
+         |               "uriPattern":"/today",
+         |               "endpointName":"Get Today's Date",
+         |               "method":"GET",
+         |               "authType":"NONE",
+         |               "throttlingTier":"UNLIMITED",
+         |               "queryParameters": []
+         |            }
+         |         ]
+         |      }
+         |   ]
+         |}""".stripMargin.replaceAll("\n", " ")
     }
 
-    "read from JSON" in {
-      anApiDefinition()
+    def anApiDefinitionJson(
+        requiresTrust: Boolean = false,
+        isTestSupport: Boolean = false,
+        categories: String = """[ "AGENTS" ]"""
+      ): String = {
+
+      s"""{
+         |   "serviceName":"calendar",
+         |   "serviceBaseUrl":"http://calendar",
+         |   "name":"Calendar API",
+         |   "description":"My Calendar API",
+         |   "context":"calendar",
+         |   "versions":{
+         |    "1.0":  {
+         |         "version":"1.0",
+         |         "status":"STABLE",
+         |         "access": {
+         |           "isTrial": false,
+         |           "type": "PRIVATE"
+         |         },
+         |         "endpoints":[
+         |            {
+         |               "uriPattern":"/today",
+         |               "endpointName":"Get Today's Date",
+         |               "method":"GET",
+         |               "authType":"NONE",
+         |               "throttlingTier":"UNLIMITED",
+         |               "queryParameters": []
+         |            }
+         |          ],
+         |         "endpointsEnabled": true,
+         |         "versionSource": "OAS"
+         |      }
+         |   },
+         |   "requiresTrust": $requiresTrust,
+         |   "isTestSupport": $isTestSupport,
+         |   "lastPublishedAt": "2011-12-03T10:15:30.000Z",
+         |   "categories": $categories
+         |}""".stripMargin.replaceAll("\n", " ")
+    }
+
+    "read from old style JSON" in {
+      Json.parse(anApiDefinitionJson()).as[ApiDefinition]
+    }
+
+    "read from new style JSON" in {
+      Json.parse(aStoredApiDefinitionJson()).as[ApiDefinition]
+    }
+
+    "write to JSON" in {
+      val jsonText                     = anApiDefinitionJson()
+      val apiDefinition: ApiDefinition = Json.parse(jsonText).as[ApiDefinition]
+
+      Json.toJson(apiDefinition) shouldBe Json.parse(jsonText)
+    }
+
+    "convert from StoredApiDefinition" in {
+      val storedApiDefinition: StoredApiDefinition = Json.parse(aStoredApiDefinitionJson()).as[StoredApiDefinition]
+      val apiDefinition: ApiDefinition             = Json.parse(aStoredApiDefinitionJson()).as[ApiDefinition]
+
+      ApiDefinition.fromStored(storedApiDefinition) shouldBe apiDefinition
+    }
+
+    "convert from a list of StoredApiDefinitions" in {
+      val storedApiDefinition: StoredApiDefinition = Json.parse(aStoredApiDefinitionJson()).as[StoredApiDefinition]
+      val apiDefinition: ApiDefinition             = Json.parse(aStoredApiDefinitionJson()).as[ApiDefinition]
+
+      ApiDefinition.fromStoredCollection(List(storedApiDefinition)) shouldBe Map(ApiContext("calendar") -> apiDefinition)
     }
 
     "read from JSON when the API categories are defined with correct values" in {
-      val apiDefinition = anApiDefinition(categories = """ [ "CUSTOMS", "VAT" ] """)
+      val apiDefinition = Json.parse(anApiDefinitionJson(categories = """ [ "CUSTOMS", "VAT" ] """)).as[ApiDefinition]
 
       apiDefinition.categories shouldBe Seq(ApiCategory.CUSTOMS, ApiCategory.VAT)
     }
 
     "read from JSON when the API categories are defined but empty (this should fail publisher validation)" in {
-      anApiDefinition(categories = "[]")
+      val apiDefinition = Json.parse(anApiDefinitionJson(categories = """ [] """)).as[ApiDefinition]
+
+      apiDefinition.categories shouldBe Seq()
     }
 
     "fail to read from JSON when the API categories are defined with incorrect values" in {
       intercept[RuntimeException] {
-        anApiDefinition(categories = """ [ "NOT_A_VALID_CATEGORY" ] """)
+        Json.parse(anApiDefinitionJson(categories = """ [ "NOT_A_VALID_CATEGORY" ] """)).as[ApiDefinition]
       }
     }
   }
-
 }

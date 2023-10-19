@@ -23,7 +23,7 @@ case class ApiVersion(
     versionNbr: ApiVersionNbr,
     status: ApiStatus,
     access: ApiAccess = ApiAccess.PUBLIC,
-    endpoints: List[Endpoint],                     // Should be NonEmpty
+    endpoints: List[Endpoint], // Should be NonEmpty
     endpointsEnabled: Boolean = true,
     awsRequestId: Option[String] = None,
     versionSource: ApiVersionSource = ApiVersionSource.UNKNOWN
