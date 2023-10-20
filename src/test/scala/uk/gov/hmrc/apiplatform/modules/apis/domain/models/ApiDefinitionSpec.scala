@@ -22,7 +22,7 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiContext
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
-class ApiDefinitionSpec extends HmrcSpec {
+class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
 
   "ApiDefinition2" should {
     def aStoredApiDefinitionJson(
@@ -152,6 +152,30 @@ class ApiDefinitionSpec extends HmrcSpec {
       intercept[RuntimeException] {
         Json.parse(anApiDefinitionJson(categories = """ [ "NOT_A_VALID_CATEGORY" ] """)).as[ApiDefinition]
       }
+    }
+
+    "filter versions when some remain" in {
+        val version1 = buildVersion("1.0")
+        val version2 = buildVersion("2.0")
+        val version3 = buildVersion("3.0")
+
+        val definition = buildDefinition(List(version1, version2, version3))
+
+        val fn: ApiVersions.ApiVersionFilterFn = (v => v.versionNbr.value != "1.0")
+        val remainingVersions = definition.filterVersions(fn).value.versions.values
+        remainingVersions should contain.allOf(version2, version3)
+        remainingVersions should not contain (version1)
+    }
+
+    "filter versions when none remain" in {
+        val version1 = buildVersion("1.0")
+        val version2 = buildVersion("2.0")
+        val version3 = buildVersion("3.0")
+
+        val definition = buildDefinition(List(version1, version2, version3))
+
+        val fn: ApiVersions.ApiVersionFilterFn = (v => v.versionNbr.value == "5.0")
+        definition.filterVersions(fn) shouldBe None
     }
   }
 }

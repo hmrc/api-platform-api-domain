@@ -35,9 +35,15 @@ case class ApiDefinition(
   ) {
 
   lazy val versionsAsList: List[ApiVersion] = versions.values.toList
+
+  def filterVersions(fn: ApiVersions.ApiVersionFilterFn): Option[ApiDefinition] = {
+    val filteredVersions = versions.filter(kv => fn(kv._2))
+    if (filteredVersions.isEmpty) None else Some(copy(versions = filteredVersions))
+  }
 }
 
 object ApiDefinition {
+  
   import play.api.libs.json._
   import InstantJsonFormatter.WithTimeZone._
   import play.api.libs.functional.syntax._ // Combinator syntax
