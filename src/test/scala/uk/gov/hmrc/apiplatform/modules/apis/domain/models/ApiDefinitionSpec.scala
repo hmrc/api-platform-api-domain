@@ -177,5 +177,22 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
         val fn: ApiVersions.ApiVersionFilterFn = (v => v.versionNbr.value == "5.0")
         definition.filterVersions(fn) shouldBe None
     }
+
+    val openEndpoint = anEndpoint.copy(authType = AuthType.NONE)
+    val applicationEndpoint = anEndpoint.copy(authType = AuthType.APPLICATION)
+
+    val privateVersion = buildVersion("1.0",apiAccess = ApiAccess.Private(), endpoints = List(openEndpoint, applicationEndpoint))
+    val publicVersion = buildVersion("2.0",apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, applicationEndpoint))
+    val openVersion = buildVersion("3.0",apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, openEndpoint))
+
+    "isOpenAccess for a definition with a private API" in {
+      buildDefinition(List(privateVersion, publicVersion)).isOpenAccess shouldBe false
+    }
+    "isOpenAccess for a definition with a public API with endpoints with auth" in {
+      buildDefinition(List(publicVersion)).isOpenAccess shouldBe false
+    }
+    "isOpenAccess for a definition with a public API with open endpoints" in {
+      buildDefinition(List(openVersion)).isOpenAccess shouldBe true
+    } 
   }
 }

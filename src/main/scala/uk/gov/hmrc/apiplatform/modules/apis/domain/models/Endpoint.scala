@@ -24,7 +24,7 @@ case class Endpoint(
     throttlingTier: ResourceThrottlingTier = ResourceThrottlingTier.UNLIMITED,
     scope: Option[String] = None,
     queryParameters: List[QueryParameter] = List.empty
-  )
+)
 
 object Endpoint {
   import play.api.libs.json.Json

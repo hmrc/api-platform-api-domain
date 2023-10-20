@@ -23,8 +23,8 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiContext
 trait ApiDefinitionFactory {
   protected val anEndpoint = Endpoint("endpoint1", "/some/endpoint1", HttpMethod.POST, AuthType.USER)
 
-  def buildVersion(version: String, status: ApiStatus = ApiStatus.STABLE, apiAccess: ApiAccess = ApiAccess.PUBLIC): ApiVersion = {
-    ApiVersion(ApiVersionNbr(version), status, apiAccess, List(anEndpoint))
+  def buildVersion(version: String, status: ApiStatus = ApiStatus.STABLE, apiAccess: ApiAccess = ApiAccess.PUBLIC, endpoints: List[Endpoint] = List(anEndpoint)): ApiVersion = {
+    ApiVersion(ApiVersionNbr(version), status, apiAccess, endpoints)
   }
 
   def buildDefinition(versions: List[ApiVersion]): ApiDefinition = {

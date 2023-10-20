@@ -40,6 +40,9 @@ case class ApiDefinition(
     val filteredVersions = versions.filter(kv => fn(kv._2))
     if (filteredVersions.isEmpty) None else Some(copy(versions = filteredVersions))
   }
+
+  // All versions must be open access
+  lazy val isOpenAccess: Boolean = versions.values.find(_.isOpenAccess == false).isEmpty
 }
 
 object ApiDefinition {
