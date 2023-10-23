@@ -23,11 +23,14 @@ case class ApiVersion(
     versionNbr: ApiVersionNbr,
     status: ApiStatus,
     access: ApiAccess = ApiAccess.PUBLIC,
-    endpoints: List[Endpoint],                     // Should be NonEmpty
+    endpoints: List[Endpoint], // Should be NonEmpty
     endpointsEnabled: Boolean = true,
     awsRequestId: Option[String] = None,
     versionSource: ApiVersionSource = ApiVersionSource.UNKNOWN
-  )
+  ) {
+  // No endpoints must have an auth type and version must be public
+  lazy val isOpenAccess: Boolean = access.isPublic && endpoints.find(_.authType != AuthType.NONE).isEmpty
+}
 
 object ApiVersion {
   import play.api.libs.json._

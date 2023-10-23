@@ -19,6 +19,8 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 sealed trait ApiAccess {
   lazy val displayText: String       = ApiAccess.displayText(this)
   lazy val accessType: ApiAccessType = ApiAccess.accessType(this)
+
+  lazy val isPublic = this == ApiAccess.PUBLIC
 }
 
 object ApiAccess {

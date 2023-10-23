@@ -23,7 +23,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 
-class ApiVersionSpec extends BaseJsonFormattersSpec {
+class ApiVersionSpec extends BaseJsonFormattersSpec with ApiDefinitionFactory {
 
   val example = ApiVersion(
     versionNbr = ApiVersionNbr("1.0"),
@@ -47,6 +47,28 @@ class ApiVersionSpec extends BaseJsonFormattersSpec {
     """{"version":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
 
   "ApiVersion" should {
+    val openEndpoint        = anEndpoint.copy(authType = AuthType.NONE)
+    val applicationEndpoint = anEndpoint.copy(authType = AuthType.APPLICATION)
+    val userEndpoint        = anEndpoint.copy(authType = AuthType.USER)
+
+    "determine isOpenAccess when not all endpoints are open and public" in {
+      val version = buildVersion("1.0", endpoints = List(openEndpoint, applicationEndpoint, userEndpoint))
+
+      version.isOpenAccess shouldBe false
+    }
+
+    "determine isOpenAccess when all endpoints are open and public" in {
+      val version = buildVersion("1.0", endpoints = List(openEndpoint, openEndpoint))
+
+      version.isOpenAccess shouldBe true
+    }
+
+    "determine isOpenAccess when all endpoints are open but version is not public" in {
+      val version = buildVersion("1.0", apiAccess = ApiAccess.Private(), endpoints = List(openEndpoint, openEndpoint))
+
+      version.isOpenAccess shouldBe false
+    }
+
     "read from Json" in {
       testFromJson(expectedJson)(example)
     }
