@@ -19,7 +19,7 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
 class ApiVersionsSpec extends HmrcSpec with ApiDefinitionFactory {
- 
+
   val version1 = buildVersion("1.0")
   val version2 = buildVersion("2.0")
   val version3 = buildVersion("3.0")
@@ -36,7 +36,7 @@ class ApiVersionsSpec extends HmrcSpec with ApiDefinitionFactory {
         buildVersion("3.0")
       )
 
-      ApiVersions.fromList(versions).keySet should contain.allOf (version1.versionNbr, version2.versionNbr, version3.versionNbr)
+      ApiVersions.fromList(versions).keySet should contain.allOf(version1.versionNbr, version2.versionNbr, version3.versionNbr)
     }
 
     "convert from list removing duplicate version numbers" in {
@@ -49,8 +49,8 @@ class ApiVersionsSpec extends HmrcSpec with ApiDefinitionFactory {
       )
 
       val result = ApiVersions.fromList(versions).keySet
-      
-      result should contain.allOf (version1.versionNbr, version2.versionNbr, version3.versionNbr)
+
+      result should contain.allOf(version1.versionNbr, version2.versionNbr, version3.versionNbr)
       result.size shouldBe 3
     }
   }

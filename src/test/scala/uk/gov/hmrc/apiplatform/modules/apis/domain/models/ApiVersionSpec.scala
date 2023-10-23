@@ -47,9 +47,9 @@ class ApiVersionSpec extends BaseJsonFormattersSpec with ApiDefinitionFactory {
     """{"version":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
 
   "ApiVersion" should {
-    val openEndpoint = anEndpoint.copy(authType = AuthType.NONE)
+    val openEndpoint        = anEndpoint.copy(authType = AuthType.NONE)
     val applicationEndpoint = anEndpoint.copy(authType = AuthType.APPLICATION)
-    val userEndpoint = anEndpoint.copy(authType = AuthType.USER)
+    val userEndpoint        = anEndpoint.copy(authType = AuthType.USER)
 
     "determine isOpenAccess when not all endpoints are open and public" in {
       val version = buildVersion("1.0", endpoints = List(openEndpoint, applicationEndpoint, userEndpoint))

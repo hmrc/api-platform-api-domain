@@ -46,7 +46,7 @@ case class ApiDefinition(
 }
 
 object ApiDefinition {
-  
+
   import play.api.libs.json._
   import InstantJsonFormatter.WithTimeZone._
   import play.api.libs.functional.syntax._ // Combinator syntax

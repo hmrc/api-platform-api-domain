@@ -16,9 +16,7 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiContext
-
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.{ApiContext, ApiVersionNbr}
 
 trait ApiDefinitionFactory {
   protected val anEndpoint = Endpoint("endpoint1", "/some/endpoint1", HttpMethod.POST, AuthType.USER)
@@ -34,7 +32,7 @@ trait ApiDefinitionFactory {
       "test1Name",
       "test1Desc",
       ApiContext("som/context/here"),
-      versions.groupBy(_.versionNbr).map { case (k,vs) => k -> vs.head },
+      versions.groupBy(_.versionNbr).map { case (k, vs) => k -> vs.head },
       requiresTrust = false,
       isTestSupport = false,
       None,

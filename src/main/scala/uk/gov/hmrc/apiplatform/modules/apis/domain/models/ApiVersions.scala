@@ -20,8 +20,9 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 
 object ApiVersions {
+
   def fromList(list: List[ApiVersion]): Map[ApiVersionNbr, ApiVersion] =
-    list.groupBy(_.versionNbr).map { case (k,vs) => k -> vs.head }
+    list.groupBy(_.versionNbr).map { case (k, vs) => k -> vs.head }
 
   type ApiVersionFilterFn = (ApiVersion) => Boolean
 }

@@ -155,35 +155,35 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
     }
 
     "filter versions when some remain" in {
-        val version1 = buildVersion("1.0")
-        val version2 = buildVersion("2.0")
-        val version3 = buildVersion("3.0")
+      val version1 = buildVersion("1.0")
+      val version2 = buildVersion("2.0")
+      val version3 = buildVersion("3.0")
 
-        val definition = buildDefinition(List(version1, version2, version3))
+      val definition = buildDefinition(List(version1, version2, version3))
 
-        val fn: ApiVersions.ApiVersionFilterFn = (v => v.versionNbr.value != "1.0")
-        val remainingVersions = definition.filterVersions(fn).value.versions.values
-        remainingVersions should contain.allOf(version2, version3)
-        remainingVersions should not contain (version1)
+      val fn: ApiVersions.ApiVersionFilterFn = (v => v.versionNbr.value != "1.0")
+      val remainingVersions                  = definition.filterVersions(fn).value.versions.values
+      remainingVersions should contain.allOf(version2, version3)
+      remainingVersions should not contain (version1)
     }
 
     "filter versions when none remain" in {
-        val version1 = buildVersion("1.0")
-        val version2 = buildVersion("2.0")
-        val version3 = buildVersion("3.0")
+      val version1 = buildVersion("1.0")
+      val version2 = buildVersion("2.0")
+      val version3 = buildVersion("3.0")
 
-        val definition = buildDefinition(List(version1, version2, version3))
+      val definition = buildDefinition(List(version1, version2, version3))
 
-        val fn: ApiVersions.ApiVersionFilterFn = (v => v.versionNbr.value == "5.0")
-        definition.filterVersions(fn) shouldBe None
+      val fn: ApiVersions.ApiVersionFilterFn = (v => v.versionNbr.value == "5.0")
+      definition.filterVersions(fn) shouldBe None
     }
 
-    val openEndpoint = anEndpoint.copy(authType = AuthType.NONE)
+    val openEndpoint        = anEndpoint.copy(authType = AuthType.NONE)
     val applicationEndpoint = anEndpoint.copy(authType = AuthType.APPLICATION)
 
-    val privateVersion = buildVersion("1.0",apiAccess = ApiAccess.Private(), endpoints = List(openEndpoint, applicationEndpoint))
-    val publicVersion = buildVersion("2.0",apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, applicationEndpoint))
-    val openVersion = buildVersion("3.0",apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, openEndpoint))
+    val privateVersion = buildVersion("1.0", apiAccess = ApiAccess.Private(), endpoints = List(openEndpoint, applicationEndpoint))
+    val publicVersion  = buildVersion("2.0", apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, applicationEndpoint))
+    val openVersion    = buildVersion("3.0", apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, openEndpoint))
 
     "isOpenAccess for a definition with a private API" in {
       buildDefinition(List(privateVersion, publicVersion)).isOpenAccess shouldBe false
@@ -193,6 +193,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
     }
     "isOpenAccess for a definition with a public API with open endpoints" in {
       buildDefinition(List(openVersion)).isOpenAccess shouldBe true
-    } 
+    }
   }
 }

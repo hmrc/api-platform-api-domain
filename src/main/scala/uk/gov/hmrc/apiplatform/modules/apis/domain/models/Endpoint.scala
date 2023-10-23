@@ -17,13 +17,13 @@
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 case class Endpoint(
-    uriPattern: String,
-    endpointName: String,
-    method: HttpMethod,
-    authType: AuthType,
-    throttlingTier: ResourceThrottlingTier = ResourceThrottlingTier.UNLIMITED,
-    scope: Option[String] = None,
-    queryParameters: List[QueryParameter] = List.empty
+  uriPattern: String,
+  endpointName: String,
+  method: HttpMethod,
+  authType: AuthType,
+  throttlingTier: ResourceThrottlingTier = ResourceThrottlingTier.UNLIMITED,
+  scope: Option[String] = None,
+  queryParameters: List[QueryParameter] = List.empty
 )
 
 object Endpoint {
