@@ -25,7 +25,16 @@ case class ExtendedApiVersion(
     endpoints: List[Endpoint],
     productionAvailability: Option[ApiAvailability],
     sandboxAvailability: Option[ApiAvailability]
-  )
+  ) {
+
+  val displayedStatus = {
+    val accessIndicator = sandboxAvailability.orElse(productionAvailability).map(_.access) match {
+      case Some(ApiAccess.Private(_)) => "Private "
+      case _                          => ""
+    }
+    s"${accessIndicator}${status.displayText}"
+  }
+}
 
 object ExtendedApiVersion {
   import play.api.libs.json.Json

@@ -25,7 +25,17 @@ trait ApiDefinitionFactory {
     ApiVersion(ApiVersionNbr(version), status, apiAccess, endpoints)
   }
 
-  def buildDefinition(versions: List[ApiVersion]): ApiDefinition = {
+  def buildExtendedVersion(
+      version: String,
+      status: ApiStatus = ApiStatus.STABLE,
+      endpoints: List[Endpoint] = List(anEndpoint),
+      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = true, authorised = true)),
+      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = true, authorised = true))
+    ): ExtendedApiVersion = {
+    ExtendedApiVersion(ApiVersionNbr(version), status, endpoints, productionAvailability, sandboxAvailability)
+  }
+
+  def buildDefinition(versions: List[ApiVersion]): ApiDefinition  = {
     ApiDefinition(
       ServiceName("test1ServiceName"),
       "someUrl",
@@ -33,6 +43,21 @@ trait ApiDefinitionFactory {
       "test1Desc",
       ApiContext("som/context/here"),
       versions.groupBy(_.versionNbr).map { case (k, vs) => k -> vs.head },
+      requiresTrust = false,
+      isTestSupport = false,
+      None,
+      List.empty
+    )
+  }
+
+  def buildExtendedDefinition(versions: List[ExtendedApiVersion]): ExtendedApiDefinition = {
+    ExtendedApiDefinition(
+      ServiceName("test1ServiceName"),
+      "someUrl",
+      "test1Name",
+      "test1Desc",
+      ApiContext("som/context/here"),
+      versions = versions,
       requiresTrust = false,
       isTestSupport = false,
       None,

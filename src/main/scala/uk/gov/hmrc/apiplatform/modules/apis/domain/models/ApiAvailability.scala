@@ -16,7 +16,9 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-case class ApiAvailability(endpointsEnabled: Boolean, access: ApiAccess, loggedIn: Boolean, authorised: Boolean)
+case class ApiAvailability(endpointsEnabled: Boolean, access: ApiAccess, loggedIn: Boolean, authorised: Boolean) {
+  lazy val isAccessible: Boolean = authorised || access == ApiAccess.Private(true) || access == ApiAccess.PUBLIC
+}
 
 object ApiAvailability {
   import play.api.libs.json.{Format, Json}

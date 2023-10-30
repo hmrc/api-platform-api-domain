@@ -91,5 +91,22 @@ class ApiStatusSpec extends BaseJsonFormattersSpec with TableDrivenPropertyCheck
 
       Random.shuffle(items).sorted shouldBe items
     }
+
+    val priorityTable =
+      Table(
+        ("Status", "PriorityOf"),
+        (ApiStatus.ALPHA, 3),
+        (ApiStatus.BETA, 2),
+        (ApiStatus.STABLE, 1),
+        (ApiStatus.DEPRECATED, 4),
+        (ApiStatus.RETIRED, 5)
+      )
+
+    "have a priority" in {
+      forAll(priorityTable) { (status, priority) =>
+        ApiStatus.priorityOf(status) shouldBe priority
+      }
+    }
+
   }
 }
