@@ -22,18 +22,17 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
 
-// Not used in Api Definition
 case class ExtendedApiDefinition(
-                                  serviceName: String, // TODO : Should be ServiceName but breaking change to APM
-                                  serviceBaseUrl: String,
-                                  name: String,
-                                  description: String,
-                                  context: ApiContext,
-                                  requiresTrust: Boolean,
-                                  isTestSupport: Boolean,
-                                  versions: List[ExtendedApiVersion],
-                                  categories: List[ApiCategory] = List.empty,
-                                  lastPublishedAt: Option[Instant]
+    serviceName: String, // TODO : Should be ServiceName but breaking change to APM
+    serviceBaseUrl: String,
+    name: String,
+    description: String,
+    context: ApiContext,
+    requiresTrust: Boolean,
+    isTestSupport: Boolean,
+    versions: List[ExtendedApiVersion],
+    categories: List[ApiCategory] = List.empty,
+    lastPublishedAt: Option[Instant]
   )
 
 object ExtendedApiDefinition {
