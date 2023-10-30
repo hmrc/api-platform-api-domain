@@ -16,19 +16,27 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
+import java.time.Instant
 
-// Not used in Api Definition
-case class ExtendedAPIVersion(
-    version: ApiVersionNbr,
-    status: ApiStatus,
-    endpoints: List[Endpoint],
-    productionAvailability: Option[ApiAvailability],
-    sandboxAvailability: Option[ApiAvailability]
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
+
+case class ExtendedApiDefinition(
+    serviceName: String, // TODO : Should be ServiceName but breaking change to APM
+    serviceBaseUrl: String,
+    name: String,
+    description: String,
+    context: ApiContext,
+    requiresTrust: Boolean,
+    isTestSupport: Boolean,
+    versions: List[ExtendedApiVersion],
+    categories: List[ApiCategory] = List.empty,
+    lastPublishedAt: Option[Instant]
   )
 
-object ExtendedAPIVersion {
+object ExtendedApiDefinition {
   import play.api.libs.json.Json
-  implicit val format = Json.format[ExtendedAPIVersion]
+  import InstantJsonFormatter.WithTimeZone._
+  implicit val format = Json.format[ExtendedApiDefinition]
 }
