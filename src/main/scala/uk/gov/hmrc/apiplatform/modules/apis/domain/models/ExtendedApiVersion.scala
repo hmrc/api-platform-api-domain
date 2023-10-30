@@ -20,7 +20,7 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 // Not used in Api Definition
-case class ExtendedAPIVersion(
+case class ExtendedApiVersion(
     version: ApiVersionNbr,
     status: ApiStatus,
     endpoints: List[Endpoint],
@@ -28,7 +28,7 @@ case class ExtendedAPIVersion(
     sandboxAvailability: Option[ApiAvailability]
   )
 
-object ExtendedAPIVersion {
+object ExtendedApiVersion {
   import play.api.libs.json.Json
-  implicit val format = Json.format[ExtendedAPIVersion]
+  implicit val format = Json.format[ExtendedApiVersion]
 }

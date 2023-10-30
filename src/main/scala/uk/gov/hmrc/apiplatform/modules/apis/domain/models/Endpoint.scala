@@ -17,14 +17,27 @@
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 case class Endpoint(
-  uriPattern: String,
-  endpointName: String,
-  method: HttpMethod,
-  authType: AuthType,
-  throttlingTier: ResourceThrottlingTier = ResourceThrottlingTier.UNLIMITED,
-  scope: Option[String] = None,
-  queryParameters: List[QueryParameter] = List.empty
-)
+    uriPattern: String,
+    endpointName: String,
+    method: HttpMethod,
+    authType: AuthType,
+    throttlingTier: ResourceThrottlingTier = ResourceThrottlingTier.UNLIMITED,
+    scope: Option[String] = None,
+    queryParameters: List[QueryParameter] = List.empty
+  ) {
+
+  def decoratedUriPattern = {
+    if (!queryParameters.exists(_.required)) {
+      uriPattern
+    } else {
+      val queryString = queryParameters
+        .filter(_.required)
+        .map(parameter => s"${parameter.name}={${parameter.name}}")
+        .mkString("&")
+      s"$uriPattern?$queryString"
+    }
+  }
+}
 
 object Endpoint {
   import play.api.libs.json.Json
