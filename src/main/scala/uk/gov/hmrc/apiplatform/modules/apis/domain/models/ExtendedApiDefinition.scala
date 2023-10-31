@@ -23,17 +23,38 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
 
 case class ExtendedApiDefinition(
-    serviceName: String, // TODO : Should be ServiceName but breaking change to APM
+    serviceName: ServiceName,
     serviceBaseUrl: String,
     name: String,
     description: String,
     context: ApiContext,
+    versions: List[ExtendedApiVersion],
     requiresTrust: Boolean,
     isTestSupport: Boolean,
-    versions: List[ExtendedApiVersion],
-    categories: List[ApiCategory] = List.empty,
-    lastPublishedAt: Option[Instant]
-  )
+    lastPublishedAt: Option[Instant],
+    categories: List[ApiCategory] = List.empty
+  ) {
+
+  def userAccessibleApiDefinition = {
+    copy(versions =
+      versions.filter(v =>
+        v.productionAvailability.exists(_.isAccessible) || v.sandboxAvailability.exists(_.isAccessible)
+      )
+    )
+  }
+
+  private val statusThenVersionOrdering: Ordering[ExtendedApiVersion] = Ordering.by[ExtendedApiVersion, ApiStatus](_.status)(ApiStatus.orderingByPriority).reverse
+    .orElseBy(_.version).reverse
+
+  lazy val sortedActiveVersions = versions
+    .filterNot(_.status == ApiStatus.RETIRED)
+    .sortBy(_.version).reverse
+
+  lazy val defaultVersion = versions
+    .filterNot(_.status == ApiStatus.RETIRED)
+    .sorted(statusThenVersionOrdering)
+    .headOption
+}
 
 object ExtendedApiDefinition {
   import play.api.libs.json.Json

@@ -25,6 +25,16 @@ trait ApiDefinitionFactory {
     ApiVersion(ApiVersionNbr(version), status, apiAccess, endpoints)
   }
 
+  def buildExtendedVersion(
+      version: String,
+      status: ApiStatus = ApiStatus.STABLE,
+      endpoints: List[Endpoint] = List(anEndpoint),
+      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = true, authorised = true)),
+      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = true, authorised = true))
+    ): ExtendedApiVersion = {
+    ExtendedApiVersion(ApiVersionNbr(version), status, endpoints, productionAvailability, sandboxAvailability)
+  }
+
   def buildDefinition(versions: List[ApiVersion]): ApiDefinition = {
     ApiDefinition(
       ServiceName("test1ServiceName"),
@@ -37,6 +47,21 @@ trait ApiDefinitionFactory {
       isTestSupport = false,
       None,
       List.empty
+    )
+  }
+
+  def buildExtendedDefinition(versions: List[ExtendedApiVersion]): ExtendedApiDefinition = {
+    ExtendedApiDefinition(
+      serviceName = ServiceName("test1ServiceName"),
+      serviceBaseUrl = "someUrl",
+      name = "test1Name",
+      description = "test1Desc",
+      context = ApiContext("som/context/here"),
+      versions = versions,
+      requiresTrust = false,
+      isTestSupport = false,
+      lastPublishedAt = None,
+      categories = List.empty
     )
   }
 }
