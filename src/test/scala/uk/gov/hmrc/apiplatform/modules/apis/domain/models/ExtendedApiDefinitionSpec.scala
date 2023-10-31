@@ -17,8 +17,9 @@
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import scala.util.Random
+
 import org.scalatest.prop.TableDrivenPropertyChecks
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.utils._
 
@@ -91,26 +92,21 @@ class ExtendedApiDefinitionSpec extends BaseJsonFormattersSpec with TableDrivenP
     val accessibleVersionsScenarios = Table(
       ("Availabilities", "Is version accessible"),
       ((None, None), false),
-      
       ((public, None), true),
       ((None, public), true),
       ((public, public), true),
-      
       ((privateAuthorised, None), true),
       ((None, privateAuthorised), true),
       ((privateAuthorised, privateAuthorised), true),
-      
       ((privateNotAuthorised, privateAuthorised), true),
       ((None, privateNotAuthorised), false),
       ((privateNotAuthorised, privateNotAuthorised), false),
-      
       ((trialAuthorised, privateNotAuthorised), true),
       ((None, trialAuthorised), true),
       ((trialAuthorised, trialAuthorised), true),
-      
       ((trialNotAuthorised, None), true),
       ((None, trialNotAuthorised), true),
-      ((trialNotAuthorised, trialNotAuthorised), true),
+      ((trialNotAuthorised, trialNotAuthorised), true)
     )
 
     "return the accessible active version depending on just the version" in {

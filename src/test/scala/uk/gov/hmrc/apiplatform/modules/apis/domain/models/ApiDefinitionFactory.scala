@@ -35,7 +35,7 @@ trait ApiDefinitionFactory {
     ExtendedApiVersion(ApiVersionNbr(version), status, endpoints, productionAvailability, sandboxAvailability)
   }
 
-  def buildDefinition(versions: List[ApiVersion]): ApiDefinition  = {
+  def buildDefinition(versions: List[ApiVersion]): ApiDefinition = {
     ApiDefinition(
       ServiceName("test1ServiceName"),
       "someUrl",

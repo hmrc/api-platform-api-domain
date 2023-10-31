@@ -40,15 +40,16 @@ object ApiStatus {
 
   def unsafeApply(text: String): ApiStatus = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Status"))
 
-  def priorityOf(apiStatus: ApiStatus): Int = {
+  def priorityOf(apiStatus: ApiStatus): Int   = {
     apiStatus match {
-      case ApiStatus.STABLE => 1
-      case ApiStatus.BETA => 2
-      case ApiStatus.ALPHA => 3
+      case ApiStatus.STABLE     => 1
+      case ApiStatus.BETA       => 2
+      case ApiStatus.ALPHA      => 3
       case ApiStatus.DEPRECATED => 4
-      case ApiStatus.RETIRED => 5
+      case ApiStatus.RETIRED    => 5
     }
   }
+  val orderingByPriority: Ordering[ApiStatus] = Ordering.by[ApiStatus, Int](ApiStatus.priorityOf)
 
   implicit val ordering: Ordering[ApiStatus] = Ordering.by[ApiStatus, Int](values.toList.indexOf)
 

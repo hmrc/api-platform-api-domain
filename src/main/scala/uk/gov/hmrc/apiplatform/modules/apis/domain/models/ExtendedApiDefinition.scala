@@ -43,9 +43,7 @@ case class ExtendedApiDefinition(
     )
   }
 
-  val statusOrdering: Ordering[ApiStatus] = Ordering.by[ApiStatus, Int](ApiStatus.priorityOf)
-
-  val statusExtendedVersionOrdering: Ordering[ExtendedApiVersion] = Ordering.by[ExtendedApiVersion, ApiStatus](_.status)(statusOrdering).reverse
+  private val statusThenVersionOrdering: Ordering[ExtendedApiVersion] = Ordering.by[ExtendedApiVersion, ApiStatus](_.status)(ApiStatus.orderingByPriority).reverse
     .orElseBy(_.version).reverse
 
   lazy val sortedActiveVersions = versions
@@ -54,7 +52,7 @@ case class ExtendedApiDefinition(
 
   lazy val defaultVersion = versions
     .filterNot(_.status == ApiStatus.RETIRED)
-    .sorted(statusExtendedVersionOrdering)
+    .sorted(statusThenVersionOrdering)
     .headOption
 }
 
