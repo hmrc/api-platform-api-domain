@@ -52,16 +52,16 @@ trait ApiDefinitionFactory {
 
   def buildExtendedDefinition(versions: List[ExtendedApiVersion]): ExtendedApiDefinition = {
     ExtendedApiDefinition(
-      ServiceName("test1ServiceName"),
-      "someUrl",
-      "test1Name",
-      "test1Desc",
-      ApiContext("som/context/here"),
+      serviceName = ServiceName("test1ServiceName"),
+      serviceBaseUrl = "someUrl",
+      name = "test1Name",
+      description = "test1Desc",
+      context = ApiContext("som/context/here"),
       versions = versions,
       requiresTrust = false,
       isTestSupport = false,
-      None,
-      List.empty
+      lastPublishedAt = None,
+      categories = List.empty
     )
   }
 }
