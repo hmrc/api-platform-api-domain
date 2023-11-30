@@ -57,7 +57,7 @@ case class ExtendedApiDefinition(
 }
 
 object ExtendedApiDefinition {
-  import play.api.libs.json.Json
+  import play.api.libs.json.{Json, OFormat}
   import InstantJsonFormatter.WithTimeZone._
-  implicit val format = Json.format[ExtendedApiDefinition]
+  implicit val format: OFormat[ExtendedApiDefinition] = Json.format[ExtendedApiDefinition]
 }

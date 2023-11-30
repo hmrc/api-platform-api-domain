@@ -37,5 +37,6 @@ object SubscriptionThrottlingTier {
 
   def description(tier: SubscriptionThrottlingTier): String = tier.description
 
-  implicit val format = SealedTraitJsonFormatting.createFormatFor[SubscriptionThrottlingTier]("Subscription Throttling Tier", apply, description)
+  import play.api.libs.json.Format
+  implicit val format: Format[SubscriptionThrottlingTier] = SealedTraitJsonFormatting.createFormatFor[SubscriptionThrottlingTier]("Subscription Throttling Tier", apply, description)
 }

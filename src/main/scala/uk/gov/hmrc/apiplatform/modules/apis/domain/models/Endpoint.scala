@@ -40,6 +40,6 @@ case class Endpoint(
 }
 
 object Endpoint {
-  import play.api.libs.json.Json
-  implicit val format = Json.format[Endpoint]
+  import play.api.libs.json.{Json, OFormat}
+  implicit val format: OFormat[Endpoint] = Json.format[Endpoint]
 }

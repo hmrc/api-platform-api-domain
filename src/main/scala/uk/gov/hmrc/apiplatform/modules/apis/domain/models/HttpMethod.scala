@@ -35,5 +35,6 @@ object HttpMethod {
 
   def unsafeApply(text: String): HttpMethod = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid HTTP Method"))
 
-  implicit val format = SealedTraitJsonFormatting.createFormatFor[HttpMethod]("HTTP Method", apply)
+  import play.api.libs.json.Format
+  implicit val format: Format[HttpMethod] = SealedTraitJsonFormatting.createFormatFor[HttpMethod]("HTTP Method", apply)
 }

@@ -31,6 +31,7 @@ object AuthType {
 
   def unsafeApply(text: String): AuthType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Auth Type"))
 
-  implicit val format = SealedTraitJsonFormatting.createFormatFor[AuthType]("AuthType", apply)
+  import play.api.libs.json.Format
+  implicit val format: Format[AuthType] = SealedTraitJsonFormatting.createFormatFor[AuthType]("AuthType", apply)
 
 }
