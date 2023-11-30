@@ -37,6 +37,6 @@ case class ExtendedApiVersion(
 }
 
 object ExtendedApiVersion {
-  import play.api.libs.json.Json
-  implicit val format = Json.format[ExtendedApiVersion]
+  import play.api.libs.json.{Json, OFormat}
+  implicit val format: OFormat[ExtendedApiVersion] = Json.format[ExtendedApiVersion]
 }

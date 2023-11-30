@@ -19,7 +19,7 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 case class QueryParameter(name: String, required: Boolean = false)
 
 object QueryParameter {
-  import play.api.libs.json.Json
+  import play.api.libs.json.{Format, Json}
 
-  implicit val format = Json.format[QueryParameter]
+  implicit val format: Format[QueryParameter] = Json.format[QueryParameter]
 }

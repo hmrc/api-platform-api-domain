@@ -19,11 +19,11 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 
 class LocatorSpec extends BaseJsonFormattersSpec {
-
-  implicit val formatter          = Locator.buildLocatorFormatter[String]
-  val sandbox: Locator[String]    = Locator.Sandbox("ABC")
-  val production: Locator[String] = Locator.Production("XYZ")
-  val both: Locator[String]       = Locator.Both("ABC", "XYZ")
+  import play.api.libs.json.OFormat
+  implicit val formatter: OFormat[Locator[String]] = Locator.buildLocatorFormatter[String]
+  val sandbox: Locator[String]                     = Locator.Sandbox("ABC")
+  val production: Locator[String]                  = Locator.Production("XYZ")
+  val both: Locator[String]                        = Locator.Both("ABC", "XYZ")
 
   "Locator" should {
 
