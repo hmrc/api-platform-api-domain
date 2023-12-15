@@ -26,7 +26,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
 
   "ApiDefinition2" should {
     def aStoredApiDefinitionJson(
-        requiresTrust: Boolean = false,
         isTestSupport: Boolean = false,
         categories: String = """[ "AGENTS" ]"""
       ): String = {
@@ -38,7 +37,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
          |   "serviceBaseUrl":"http://calendar",
          |   "context":"calendar",
          |   "categories": $categories,
-         |   "requiresTrust": $requiresTrust,
          |   "isTestSupport": $isTestSupport,
          |   "versions":[
          |      {
@@ -67,7 +65,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
     }
 
     def anApiDefinitionJson(
-        requiresTrust: Boolean = false,
         isTestSupport: Boolean = false,
         categories: String = """[ "AGENTS" ]"""
       ): String = {
@@ -100,7 +97,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
          |         "versionSource": "OAS"
          |      }
          |   },
-         |   "requiresTrust": $requiresTrust,
          |   "isTestSupport": $isTestSupport,
          |   "lastPublishedAt": "2011-12-03T10:15:30.000Z",
          |   "categories": $categories

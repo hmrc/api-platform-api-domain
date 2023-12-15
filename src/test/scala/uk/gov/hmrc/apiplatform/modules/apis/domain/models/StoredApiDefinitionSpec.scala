@@ -27,7 +27,6 @@ class StoredApiDefinitionSpec extends HmrcSpec {
     def anApiDefinition(
         accessType: String = "PUBLIC",
         isTrial: Boolean = false,
-        requiresTrust: Boolean = false,
         isTestSupport: Boolean = false,
         categories: String = """[ "AGENTS" ]"""
       ) = {
@@ -40,7 +39,6 @@ class StoredApiDefinitionSpec extends HmrcSpec {
            |   "serviceBaseUrl":"http://calendar",
            |   "context":"calendar",
            |   "categories": $categories,
-           |   "requiresTrust": $requiresTrust,
            |   "isTestSupport": $isTestSupport,
            |   "versions":[
            |      {

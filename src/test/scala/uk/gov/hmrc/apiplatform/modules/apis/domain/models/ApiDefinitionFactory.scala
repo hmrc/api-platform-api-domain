@@ -43,7 +43,6 @@ trait ApiDefinitionFactory {
       "test1Desc",
       ApiContext("som/context/here"),
       versions.groupBy(_.versionNbr).map { case (k, vs) => k -> vs.head },
-      requiresTrust = false,
       isTestSupport = false,
       None,
       List.empty
@@ -58,7 +57,6 @@ trait ApiDefinitionFactory {
       description = "test1Desc",
       context = ApiContext("som/context/here"),
       versions = versions,
-      requiresTrust = false,
       isTestSupport = false,
       lastPublishedAt = None,
       categories = List.empty
