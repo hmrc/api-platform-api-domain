@@ -28,7 +28,6 @@ case class ApiDefinition(
     description: String,
     context: ApiContext,
     versions: Map[ApiVersionNbr, ApiVersion], // Should be NonEmpty
-    requiresTrust: Boolean = false,           // Should be removed
     isTestSupport: Boolean = false,
     lastPublishedAt: Option[Instant] = None,  // Only None in very old records from APIs that have not been published since field was added
     categories: List[ApiCategory]             // Should be NonEmpty
@@ -61,7 +60,6 @@ object ApiDefinition {
         (JsPath \ "versions").read[Map[ApiVersionNbr, ApiVersion]] or
           (JsPath \ "versions").read[List[ApiVersion]].map(ApiDefinition.fromStoredVersions)
       ) and
-      ((JsPath \ "requiresTrust").read[Boolean] or Reads.pure(false)) and
       ((JsPath \ "isTestSupport").read[Boolean] or Reads.pure(false)) and
       (JsPath \ "lastPublishedAt").readNullable[Instant] and
       (JsPath \ "categories").read[List[ApiCategory]]
@@ -87,7 +85,6 @@ object ApiDefinition {
       in.description,
       in.context,
       fromStoredVersions(in.versions),
-      in.requiresTrust,
       in.isTestSupport,
       in.lastPublishedAt,
       in.categories

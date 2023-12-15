@@ -29,7 +29,6 @@ case class ExtendedApiDefinition(
     description: String,
     context: ApiContext,
     versions: List[ExtendedApiVersion],
-    requiresTrust: Boolean,
     isTestSupport: Boolean,
     lastPublishedAt: Option[Instant],
     categories: List[ApiCategory] = List.empty
