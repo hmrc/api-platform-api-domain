@@ -1,3 +1,4 @@
+import scoverage.ScoverageKeys
 import sbt._
 import sbt.Keys._
 import uk.gov.hmrc.DefaultBuildSettings.targetJvm
@@ -8,33 +9,47 @@ import bloop.integrations.sbt.BloopDefaults
 val appName = "api-platform-api-domain"
 lazy val scala213 = "2.13.12"
 
+ThisBuild / majorVersion     := 0
+ThisBuild / isPublicArtefact := true
+ThisBuild / scalaVersion     := scala213
+
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 
-lazy val library = Project(appName, file("."))
+lazy val library = (project in file("."))
   .settings(
-    scalaVersion                     := scala213,
-    name                             := appName,
-    majorVersion                     := 0,
-    isPublicArtefact                 := true,
-    libraryDependencies ++= LibraryDependencies()
+    publish / skip := true
   )
-  .settings(
-    ScoverageSettings()
+  .aggregate(
+    apiPlatformApiDomain, apiPlatformTestApiDomain
   )
-  .disablePlugins(JUnitXmlReportPlugin)
+
+lazy val apiPlatformApiDomain = Project("api-platform-api-domain", file("api-platform-api-domain"))
   .settings(
+    libraryDependencies ++= LibraryDependencies.commonDomain,
+    ScoverageSettings(),
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT")
   )
+  .disablePlugins(JUnitXmlReportPlugin)
 
-  commands ++= Seq(
-    Command.command("run-all-tests") { state => "test" :: state },
-
-    Command.command("clean-and-test") { state => "clean" :: "compile" :: "run-all-tests" :: state },
-
-    // Coverage does not need compile !
-    Command.command("pre-commit") { state => "clean" :: "scalafmtAll" :: "scalafixAll" ::"coverage" :: "run-all-tests" :: "coverageOff" :: "coverageAggregate" :: state }
+lazy val apiPlatformTestApiDomain = Project("api-platform-test-api-domain", file("api-platform-test-api-domain"))
+  .dependsOn(
+    apiPlatformApiDomain
   )
+  .settings(
+    libraryDependencies ++= LibraryDependencies.root,
+    ScoverageKeys.coverageEnabled := false,
+  )
+  .disablePlugins(JUnitXmlReportPlugin)
 
-  Global / bloopAggregateSourceDependencies := true
+commands ++= Seq(
+  Command.command("run-all-tests") { state => "test" :: state },
+
+  Command.command("clean-and-test") { state => "clean" :: "compile" :: "run-all-tests" :: state },
+
+  // Coverage does not need compile !
+  Command.command("pre-commit") { state => "clean" :: "scalafmtAll" :: "scalafixAll" ::"coverage" :: "run-all-tests" :: "coverageOff" :: "coverageAggregate" :: state }
+)
+
+Global / bloopAggregateSourceDependencies := true
