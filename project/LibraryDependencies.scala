@@ -2,7 +2,7 @@ import sbt._
 
 object LibraryDependencies {
   val scalatestVersion = "3.2.17"
-  val commonDomainVersion = "0.13.0"
+  val commonDomainVersion = "0.15.0"
 
   lazy val commonDomain = compileDependencies ++ testDependencies.map(_ % "test")
 
