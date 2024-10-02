@@ -25,7 +25,7 @@ object ApiDefinitionData {
     "http://localhost",
     "Test API defintion name",
     "Test API defintion description",
-    ApiContextData.contextA,
+    ApiContextData.one,
     ApiVersions.fromList(
       List(
         ApiVersionData.apiVersionOnePublicStable,

@@ -21,7 +21,7 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbrData
 object ApiVersionData {
 
   val apiVersionOnePublicStable = ApiVersion(
-    ApiVersionNbrData.versionNbr1,
+    ApiVersionNbrData.one,
     ApiStatus.STABLE,
     ApiAccess.PUBLIC,
     List(EndpointData.openGetEndpoint),
@@ -31,7 +31,7 @@ object ApiVersionData {
   )
 
   val apiVersionTwoPublicStable = ApiVersion(
-    ApiVersionNbrData.versionNbr2,
+    ApiVersionNbrData.two,
     ApiStatus.STABLE,
     ApiAccess.PUBLIC,
     List(EndpointData.openGetEndpoint),

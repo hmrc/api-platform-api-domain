@@ -25,7 +25,7 @@ object ExtendedApiDefinitionData {
     "http://localhost",
     "Test API defintion name",
     "Test API defintion description",
-    ApiContextData.contextA,
+    ApiContextData.one,
     List(
       ExtendedApiVersion(
         ApiVersionData.apiVersionOnePublicStable.versionNbr,
