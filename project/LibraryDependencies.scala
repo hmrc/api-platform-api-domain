@@ -2,7 +2,7 @@ import sbt._
 
 object LibraryDependencies {
   val scalatestVersion = "3.2.17"
-  val commonDomainVersion = "0.16.0"
+  val commonDomainVersion = "0.17.0"
 
   lazy val commonDomain = compileDependencies ++ testDependencies.map(_ % "test")
 
@@ -17,6 +17,6 @@ object LibraryDependencies {
     "org.mockito"             %% "mockito-scala-scalatest"          % "1.17.29",
     "org.scalactic"           %% "scalactic"                        % scalatestVersion,
     "org.scalatest"           %% "scalatest"                        % scalatestVersion,
-    "uk.gov.hmrc"             %% "api-platform-test-common-domain"  % commonDomainVersion,
+    "uk.gov.hmrc"             %% "api-platform-common-domain-fixtures"  % commonDomainVersion,
     )
 }
