@@ -7,7 +7,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import bloop.integrations.sbt.BloopDefaults
 
 val appName = "api-platform-api-domain"
-lazy val scala213 = "2.13.12"
+lazy val scala213 = "2.13.16"
 
 ThisBuild / majorVersion     := 0
 ThisBuild / isPublicArtefact := true
