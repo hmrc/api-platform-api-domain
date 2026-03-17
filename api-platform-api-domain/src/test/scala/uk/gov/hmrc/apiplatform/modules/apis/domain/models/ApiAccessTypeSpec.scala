@@ -29,11 +29,15 @@ class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyC
       Table(
         ("Type", "text"),
         (ApiAccessType.PUBLIC, "public"),
+        (ApiAccessType.INTERNAL, "internal"),
+        (ApiAccessType.CONTROLLED, "controlled"),
         (ApiAccessType.PRIVATE, "private")
       )
 
     "displayText correctly" in {
       ApiAccessType.PUBLIC.displayText shouldBe "Public"
+      ApiAccessType.INTERNAL.displayText shouldBe "Internal"
+      ApiAccessType.CONTROLLED.displayText shouldBe "Controlled"
       ApiAccessType.PRIVATE.displayText shouldBe "Private"
     }
 

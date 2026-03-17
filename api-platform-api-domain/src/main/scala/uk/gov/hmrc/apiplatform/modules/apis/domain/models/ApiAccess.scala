@@ -24,7 +24,9 @@ sealed trait ApiAccess {
 }
 
 object ApiAccess {
-  case object PUBLIC extends ApiAccess
+  case object PUBLIC     extends ApiAccess
+  case object INTERNAL   extends ApiAccess
+  case object CONTROLLED extends ApiAccess
 
   case class Private(isTrial: Boolean = false) extends ApiAccess
 
@@ -32,6 +34,8 @@ object ApiAccess {
 
   def accessType(apiAccess: ApiAccess) = apiAccess match {
     case PUBLIC     => ApiAccessType.PUBLIC
+    case INTERNAL   => ApiAccessType.INTERNAL
+    case CONTROLLED => ApiAccessType.CONTROLLED
     case Private(_) => ApiAccessType.PRIVATE
   }
 
@@ -42,6 +46,8 @@ object ApiAccess {
 
   implicit val format: Format[ApiAccess] = Union.from[ApiAccess]("type")
     .andType("PUBLIC", () => PUBLIC)
+    .andType("INTERNAL", () => INTERNAL)
+    .andType("CONTROLLED", () => CONTROLLED)
     .and[Private]("PRIVATE")
     .format
 }

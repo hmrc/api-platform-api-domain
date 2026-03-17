@@ -28,9 +28,11 @@ sealed trait ApiAccessType {
 }
 
 object ApiAccessType {
-  val values = Set[ApiAccessType](PRIVATE, PUBLIC)
-  case object PRIVATE extends ApiAccessType
-  case object PUBLIC  extends ApiAccessType
+  val values = Set[ApiAccessType](PRIVATE, PUBLIC, INTERNAL, CONTROLLED)
+  case object PRIVATE    extends ApiAccessType
+  case object PUBLIC     extends ApiAccessType
+  case object INTERNAL   extends ApiAccessType
+  case object CONTROLLED extends ApiAccessType
 
   def apply(text: String): Option[ApiAccessType] = ApiAccessType.values.find(_.toString() == text.toUpperCase)
 
