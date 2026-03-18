@@ -29,18 +29,30 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
 
     "display text correctly" in {
       ApiAccess.PUBLIC.displayText shouldBe "Public"
+      ApiAccess.INTERNAL.displayText shouldBe "Internal"
+      ApiAccess.CONTROLLED.displayText shouldBe "Controlled"
       ApiAccess.Private(true).displayText shouldBe "Private"
       ApiAccess.Private(false).displayText shouldBe "Private"
     }
 
     "provide access type" in {
       ApiAccess.PUBLIC.accessType shouldBe ApiAccessType.PUBLIC
+      ApiAccess.INTERNAL.accessType shouldBe ApiAccessType.INTERNAL
+      ApiAccess.CONTROLLED.accessType shouldBe ApiAccessType.CONTROLLED
       ApiAccess.Private(true).accessType shouldBe ApiAccessType.PRIVATE
       ApiAccess.Private(false).accessType shouldBe ApiAccessType.PRIVATE
     }
 
     "read public access from Json" in {
       testFromJson[ApiAccess]("""{ "type": "PUBLIC"}""")(ApiAccess.PUBLIC)
+    }
+
+    "read controlled access from Json" in {
+      testFromJson[ApiAccess]("""{ "type": "CONTROLLED"}""")(ApiAccess.CONTROLLED)
+    }
+
+    "read internal access from Json" in {
+      testFromJson[ApiAccess]("""{ "type": "INTERNAL"}""")(ApiAccess.INTERNAL)
     }
 
     "read private access from Json" in {
@@ -59,6 +71,8 @@ class ApiAccessSpec extends BaseJsonFormattersSpec {
 
     "write to Json" in {
       Json.toJson[ApiAccess](ApiAccess.PUBLIC) shouldBe Json.obj("type" -> "PUBLIC")
+      Json.toJson[ApiAccess](ApiAccess.INTERNAL) shouldBe Json.obj("type" -> "INTERNAL")
+      Json.toJson[ApiAccess](ApiAccess.CONTROLLED) shouldBe Json.obj("type" -> "CONTROLLED")
       Json.toJson[ApiAccess](ApiAccess.Private(false)) shouldBe Json.obj(
         ("type"    -> "PRIVATE"),
         ("isTrial" -> false)
