@@ -29,7 +29,7 @@ case class ApiVersion(
     versionSource: ApiVersionSource = ApiVersionSource.UNKNOWN
   ) {
   // No endpoints must have an auth type and version must be public
-  lazy val isOpenAccess: Boolean = access.isPublic && endpoints.find(_.authType != AuthType.NONE).isEmpty
+  lazy val isOpenAccess: Boolean = access.isPublic && !endpoints.exists(_.authType != AuthType.NONE)
 }
 
 object ApiVersion {

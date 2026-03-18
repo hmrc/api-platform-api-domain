@@ -23,8 +23,8 @@ object ExtendedApiDefinitionData {
   val extendedApiDefinition = ExtendedApiDefinition(
     ServiceNameData.serviceName,
     "http://localhost",
-    "Test API defintion name",
-    "Test API defintion description",
+    "Test API definition name",
+    "Test API definition description",
     ApiContextData.one,
     List(
       ExtendedApiVersion(

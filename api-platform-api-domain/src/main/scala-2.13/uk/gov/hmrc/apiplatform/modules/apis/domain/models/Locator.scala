@@ -37,9 +37,9 @@ object Locator {
     val production = None
 
     override def combine(other: Locator[T]): Locator[T] = other match {
-      case sandbox: Sandbox[T]       => sandbox
-      case production: Production[T] => Both[T](value, production.value)
-      case both: Both[T]             => both
+      case _: Sandbox[T]    => other
+      case p: Production[T] => Both[T](value, p.value)
+      case both: Both[T]    => both
     }
 
     def map[A](fn: T => A): Locator[A] = Sandbox(fn(value))
@@ -50,9 +50,9 @@ object Locator {
     val production = Some(value)
 
     override def combine(other: Locator[T]): Locator[T] = other match {
-      case sandbox: Sandbox[T]       => Both[T](sandbox.value, value)
-      case production: Production[T] => other
-      case both: Both[T]             => both
+      case s: Sandbox[T]    => Both[T](s.value, value)
+      case _: Production[T] => other
+      case both: Both[T]    => both
     }
 
     def map[A](fn: T => A): Locator[A] = Production(fn(value))
@@ -63,9 +63,9 @@ object Locator {
     val production = Some(productionValue)
 
     override def combine(other: Locator[T]): Locator[T] = other match {
-      case sandbox: Sandbox[T]       => Both[T](sandbox.value, productionValue)
-      case production: Production[T] => Both[T](sandboxValue, production.value)
-      case both: Both[T]             => both
+      case s: Sandbox[T]    => Both[T](s.value, productionValue)
+      case p: Production[T] => Both[T](sandboxValue, p.value)
+      case both: Both[T]    => both
     }
 
     def filterSandbox(): Locator[T]    = Sandbox(sandboxValue)
