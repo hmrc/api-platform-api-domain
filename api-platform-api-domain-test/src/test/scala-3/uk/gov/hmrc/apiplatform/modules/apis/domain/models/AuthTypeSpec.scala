@@ -20,60 +20,54 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 import play.api.libs.json.{JsString, Json}
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+import uk.gov.hmrc.apiplatform.modules.common.utils.*
 
-class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
+class AuthTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
-  "ApiAccessType" should {
+  "AuthType" should {
     val values =
       Table(
-        ("Type", "text"),
-        (ApiAccessType.Public, "public"),
-        (ApiAccessType.Internal, "internal"),
-        (ApiAccessType.Controlled, "controlled"),
-        (ApiAccessType.Private, "private")
+        ("AuthType", "text"),
+        (AuthType.None, "none"),
+        (AuthType.User, "user"),
+        (AuthType.Application, "application")
       )
 
     "convert lower case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t) shouldBe s
+        AuthType.apply(t) shouldBe Some(s)
+        AuthType.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t.toUpperCase()) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t.toUpperCase()) shouldBe s
+        AuthType.apply(t.toUpperCase()) shouldBe Some(s)
+        AuthType.unsafeApply(t.toUpperCase()) shouldBe s
       }
     }
 
     "convert string value to None when undefined or empty" in {
-      ApiAccessType.apply("rubbish") shouldBe None
-      ApiAccessType.apply("") shouldBe None
+      AuthType.apply("rubbish") shouldBe None
+      AuthType.apply("") shouldBe None
     }
 
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
-        ApiAccessType.unsafeApply("rubbish")
-      }.getMessage() should include("API Access Type")
+        AuthType.unsafeApply("rubbish")
+      }.getMessage() should include("Auth Type")
     }
 
     "read from Json" in {
       forAll(values) { (s, t) =>
-        testFromJson[ApiAccessType](s""""${t.toUpperCase}"""")(s)
+        testFromJson[AuthType](s""""$t"""")(s)
+        testFromJson[AuthType](s""""${t.toUpperCase()}"""")(s)
       }
-    }
-
-    "read with error from Json" in {
-      intercept[Exception] {
-        testFromJson[ApiAccessType](s"""123""")(ApiAccessType.Public)
-      }.getMessage() should include("Cannot parse API Access Type from '123'")
     }
 
     "write to Json" in {
       forAll(values) { (s, t) =>
-        Json.toJson[ApiAccessType](s) shouldBe JsString(t.toUpperCase())
+        Json.toJson[AuthType](s) shouldBe JsString(t.toUpperCase())
       }
     }
   }

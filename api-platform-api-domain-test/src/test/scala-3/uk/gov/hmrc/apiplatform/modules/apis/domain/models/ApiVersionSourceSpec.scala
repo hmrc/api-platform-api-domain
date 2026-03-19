@@ -20,60 +20,53 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 import play.api.libs.json.{JsString, Json}
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+import uk.gov.hmrc.apiplatform.modules.common.utils.*
 
-class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
+class ApiVersionSourceSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
-  "ApiAccessType" should {
+  "ApiVersionSource" should {
     val values =
       Table(
-        ("Type", "text"),
-        (ApiAccessType.Public, "public"),
-        (ApiAccessType.Internal, "internal"),
-        (ApiAccessType.Controlled, "controlled"),
-        (ApiAccessType.Private, "private")
+        ("Source", "text"),
+        (ApiVersionSource.OAS, "oas"),
+        (ApiVersionSource.RAML, "raml"),
+        (ApiVersionSource.Unknown, "unknown")
       )
 
     "convert lower case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t) shouldBe s
+        ApiVersionSource.apply(t) shouldBe Some(s)
+        ApiVersionSource.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t.toUpperCase()) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t.toUpperCase()) shouldBe s
+        ApiVersionSource.apply(t.toUpperCase()) shouldBe Some(s)
+        ApiVersionSource.unsafeApply(t.toUpperCase()) shouldBe s
       }
     }
 
     "convert string value to None when undefined or empty" in {
-      ApiAccessType.apply("rubbish") shouldBe None
-      ApiAccessType.apply("") shouldBe None
+      ApiVersionSource.apply("rubbish") shouldBe None
+      ApiVersionSource.apply("") shouldBe None
     }
 
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
-        ApiAccessType.unsafeApply("rubbish")
-      }.getMessage() should include("API Access Type")
+        ApiVersionSource.unsafeApply("rubbish")
+      }.getMessage() should include("API Version Source")
     }
 
     "read from Json" in {
       forAll(values) { (s, t) =>
-        testFromJson[ApiAccessType](s""""${t.toUpperCase}"""")(s)
+        testFromJson[ApiVersionSource](s""""${t.toUpperCase()}"""")(s)
       }
-    }
-
-    "read with error from Json" in {
-      intercept[Exception] {
-        testFromJson[ApiAccessType](s"""123""")(ApiAccessType.Public)
-      }.getMessage() should include("Cannot parse API Access Type from '123'")
     }
 
     "write to Json" in {
       forAll(values) { (s, t) =>
-        Json.toJson[ApiAccessType](s) shouldBe JsString(t.toUpperCase())
+        Json.toJson[ApiVersionSource](s) shouldBe JsString(t.toUpperCase())
       }
     }
   }

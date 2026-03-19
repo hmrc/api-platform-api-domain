@@ -20,60 +20,64 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 import play.api.libs.json.{JsString, Json}
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+import uk.gov.hmrc.apiplatform.modules.common.utils.*
 
-class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
+class HttpMethodSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
-  "ApiAccessType" should {
+  "HttpMethod" should {
     val values =
       Table(
-        ("Type", "text"),
-        (ApiAccessType.Public, "public"),
-        (ApiAccessType.Internal, "internal"),
-        (ApiAccessType.Controlled, "controlled"),
-        (ApiAccessType.Private, "private")
+        ("Method", "text"),
+        (HttpMethod.Get, "get"),
+        (HttpMethod.Post, "post"),
+        (HttpMethod.Put, "put"),
+        (HttpMethod.Patch, "patch"),
+        (HttpMethod.Delete, "delete"),
+        (HttpMethod.Options, "options"),
+        (HttpMethod.Head, "head")
       )
 
     "convert lower case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t) shouldBe s
+        HttpMethod.apply(t) shouldBe Some(s)
+        HttpMethod.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t.toUpperCase()) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t.toUpperCase()) shouldBe s
+        HttpMethod.apply(t.toUpperCase()) shouldBe Some(s)
+        HttpMethod.unsafeApply(t.toUpperCase()) shouldBe s
       }
     }
 
     "convert string value to None when undefined or empty" in {
-      ApiAccessType.apply("rubbish") shouldBe None
-      ApiAccessType.apply("") shouldBe None
+      HttpMethod.apply("rubbish") shouldBe None
+      HttpMethod.apply("") shouldBe None
     }
 
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
-        ApiAccessType.unsafeApply("rubbish")
-      }.getMessage() should include("API Access Type")
+        HttpMethod.unsafeApply("rubbish")
+      }.getMessage() should include("HTTP Method")
     }
 
     "read from Json" in {
       forAll(values) { (s, t) =>
-        testFromJson[ApiAccessType](s""""${t.toUpperCase}"""")(s)
+        testFromJson[HttpMethod](s""""$t"""")(s)
+        testFromJson[HttpMethod](s""""${t.toUpperCase}"""")(s)
       }
     }
 
     "read with error from Json" in {
       intercept[Exception] {
-        testFromJson[ApiAccessType](s"""123""")(ApiAccessType.Public)
-      }.getMessage() should include("Cannot parse API Access Type from '123'")
+        testFromJson[HttpMethod](s"""123""")(HttpMethod.Get)
+      }.getMessage() should include("Cannot parse HTTP Method from '123'")
     }
 
     "write to Json" in {
       forAll(values) { (s, t) =>
-        Json.toJson[ApiAccessType](s) shouldBe JsString(t.toUpperCase())
+        Json.toJson[HttpMethod](s) shouldBe JsString(t.toUpperCase())
       }
     }
   }

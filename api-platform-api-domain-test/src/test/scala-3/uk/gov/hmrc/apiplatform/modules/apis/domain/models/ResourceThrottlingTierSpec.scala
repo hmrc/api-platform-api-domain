@@ -20,60 +20,51 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 import play.api.libs.json.{JsString, Json}
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
+import uk.gov.hmrc.apiplatform.modules.common.utils.*
 
-class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
+class ResourceThrottlingTierSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks {
 
-  "ApiAccessType" should {
+  "SubscriptionThrottlingTier" should {
     val values =
       Table(
-        ("Type", "text"),
-        (ApiAccessType.Public, "public"),
-        (ApiAccessType.Internal, "internal"),
-        (ApiAccessType.Controlled, "controlled"),
-        (ApiAccessType.Private, "private")
+        ("Tier", "text"),
+        (ResourceThrottlingTier.Unlimited, "unlimited")
       )
 
     "convert lower case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t) shouldBe s
+        ResourceThrottlingTier.apply(t) shouldBe Some(s)
+        ResourceThrottlingTier.unsafeApply(t) shouldBe s
       }
     }
 
     "convert mixed case string to case object" in {
       forAll(values) { (s, t) =>
-        ApiAccessType.apply(t.toUpperCase()) shouldBe Some(s)
-        ApiAccessType.unsafeApply(t.toUpperCase()) shouldBe s
+        ResourceThrottlingTier.apply(t.toUpperCase()) shouldBe Some(s)
+        ResourceThrottlingTier.unsafeApply(t.toUpperCase()) shouldBe s
       }
     }
 
     "convert string value to None when undefined or empty" in {
-      ApiAccessType.apply("rubbish") shouldBe None
-      ApiAccessType.apply("") shouldBe None
+      ResourceThrottlingTier.apply("rubbish") shouldBe None
+      ResourceThrottlingTier.apply("") shouldBe None
     }
 
     "throw when string value is invalid" in {
       intercept[RuntimeException] {
-        ApiAccessType.unsafeApply("rubbish")
-      }.getMessage() should include("API Access Type")
+        ResourceThrottlingTier.unsafeApply("rubbish")
+      }.getMessage() should include("Resource Throttling Tier")
     }
 
     "read from Json" in {
       forAll(values) { (s, t) =>
-        testFromJson[ApiAccessType](s""""${t.toUpperCase}"""")(s)
+        testFromJson[ResourceThrottlingTier](s""""$t"""")(s)
       }
-    }
-
-    "read with error from Json" in {
-      intercept[Exception] {
-        testFromJson[ApiAccessType](s"""123""")(ApiAccessType.Public)
-      }.getMessage() should include("Cannot parse API Access Type from '123'")
     }
 
     "write to Json" in {
       forAll(values) { (s, t) =>
-        Json.toJson[ApiAccessType](s) shouldBe JsString(t.toUpperCase())
+        Json.toJson[ResourceThrottlingTier](s) shouldBe JsString(t.toUpperCase())
       }
     }
   }

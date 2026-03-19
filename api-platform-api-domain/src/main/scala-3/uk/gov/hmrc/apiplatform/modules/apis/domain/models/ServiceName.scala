@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
+opaque type ServiceName <: String = String
 
-enum ApiAccessType {
-  case Private, Public, Internal, Controlled
-}
+object ServiceName {
 
-object ApiAccessType {
-  def apply(text: String): Option[ApiAccessType] = ApiAccessType.values.find(_.toString().equalsIgnoreCase(text))
+  extension (s: ServiceName) {
+    def value: String = s
+  }
 
-  def unsafeApply(text: String): ApiAccessType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
+  def apply(s: String): ServiceName = s
 
-  import play.api.libs.json.Format
-  given Format[ApiAccessType] = SimpleEnumJsonFormatting.createStringFormatFor[ApiAccessType]("API Access Type", apply, _.toString.toUpperCase)
+  import play.api.libs.json.*
+  given Format[ServiceName] = Format(Reads.StringReads, Writes.StringWrites)
 }

@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
+import play.api.libs.json.Format
+
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-enum ApiAccessType {
-  case Private, Public, Internal, Controlled
-}
+enum ResourceThrottlingTier:
+  case Unlimited
 
-object ApiAccessType {
-  def apply(text: String): Option[ApiAccessType] = ApiAccessType.values.find(_.toString().equalsIgnoreCase(text))
+object ResourceThrottlingTier {
+  def apply(text: String): Option[ResourceThrottlingTier] = ResourceThrottlingTier.values.find(_.toString.equalsIgnoreCase(text))
 
-  def unsafeApply(text: String): ApiAccessType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
+  def unsafeApply(text: String): ResourceThrottlingTier = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Resource Throttling Tier"))
 
-  import play.api.libs.json.Format
-  given Format[ApiAccessType] = SimpleEnumJsonFormatting.createStringFormatFor[ApiAccessType]("API Access Type", apply, _.toString.toUpperCase)
+  given Format[ResourceThrottlingTier] = SimpleEnumJsonFormatting.createStringFormatFor[ResourceThrottlingTier]("Resource Throttling Tier", apply, _.toString().toUpperCase())
 }

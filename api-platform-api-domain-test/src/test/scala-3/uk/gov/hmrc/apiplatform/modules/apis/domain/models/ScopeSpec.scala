@@ -16,17 +16,33 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
+import scala.util.Random
 
-enum ApiAccessType {
-  case Private, Public, Internal, Controlled
-}
+import play.api.libs.json.*
 
-object ApiAccessType {
-  def apply(text: String): Option[ApiAccessType] = ApiAccessType.values.find(_.toString().equalsIgnoreCase(text))
+import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 
-  def unsafeApply(text: String): ApiAccessType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
+class ScopeSpec extends BaseJsonFormattersSpec {
 
-  import play.api.libs.json.Format
-  given Format[ApiAccessType] = SimpleEnumJsonFormatting.createStringFormatFor[ApiAccessType]("API Access Type", apply, _.toString.toUpperCase)
+  "Scope" should {
+    val example = Scope("miscblah")
+
+    "convert toString" in {
+      example.toString() shouldBe "miscblah"
+    }
+
+    "read from Json" in {
+      testFromJson[Scope](s""""miscblah"""")(example)
+    }
+
+    "write to Json" in {
+      Json.toJson[Scope](example) shouldBe JsString("miscblah")
+    }
+
+    "order correctly" in {
+      val names = List("a", "b", "c", "d", "e").map(Scope(_))
+
+      Random.shuffle(names).sorted shouldBe names
+    }
+  }
 }

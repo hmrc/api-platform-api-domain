@@ -18,15 +18,17 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-enum ApiAccessType {
-  case Private, Public, Internal, Controlled
+enum AuthType {
+  case None
+  case Application
+  case User
 }
 
-object ApiAccessType {
-  def apply(text: String): Option[ApiAccessType] = ApiAccessType.values.find(_.toString().equalsIgnoreCase(text))
+object AuthType {
+  def apply(text: String): Option[AuthType] = AuthType.values.find(_.toString.equalsIgnoreCase(text))
 
-  def unsafeApply(text: String): ApiAccessType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
+  def unsafeApply(text: String): AuthType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Auth Type"))
 
   import play.api.libs.json.Format
-  given Format[ApiAccessType] = SimpleEnumJsonFormatting.createStringFormatFor[ApiAccessType]("API Access Type", apply, _.toString.toUpperCase)
+  given Format[AuthType] = SimpleEnumJsonFormatting.createStringFormatFor[AuthType]("AuthType", apply, _.toString.toUpperCase)
 }

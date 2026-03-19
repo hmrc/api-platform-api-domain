@@ -39,7 +39,7 @@ object ApiAccess {
     case Private(_) => ApiAccessType.Private
   }
 
-  import play.api.libs.json._
+  import play.api.libs.json.*
   import uk.gov.hmrc.play.json.Union
 
   private given OFormat[Private] = Json.format[Private]

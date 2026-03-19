@@ -18,15 +18,21 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-enum ApiAccessType {
-  case Private, Public, Internal, Controlled
+enum HttpMethod {
+  case Get
+  case Post
+  case Put
+  case Patch
+  case Delete
+  case Options
+  case Head
 }
 
-object ApiAccessType {
-  def apply(text: String): Option[ApiAccessType] = ApiAccessType.values.find(_.toString().equalsIgnoreCase(text))
+object HttpMethod {
+  def apply(text: String): Option[HttpMethod] = HttpMethod.values.find(_.toString.equalsIgnoreCase(text))
 
-  def unsafeApply(text: String): ApiAccessType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
+  def unsafeApply(text: String): HttpMethod = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid HTTP Method"))
 
   import play.api.libs.json.Format
-  given Format[ApiAccessType] = SimpleEnumJsonFormatting.createStringFormatFor[ApiAccessType]("API Access Type", apply, _.toString.toUpperCase)
+  given Format[HttpMethod] = SimpleEnumJsonFormatting.createStringFormatFor[HttpMethod]("HTTP Method", apply, _.toString.toUpperCase)
 }
