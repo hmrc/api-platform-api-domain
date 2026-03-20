@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// $COVERAGE-OFF$
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import play.api.libs.json._
@@ -39,7 +38,7 @@ object Locator {
     override def combine(other: Locator[T]): Locator[T] = other match {
       case _: Sandbox[T]    => other
       case p: Production[T] => Both[T](value, p.value)
-      case both: Both[T]    => both
+      case _: Both[T]       => other
     }
 
     def map[A](fn: T => A): Locator[A] = Sandbox(fn(value))
@@ -52,7 +51,7 @@ object Locator {
     override def combine(other: Locator[T]): Locator[T] = other match {
       case s: Sandbox[T]    => Both[T](s.value, value)
       case _: Production[T] => other
-      case both: Both[T]    => both
+      case _: Both[T]       => other
     }
 
     def map[A](fn: T => A): Locator[A] = Production(fn(value))
@@ -65,7 +64,7 @@ object Locator {
     override def combine(other: Locator[T]): Locator[T] = other match {
       case s: Sandbox[T]    => Both[T](s.value, productionValue)
       case p: Production[T] => Both[T](sandboxValue, p.value)
-      case both: Both[T]    => both
+      case _: Both[T]       => other
     }
 
     def filterSandbox(): Locator[T]    = Sandbox(sandboxValue)
@@ -101,4 +100,3 @@ object LocatorSyntax {
   }
 
 }
-// $COVERAGE-ON$

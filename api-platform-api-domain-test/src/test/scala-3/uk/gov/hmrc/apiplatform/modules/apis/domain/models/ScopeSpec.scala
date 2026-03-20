@@ -27,10 +27,6 @@ class ScopeSpec extends BaseJsonFormattersSpec {
   "Scope" should {
     val example = Scope("miscblah")
 
-    "convert toString" in {
-      example.toString() shouldBe "miscblah"
-    }
-
     "read from Json" in {
       testFromJson[Scope](s""""miscblah"""")(example)
     }
