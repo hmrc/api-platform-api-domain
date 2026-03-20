@@ -22,8 +22,8 @@ case class Endpoint(
     method: HttpMethod,
     authType: AuthType,
     throttlingTier: ResourceThrottlingTier = ResourceThrottlingTier.Unlimited,
-    scope: Option[Scope] = None,
-    queryParameters: List[QueryParameter] = List.empty
+    scope: Option[Scope],
+    queryParameters: List[QueryParameter]
   ) {
 
   def decoratedUriPattern = {
@@ -46,10 +46,6 @@ object Endpoint {
 
   object Name {
 
-    extension (s: Name) {
-      def value: String = s
-    }
-
     def apply(s: String): Name = s
 
     given Format[Name] = Format(Reads.StringReads, Writes.StringWrites)
@@ -58,10 +54,6 @@ object Endpoint {
   opaque type UriPattern <: String = String
 
   object UriPattern {
-
-    extension (s: UriPattern) {
-      def value: String = s
-    }
 
     def apply(s: String): UriPattern = s
 

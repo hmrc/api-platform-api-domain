@@ -20,10 +20,15 @@ import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 
 class LocatorSpec extends BaseJsonFormattersSpec {
   import play.api.libs.json.OFormat
-  implicit val formatter: OFormat[Locator[String]] = Locator.buildLocatorFormatter[String]
-  val sandbox: Locator[String]                     = Locator.Sandbox("ABC")
-  val production: Locator[String]                  = Locator.Production("XYZ")
-  val both: Locator[String]                        = Locator.Both("ABC", "XYZ")
+
+  given OFormat[Locator[String]] = Locator.buildLocatorFormatter[String]
+
+  val sandbox: Locator[String]         = Locator.Sandbox("ABC")
+  val otherSandbox: Locator[String]    = Locator.Sandbox("DEF")
+  val production: Locator[String]      = Locator.Production("XYZ")
+  val otherProduction: Locator[String] = Locator.Production("STU")
+  val both: Locator.Both[String]       = Locator.Both("ABC", "XYZ")
+  val otherBoth: Locator.Both[String]  = Locator.Both("DEF", "STU")
 
   "Locator" should {
 
@@ -31,17 +36,33 @@ class LocatorSpec extends BaseJsonFormattersSpec {
       import LocatorSyntax.*
 
       "ABC".toSandbox shouldBe sandbox
+
+      "ABC".toLocator(true) shouldBe sandbox
     }
 
     "lift to production" in {
       import LocatorSyntax.*
 
       "XYZ".toProduction shouldBe production
+
+      "XYZ".toLocator(false) shouldBe production
     }
 
-    "add the other side to sandbox" in {
+    "add the other side to locator" in {
       sandbox.combine(production) shouldBe both
+      sandbox.combine(both) shouldBe both
       production.combine(sandbox) shouldBe both
+      production.combine(both) shouldBe both
+    }
+
+    "add to same side overides original locator" in {
+      sandbox.combine(otherSandbox) shouldBe otherSandbox
+      production.combine(otherProduction) shouldBe otherProduction
+    }
+
+    "filter" in {
+      both.filterSandbox() shouldBe sandbox
+      both.filterProduction() shouldBe production
     }
 
     "map works" in {
@@ -50,6 +71,12 @@ class LocatorSpec extends BaseJsonFormattersSpec {
       sandbox.map(fn) shouldBe 3.toSandbox
       production.map(fn) shouldBe 3.toProduction
       both.map(fn) shouldBe Locator.Both(3, 3)
+    }
+
+    "both correctly combines" in {
+      both.combine(otherSandbox) shouldBe Locator.Both("DEF", "XYZ")
+      both.combine(otherProduction) shouldBe Locator.Both("ABC", "STU")
+      both.combine(otherBoth) shouldBe otherBoth
     }
 
     "read sandbox from Json" in {
@@ -73,7 +100,7 @@ class LocatorSpec extends BaseJsonFormattersSpec {
     }
 
     "write both to Json" in {
-      testToJson(both)("location" -> "BOTH", "sandboxValue" -> "ABC", "productionValue" -> "XYZ")
+      testToJson[Locator[String]](both)("location" -> "BOTH", "sandboxValue" -> "ABC", "productionValue" -> "XYZ")
     }
   }
 }

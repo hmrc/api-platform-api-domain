@@ -31,7 +31,7 @@ case class ExtendedApiDefinition(
     versions: List[ExtendedApiVersion],
     isTestSupport: Boolean,
     lastPublishedAt: Option[Instant],
-    categories: List[ApiCategory] = List.empty
+    categories: List[ApiCategory]
   ) {
 
   def userAccessibleApiDefinition = {

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.services.ApiDefinitionFactory
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
 class ApiVersionsSpec extends HmrcSpec with ApiDefinitionFactory {

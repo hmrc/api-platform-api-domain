@@ -43,8 +43,8 @@ class EndpointSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks
       }
     })
 
-    def anEndpoint(uriPattern: Endpoint.UriPattern, parameters: List[QueryParameter]) = {
-      Endpoint(uriPattern, Endpoint.Name("Get Today's Date"), HttpMethod.Get, AuthType.Application, queryParameters = parameters)
+    def anEndpoint(uriPattern: Endpoint.UriPattern, queryParameters: List[QueryParameter]) = {
+      Endpoint(uriPattern, Endpoint.Name("Get Today's Date"), HttpMethod.Get, AuthType.Application, scope = None, queryParameters)
     }
   }
 

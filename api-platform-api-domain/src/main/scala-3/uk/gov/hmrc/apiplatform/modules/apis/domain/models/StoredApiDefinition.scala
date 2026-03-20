@@ -27,10 +27,10 @@ case class StoredApiDefinition(
     name: ApiDefinition.Name,
     description: ApiDefinition.Description,
     context: ApiContext,
-    versions: List[ApiVersion],              // Should be NonEmpty
-    isTestSupport: Boolean = false,
-    lastPublishedAt: Option[Instant] = None, // Only None in very old records from APIs that have not been published since field was added
-    categories: List[ApiCategory]            // Should be NonEmpty
+    versions: List[ApiVersion],       // Should be NonEmpty
+    isTestSupport: Boolean,
+    lastPublishedAt: Option[Instant], // Only None in very old records from APIs that have not been published since field was added
+    categories: List[ApiCategory]     // Should be NonEmpty
   )
 
 object StoredApiDefinition {

@@ -18,26 +18,27 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import play.api.libs.json.*
 
-import uk.gov.hmrc.apiplatform.modules.common.utils.{ApiBuilder, HmrcSpec}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.services.ApiBuilder
+import uk.gov.hmrc.apiplatform.modules.common.utils.{FixedClock, HmrcSpec}
 
-class MappedApiDefinitionsSpec extends HmrcSpec with ApiBuilder {
+class MappedApiDefinitionsSpec extends HmrcSpec with FixedClock with ApiBuilder {
 
   "return api definitions as mapped api definitions when Json is a map" in {
-    val apiDefinition           = DefaultApiDefinition.addVersion(VersionOne, DefaultVersionData)
+    val apiDefinition           = DefaultApiDefinition.addVersion(apiVersionNbrOne, DefaultVersionData)
     val apiContext              = apiDefinition.context
     val apiContextAndDefinition = Map(apiContext -> apiDefinition)
     val payload: JsValue        = Json.toJson(apiContextAndDefinition)
 
     val result = Json.fromJson[MappedApiDefinitions](payload).asOpt
-    result.value.wrapped shouldBe Map(apiContext -> apiDefinition)
+    result.value shouldBe Map(apiContext -> apiDefinition)
   }
 
   "return api definitions as mapped api definitions when Json is a list" in {
-    val apiDefinition    = DefaultApiDefinition.addVersion(VersionOne, DefaultVersionData)
+    val apiDefinition    = DefaultApiDefinition.addVersion(apiVersionNbrOne, DefaultVersionData)
     val apiContext       = apiDefinition.context
     val payload: JsValue = Json.toJson(List(apiDefinition))
 
     val result = Json.fromJson[MappedApiDefinitions](payload).asOpt
-    result.value.wrapped shouldBe Map(apiContext -> apiDefinition)
+    result.value shouldBe Map(apiContext -> apiDefinition)
   }
 }

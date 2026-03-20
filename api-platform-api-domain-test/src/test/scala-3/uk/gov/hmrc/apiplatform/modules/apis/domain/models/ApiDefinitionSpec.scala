@@ -19,12 +19,14 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import play.api.libs.json.Json
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.services.ApiDefinitionFactory
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiContext
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
 class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
 
-  "ApiDefinition2" should {
+  "ApiDefinition" should {
+
     def aStoredApiDefinitionJson(
         isTestSupport: Boolean = false,
         categories: String = """[ "AGENTS" ]"""
@@ -148,6 +150,16 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
       intercept[RuntimeException] {
         Json.parse(anApiDefinitionJson(categories = """ [ "NOT_A_VALID_CATEGORY" ] """)).as[ApiDefinition]
       }
+    }
+
+    "as list extracts from map" in {
+      val version1 = buildVersion("1.0")
+      val version2 = buildVersion("2.0")
+      val version3 = buildVersion("3.0")
+
+      val definition = buildDefinition(List(version1, version2, version3))
+
+      definition.versionsAsList shouldBe List(version1, version2, version3)
     }
 
     "filter versions when some remain" in {

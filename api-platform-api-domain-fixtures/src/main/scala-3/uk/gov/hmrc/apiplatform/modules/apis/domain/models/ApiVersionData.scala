@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,27 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-opaque type ServiceName <: String = String
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbrData
 
-object ServiceName {
-  def apply(s: String): ServiceName = s
+object ApiVersionData {
 
-  import play.api.libs.json.*
-  given Format[ServiceName] = Format(Reads.StringReads, Writes.StringWrites)
+  val apiVersionOnePublicStable = ApiVersion(
+    ApiVersionNbrData.one,
+    ApiStatus.Stable,
+    ApiAccess.Public,
+    List(EndpointData.openGetEndpoint),
+    true,
+    None,
+    ApiVersionSource.OAS
+  )
+
+  val apiVersionTwoPublicStable = ApiVersion(
+    ApiVersionNbrData.two,
+    ApiStatus.Stable,
+    ApiAccess.Public,
+    List(EndpointData.openGetEndpoint),
+    true,
+    None,
+    ApiVersionSource.OAS
+  )
 }

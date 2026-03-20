@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatform.modules.common.utils
+package uk.gov.hmrc.apiplatform.modules.apis.domain.services
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.{ApiContext, ApiVersionNbr}
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.{ApiContext, ApiVersionNbr, ApiVersionNbrFixtures}
+import uk.gov.hmrc.apiplatform.modules.common.services.ClockNow
 
-trait ApiBuilder {
+trait ApiBuilder extends ApiVersionNbrFixtures with ClockNow {
 
   extension (versionData: ApiVersion) {
     def withStatus(newStatus: ApiStatus) = versionData.copy(status = newStatus)
@@ -46,14 +47,10 @@ trait ApiBuilder {
     def withContext(apiContext: ApiContext) = apiDefinition.copy(context = apiContext)
   }
 
-  val DefaultVersionData = ApiVersion(ApiVersionNbr("1.0"), ApiStatus.Stable, ApiAccess.Public, List.empty)
+  val DefaultVersionData = ApiVersion(apiVersionNbrOne, ApiStatus.Stable, ApiAccess.Public, List.empty, awsRequestId = None, endpointsEnabled = true)
 
   val DefaultServiceName = ServiceName("A-Service")
   val DefaultName        = ApiDefinition.Name("API Name")
-
-  val VersionOne   = ApiVersionNbr("1.0")
-  val VersionTwo   = ApiVersionNbr("2.0")
-  val VersionThree = ApiVersionNbr("3.0")
 
   val DefaultApiDefinition = ApiDefinition(
     serviceName = DefaultServiceName,
@@ -61,8 +58,9 @@ trait ApiBuilder {
     name = DefaultName,
     description = ApiDefinition.Description("Description"),
     context = ApiContext("context/name"),
-    versions = Map(VersionOne -> DefaultVersionData),
+    versions = Map(apiVersionNbrOne -> DefaultVersionData),
     isTestSupport = false,
+    lastPublishedAt = Some(instant),
     categories = List.empty
   )
 }

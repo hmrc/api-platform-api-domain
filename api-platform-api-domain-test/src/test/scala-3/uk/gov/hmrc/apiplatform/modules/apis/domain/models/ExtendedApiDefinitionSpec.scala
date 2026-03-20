@@ -21,6 +21,7 @@ import scala.util.Random
 import org.scalatest.prop.TableDrivenPropertyChecks
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.services.ApiDefinitionFactory
 import uk.gov.hmrc.apiplatform.modules.common.utils.*
 
 class ExtendedApiDefinitionSpec extends BaseJsonFormattersSpec with TableDrivenPropertyChecks with ApiDefinitionFactory {

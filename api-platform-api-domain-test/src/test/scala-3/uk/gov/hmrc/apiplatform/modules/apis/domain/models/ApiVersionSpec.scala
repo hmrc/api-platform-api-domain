@@ -20,6 +20,7 @@ import scala.util.Random
 
 import play.api.libs.json.Json
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.services.ApiDefinitionFactory
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.apiplatform.modules.common.utils.BaseJsonFormattersSpec
 

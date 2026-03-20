@@ -20,10 +20,6 @@ opaque type Scope <: String = String
 
 object Scope {
 
-  extension (s: Scope) {
-    def value: String = s
-  }
-
   def apply(s: String): Scope = s
 
   import play.api.libs.json.*

@@ -18,23 +18,22 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiContext
 
-// Wrapper class for endpoints returning Map[ApiContext,ApiDefintion] useful until such time as everything can switch to List[ApiDefinition]
-//   but that will read a list if the supplier is updated first
+opaque type MappedApiDefinitions <: Map[ApiContext, ApiDefinition] = Map[ApiContext, ApiDefinition]
 
-final case class MappedApiDefinitions(wrapped: Map[ApiContext, ApiDefinition]) extends AnyVal
-
-object MappedApiDefinitions {
+private object BlindReaders {
   import play.api.libs.json.*
-  import play.api.libs.functional.syntax.* // Combinator syntax
+  val readFromMap: Reads[Map[ApiContext, ApiDefinition]] = summon[Reads[Map[ApiContext, ApiDefinition]]]
 
-  def fromList(in: List[ApiDefinition]): Map[ApiContext, ApiDefinition] = {
+  private def fromList(in: List[ApiDefinition]): Map[ApiContext, ApiDefinition] = {
     in.map(defn => defn.context -> defn).toMap
   }
+  val readFromList: Reads[Map[ApiContext, ApiDefinition]]                       = summon[Reads[List[ApiDefinition]]].map(fromList)
+}
 
-  given Reads[MappedApiDefinitions] = (
-    (
-      (JsPath).read[Map[ApiContext, ApiDefinition]] or
-        (JsPath).read[List[ApiDefinition]].map(fromList)
-    ).map(MappedApiDefinitions(_))
-  )
+object MappedApiDefinitions {
+  def apply(m: Map[ApiContext, ApiDefinition]): MappedApiDefinitions = m
+
+  import play.api.libs.json.*
+  import BlindReaders.*
+  given Reads[MappedApiDefinitions] = (readFromMap orElse readFromList).map(MappedApiDefinitions.apply)
 }

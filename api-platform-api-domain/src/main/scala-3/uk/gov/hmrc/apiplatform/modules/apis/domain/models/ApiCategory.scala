@@ -50,10 +50,10 @@ object ApiCategory {
 
   def unsafeApply(text: String): ApiCategory = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Category"))
 
-  implicit val ordering: Ordering[ApiCategory] = Ordering.by[ApiCategory, String](_.displayText)
+  given Ordering[ApiCategory] = Ordering.by[ApiCategory, String](_.displayText)
 
   import play.api.libs.json.Format
 
-  implicit val format: Format[ApiCategory] = SimpleEnumJsonFormatting.createEnumFormatFor[ApiCategory]("API Category", apply)
+  given Format[ApiCategory] = SimpleEnumJsonFormatting.createEnumFormatFor[ApiCategory]("API Category", apply)
 
 }

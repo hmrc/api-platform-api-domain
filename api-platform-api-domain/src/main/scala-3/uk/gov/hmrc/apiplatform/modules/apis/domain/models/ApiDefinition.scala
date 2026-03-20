@@ -28,12 +28,12 @@ case class ApiDefinition(
     description: ApiDefinition.Description,
     context: ApiContext,
     versions: Map[ApiVersionNbr, ApiVersion], // Should be NonEmpty
-    isTestSupport: Boolean = false,
-    lastPublishedAt: Option[Instant] = None,  // Only None in very old records from APIs that have not been published since field was added
+    isTestSupport: Boolean,
+    lastPublishedAt: Option[Instant],         // Only None in very old records from APIs that have not been published since field was added
     categories: List[ApiCategory]             // Should be NonEmpty
   ) {
 
-  lazy val versionsAsList: List[ApiVersion] = versions.values.toList
+  lazy val versionsAsList: List[ApiVersion] = versions.values.toList.sorted
 
   def filterVersions(fn: ApiVersions.ApiVersionFilterFn): Option[ApiDefinition] = {
     val filteredVersions = versions.filter(kv => fn(kv._2))
@@ -51,10 +51,6 @@ object ApiDefinition {
 
   object ServiceBaseUrl {
 
-    extension (s: ServiceBaseUrl) {
-      def value: String = s
-    }
-
     def apply(s: String): ServiceBaseUrl = s
 
     given Format[ServiceBaseUrl] = Format(Reads.StringReads, Writes.StringWrites)
@@ -63,11 +59,6 @@ object ApiDefinition {
   opaque type Name <: String = String
 
   object Name {
-
-    extension (s: Name) {
-      def value: String = s
-    }
-
     def apply(s: String): Name = s
 
     given Format[Name] = Format(Reads.StringReads, Writes.StringWrites)
@@ -76,11 +67,6 @@ object ApiDefinition {
   opaque type Description <: String = String
 
   object Description {
-
-    extension (s: Description) {
-      def value: String = s
-    }
-
     def apply(s: String): Description = s
 
     given Format[Description] = Format(Reads.StringReads, Writes.StringWrites)
@@ -106,7 +92,7 @@ object ApiDefinition {
 
   val writes: OWrites[ApiDefinition] = Json.writes[ApiDefinition]
 
-  implicit val api: OFormat[ApiDefinition] = OFormat[ApiDefinition](reads, writes)
+  given OFormat[ApiDefinition] = OFormat[ApiDefinition](reads, writes)
 
   def fromStoredCollection(in: List[StoredApiDefinition]): Map[ApiContext, ApiDefinition] = {
     in.map(definition => definition.context -> fromStored(definition)).toMap

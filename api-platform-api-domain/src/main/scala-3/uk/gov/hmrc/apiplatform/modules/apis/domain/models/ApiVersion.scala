@@ -22,10 +22,10 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models.*
 case class ApiVersion(
     versionNbr: ApiVersionNbr,
     status: ApiStatus,
-    access: ApiAccess = ApiAccess.Public,
+    access: ApiAccess,
     endpoints: List[Endpoint], // Should be NonEmpty
-    endpointsEnabled: Boolean = true,
-    awsRequestId: Option[String] = None,
+    endpointsEnabled: Boolean,
+    awsRequestId: Option[String],
     versionSource: ApiVersionSource = ApiVersionSource.Unknown
   ) {
   // No endpoints must have an auth type and version must be public
