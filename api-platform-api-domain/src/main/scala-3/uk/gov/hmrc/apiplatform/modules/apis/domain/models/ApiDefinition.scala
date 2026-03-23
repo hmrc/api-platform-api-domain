@@ -1,0 +1,118 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.apiplatform.modules.apis.domain.models
+
+import java.time.Instant
+
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.InstantJsonFormatter
+
+case class ApiDefinition(
+    serviceName: ServiceName,
+    serviceBaseUrl: ApiDefinition.ServiceBaseUrl,
+    name: ApiDefinition.Name,
+    description: ApiDefinition.Description,
+    context: ApiContext,
+    versions: Map[ApiVersionNbr, ApiVersion], // Should be NonEmpty
+    isTestSupport: Boolean,
+    lastPublishedAt: Option[Instant],         // Only None in very old records from APIs that have not been published since field was added
+    categories: List[ApiCategory]             // Should be NonEmpty
+  ) {
+
+  lazy val versionsAsList: List[ApiVersion] = versions.values.toList.sorted
+
+  def filterVersions(fn: ApiVersions.ApiVersionFilterFn): Option[ApiDefinition] = {
+    val filteredVersions = versions.filter(kv => fn(kv._2))
+    if (filteredVersions.isEmpty) None else Some(copy(versions = filteredVersions))
+  }
+
+  // All versions must be open access
+  lazy val isOpenAccess: Boolean = versions.values.find(_.isOpenAccess == false).isEmpty
+}
+
+object ApiDefinition {
+  import play.api.libs.json.*
+
+  opaque type ServiceBaseUrl <: String = String
+
+  object ServiceBaseUrl {
+
+    def apply(s: String): ServiceBaseUrl = s
+
+    given Format[ServiceBaseUrl] = Format(Reads.StringReads, Writes.StringWrites)
+  }
+
+  opaque type Name <: String = String
+
+  object Name {
+    def apply(s: String): Name = s
+
+    given Format[Name] = Format(Reads.StringReads, Writes.StringWrites)
+  }
+
+  opaque type Description <: String = String
+
+  object Description {
+    def apply(s: String): Description = s
+
+    given Format[Description] = Format(Reads.StringReads, Writes.StringWrites)
+  }
+
+  import InstantJsonFormatter.WithTimeZone.given
+  import play.api.libs.functional.syntax.*
+
+  val reads: Reads[ApiDefinition] = (
+    (JsPath \ "serviceName").read[ServiceName] and
+      (JsPath \ "serviceBaseUrl").read[ApiDefinition.ServiceBaseUrl] and
+      (JsPath \ "name").read[ApiDefinition.Name] and
+      (JsPath \ "description").read[ApiDefinition.Description] and
+      (JsPath \ "context").read[ApiContext] and
+      (
+        (JsPath \ "versions").read[Map[ApiVersionNbr, ApiVersion]] or
+          (JsPath \ "versions").read[List[ApiVersion]].map(ApiDefinition.fromStoredVersions)
+      ) and
+      ((JsPath \ "isTestSupport").read[Boolean] or Reads.pure(false)) and
+      (JsPath \ "lastPublishedAt").readNullable[Instant] and
+      (JsPath \ "categories").read[List[ApiCategory]]
+  )(ApiDefinition.apply _)
+
+  val writes: OWrites[ApiDefinition] = Json.writes[ApiDefinition]
+
+  given OFormat[ApiDefinition] = OFormat[ApiDefinition](reads, writes)
+
+  def fromStoredCollection(in: List[StoredApiDefinition]): Map[ApiContext, ApiDefinition] = {
+    in.map(definition => definition.context -> fromStored(definition)).toMap
+  }
+
+  def fromStoredVersions(in: List[ApiVersion]): Map[ApiVersionNbr, ApiVersion] = {
+    in.map(version => version.versionNbr -> version).toMap
+  }
+
+  def fromStored(in: StoredApiDefinition): ApiDefinition = {
+    ApiDefinition(
+      in.serviceName,
+      in.serviceBaseUrl,
+      in.name,
+      in.description,
+      in.context,
+      fromStoredVersions(in.versions),
+      in.isTestSupport,
+      in.lastPublishedAt,
+      in.categories
+    )
+  }
+}
