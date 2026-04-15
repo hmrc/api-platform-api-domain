@@ -20,6 +20,8 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonForm
 
 enum ApiAccessType {
   case Private, Public, Internal, Controlled
+
+  def isPublic = this == ApiAccessType.Public
 }
 
 object ApiAccessType {
@@ -27,6 +29,21 @@ object ApiAccessType {
 
   def unsafeApply(text: String): ApiAccessType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
 
-  import play.api.libs.json.Format
-  given Format[ApiAccessType] = SimpleEnumJsonFormatting.createStringFormatFor[ApiAccessType]("API Access Type", apply, _.toString.toUpperCase)
+  import play.api.libs.json._
+  val simpleFormat: Format[ApiAccessType] = SimpleEnumJsonFormatting.createStringFormatFor[ApiAccessType]("API Access Type", apply, _.toString.toUpperCase)
+
+  import cats.implicits._
+
+  // This can be removed once all data is in the new format.
+  given Reads[ApiAccessType] = simpleFormat.preprocess {
+    case JsString(x)                                                                                                   => JsString(x)
+    case JsObject(fields) if (fields.get("type") == JsString("PUBLIC").some)                                           => JsString("PUBLIC")
+    case JsObject(fields) if (fields.get("type") == JsString("INTERNAL").some)                                         => JsString("INTERNAL")
+    case JsObject(fields) if (fields.get("type") == JsString("CONTROLLED").some)                                       => JsString("CONTROLLED")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsFalse.some) => JsString("INTERNAL")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsTrue.some)  => JsString("CONTROLLED")
+  }
+
+  given Writes[ApiAccessType] = simpleFormat
+
 }

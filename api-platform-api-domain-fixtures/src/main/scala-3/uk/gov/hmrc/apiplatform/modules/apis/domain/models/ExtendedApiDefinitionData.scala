@@ -35,7 +35,7 @@ object ExtendedApiDefinitionData {
         Some(
           ApiAvailability(
             true,
-            ApiAccess.Public,
+            ApiAccessType.Public,
             false,
             false
           )
@@ -43,7 +43,7 @@ object ExtendedApiDefinitionData {
         Some(
           ApiAvailability(
             true,
-            ApiAccess.Public,
+            ApiAccessType.Public,
             false,
             false
           )

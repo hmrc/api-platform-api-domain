@@ -29,7 +29,7 @@ class ApiVersionSpec extends BaseJsonFormattersSpec with ApiDefinitionFactory {
   val example = ApiVersion(
     versionNbr = ApiVersionNbr("1.0"),
     status = ApiStatus.Stable,
-    access = ApiAccess.Public,
+    access = ApiAccessType.Public,
     endpoints = List(Endpoint(
       Endpoint.UriPattern("url"),
       Endpoint.Name("name"),
@@ -45,7 +45,7 @@ class ApiVersionSpec extends BaseJsonFormattersSpec with ApiDefinitionFactory {
   )
 
   val expectedJson =
-    """{"version":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
+    """{"version":"1.0","status":"STABLE","access":"PUBLIC","endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
 
   "ApiVersion" should {
     val openEndpoint        = anEndpoint.copy(authType = AuthType.None)
@@ -64,8 +64,13 @@ class ApiVersionSpec extends BaseJsonFormattersSpec with ApiDefinitionFactory {
       version.isOpenAccess shouldBe true
     }
 
-    "determine isOpenAccess when all endpoints are open but version is not public" in {
-      val version = buildVersion("1.0", apiAccess = ApiAccess.Private(), endpoints = List(openEndpoint, openEndpoint))
+    "determine isOpenAccess when all endpoints are open but version is internal" in {
+      val version = buildVersion("1.0", apiAccess = ApiAccessType.Internal, endpoints = List(openEndpoint, openEndpoint))
+
+      version.isOpenAccess shouldBe false
+    }
+    "determine isOpenAccess when all endpoints are open but version is controlled" in {
+      val version = buildVersion("1.0", apiAccess = ApiAccessType.Controlled, endpoints = List(openEndpoint, openEndpoint))
 
       version.isOpenAccess shouldBe false
     }

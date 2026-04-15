@@ -28,9 +28,10 @@ case class ExtendedApiVersion(
   ) {
 
   val displayedStatus = {
-    val accessIndicator = sandboxAvailability.orElse(productionAvailability).map(_.access) match {
-      case Some(ApiAccess.Private(_)) => "Private "
-      case _                          => ""
+    val accessIndicator = sandboxAvailability.orElse(productionAvailability).map(x => x.access) match {
+      case Some(ApiAccessType.CONTROLLED) => "Controlled "
+      case Some(ApiAccessType.INTERNAL)   => "Internal "
+      case _                              => ""
     }
     s"${accessIndicator}${status.displayText}"
   }

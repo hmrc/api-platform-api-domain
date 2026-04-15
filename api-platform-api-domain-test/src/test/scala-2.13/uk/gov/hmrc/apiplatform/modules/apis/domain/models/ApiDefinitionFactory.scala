@@ -21,7 +21,7 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models.{ApiContext, ApiVers
 trait ApiDefinitionFactory {
   protected val anEndpoint = Endpoint("endpoint1", "/some/endpoint1", HttpMethod.POST, AuthType.USER)
 
-  def buildVersion(version: String, status: ApiStatus = ApiStatus.STABLE, apiAccess: ApiAccess = ApiAccess.PUBLIC, endpoints: List[Endpoint] = List(anEndpoint)): ApiVersion = {
+  def buildVersion(version: String, status: ApiStatus = ApiStatus.STABLE, apiAccess: ApiAccessType = ApiAccessType.PUBLIC, endpoints: List[Endpoint] = List(anEndpoint)): ApiVersion = {
     ApiVersion(ApiVersionNbr(version), status, apiAccess, endpoints)
   }
 
@@ -29,8 +29,8 @@ trait ApiDefinitionFactory {
       version: String,
       status: ApiStatus = ApiStatus.STABLE,
       endpoints: List[Endpoint] = List(anEndpoint),
-      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = true, authorised = true)),
-      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = true, authorised = true))
+      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = true, authorised = true)),
+      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = true, authorised = true))
     ): ExtendedApiVersion = {
     ExtendedApiVersion(ApiVersionNbr(version), status, endpoints, productionAvailability, sandboxAvailability)
   }

@@ -30,15 +30,13 @@ class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyC
         ("Type", "text"),
         (ApiAccessType.PUBLIC, "public"),
         (ApiAccessType.INTERNAL, "internal"),
-        (ApiAccessType.CONTROLLED, "controlled"),
-        (ApiAccessType.PRIVATE, "private")
+        (ApiAccessType.CONTROLLED, "controlled")
       )
 
     "displayText correctly" in {
       ApiAccessType.PUBLIC.displayText shouldBe "Public"
       ApiAccessType.INTERNAL.displayText shouldBe "Internal"
       ApiAccessType.CONTROLLED.displayText shouldBe "Controlled"
-      ApiAccessType.PRIVATE.displayText shouldBe "Private"
     }
 
     "convert to string correctly" in {
@@ -82,6 +80,32 @@ class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyC
       intercept[Exception] {
         testFromJson[ApiAccessType](s"""123""")(ApiAccessType.PUBLIC)
       }.getMessage() should include("Cannot parse API Access Type from '123'")
+    }
+
+    "read public access from Json" in {
+      testFromJson[ApiAccessType]("""{ "type": "PUBLIC"}""")(ApiAccessType.PUBLIC)
+    }
+
+    "read controlled access from Json" in {
+      testFromJson[ApiAccessType]("""{ "type": "CONTROLLED"}""")(ApiAccessType.CONTROLLED)
+    }
+
+    "read internal access from Json" in {
+      testFromJson[ApiAccessType]("""{ "type": "INTERNAL"}""")(ApiAccessType.INTERNAL)
+    }
+
+    "read private access from Json" in {
+      testFromJson[ApiAccessType]("""{ "type": "PRIVATE", "isTrial": false }""")(ApiAccessType.INTERNAL)
+    }
+
+    "read private access from Json for trial" in {
+      testFromJson[ApiAccessType]("""{ "type": "PRIVATE", "isTrial": true }""")(ApiAccessType.CONTROLLED)
+    }
+
+    "read private access is not tolerant without any fields" in {
+      intercept[RuntimeException] {
+        testFromJson[ApiAccessType]("""{ "type": "PRIVATE"}""")(ApiAccessType.INTERNAL)
+      }
     }
 
     "write to Json" in {

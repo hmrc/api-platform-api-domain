@@ -26,19 +26,25 @@ class ExtendedApiVersionSpec extends BaseJsonFormattersSpec with TableDrivenProp
   "decoratedUriPattern" should {
     case class Scenario(displayedStatus: String, productionAvailability: Option[ApiAvailability], sandboxAvailability: Option[ApiAvailability])
 
-    val privateAccess = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.Private(), loggedIn = true, authorised = true))
-    val publicAccess  = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.Public, loggedIn = true, authorised = true))
+    val internalAccess   = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Internal, loggedIn = true, authorised = true))
+    val controlledAccess = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Controlled, loggedIn = true, authorised = true))
+    val publicAccess     = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Public, loggedIn = true, authorised = true))
 
     val scenarios = Seq(
-      Scenario("Private Beta", privateAccess, None),
-      Scenario("Beta", privateAccess, publicAccess),
-      Scenario("Private Beta", privateAccess, privateAccess),
       Scenario("Beta", publicAccess, None),
       Scenario("Beta", publicAccess, publicAccess),
-      Scenario("Private Beta", publicAccess, privateAccess),
       Scenario("Beta", None, None),
       Scenario("Beta", None, publicAccess),
-      Scenario("Private Beta", None, privateAccess)
+      Scenario("Internal Beta", internalAccess, None),
+      Scenario("Internal Beta", None, internalAccess),
+      Scenario("Internal Beta", internalAccess, internalAccess),
+      Scenario("Internal Beta", publicAccess, internalAccess),
+      Scenario("Beta", internalAccess, publicAccess),
+      Scenario("Controlled Beta", controlledAccess, None),
+      Scenario("Controlled Beta", None, controlledAccess),
+      Scenario("Controlled Beta", controlledAccess, controlledAccess),
+      Scenario("Controlled Beta", publicAccess, controlledAccess),
+      Scenario("Beta", controlledAccess, publicAccess)
     )
 
     scenarios.foreach(scenario => {
