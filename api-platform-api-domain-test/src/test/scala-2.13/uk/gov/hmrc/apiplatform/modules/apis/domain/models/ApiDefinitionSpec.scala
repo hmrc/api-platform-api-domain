@@ -64,6 +64,42 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
          |}""".stripMargin.replaceAll("\n", " ")
     }
 
+    def anApiDefinitionWithNewAccessJson(
+        isTestSupport: Boolean = false,
+        categories: String = """[ "AGENTS" ]"""
+      ): String = {
+
+      s"""{
+         |   "serviceName":"calendar",
+         |   "serviceBaseUrl":"http://calendar",
+         |   "name":"Calendar API",
+         |   "description":"My Calendar API",
+         |   "context":"calendar",
+         |   "versions":{
+         |    "1.0":  {
+         |         "version":"1.0",
+         |         "status":"STABLE",
+         |         "access": "INTERNAL",
+         |         "endpoints":[
+         |            {
+         |               "uriPattern":"/today",
+         |               "endpointName":"Get Today's Date",
+         |               "method":"GET",
+         |               "authType":"NONE",
+         |               "throttlingTier":"UNLIMITED",
+         |               "queryParameters": []
+         |            }
+         |          ],
+         |         "endpointsEnabled": true,
+         |         "versionSource": "OAS"
+         |      }
+         |   },
+         |   "isTestSupport": $isTestSupport,
+         |   "lastPublishedAt": "2011-12-03T10:15:30.000Z",
+         |   "categories": $categories
+         |}""".stripMargin.replaceAll("\n", " ")
+    }
+
     def anApiDefinitionJson(
         isTestSupport: Boolean = false,
         categories: String = """[ "AGENTS" ]"""
@@ -107,15 +143,18 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
       Json.parse(anApiDefinitionJson()).as[ApiDefinition]
     }
 
+    "read from new access style JSON" in {
+      Json.parse(anApiDefinitionJson()).as[ApiDefinition]
+    }
+
     "read from new style JSON" in {
       Json.parse(aStoredApiDefinitionJson()).as[ApiDefinition]
     }
 
     "write to JSON" in {
-      val jsonText                     = anApiDefinitionJson()
-      val apiDefinition: ApiDefinition = Json.parse(jsonText).as[ApiDefinition]
+      val apiDefinition: ApiDefinition = Json.parse(anApiDefinitionJson()).as[ApiDefinition]
 
-      Json.toJson(apiDefinition) shouldBe Json.parse(jsonText)
+      Json.toJson(apiDefinition) shouldBe Json.parse(anApiDefinitionWithNewAccessJson())
     }
 
     "convert from StoredApiDefinition" in {
@@ -177,12 +216,12 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
     val openEndpoint        = anEndpoint.copy(authType = AuthType.NONE)
     val applicationEndpoint = anEndpoint.copy(authType = AuthType.APPLICATION)
 
-    val privateVersion = buildVersion("1.0", apiAccess = ApiAccess.Private(), endpoints = List(openEndpoint, applicationEndpoint))
-    val publicVersion  = buildVersion("2.0", apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, applicationEndpoint))
-    val openVersion    = buildVersion("3.0", apiAccess = ApiAccess.PUBLIC, endpoints = List(openEndpoint, openEndpoint))
+    val internalVersion = buildVersion("1.0", apiAccess = ApiAccessType.INTERNAL, endpoints = List(openEndpoint, applicationEndpoint))
+    val publicVersion   = buildVersion("2.0", apiAccess = ApiAccessType.PUBLIC, endpoints = List(openEndpoint, applicationEndpoint))
+    val openVersion     = buildVersion("3.0", apiAccess = ApiAccessType.PUBLIC, endpoints = List(openEndpoint, openEndpoint))
 
     "isOpenAccess for a definition with a private API" in {
-      buildDefinition(List(privateVersion, publicVersion)).isOpenAccess shouldBe false
+      buildDefinition(List(internalVersion, publicVersion)).isOpenAccess shouldBe false
     }
     "isOpenAccess for a definition with a public API with endpoints with auth" in {
       buildDefinition(List(publicVersion)).isOpenAccess shouldBe false

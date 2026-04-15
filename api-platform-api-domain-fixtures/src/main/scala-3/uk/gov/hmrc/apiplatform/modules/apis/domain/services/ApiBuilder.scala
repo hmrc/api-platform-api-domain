@@ -30,9 +30,10 @@ trait ApiBuilder extends ApiVersionNbrFixtures with ClockNow {
     def deprecated                       = versionData.copy(status = ApiStatus.Deprecated)
     def retired                          = versionData.copy(status = ApiStatus.Retired)
 
-    def withAccess(newAccess: ApiAccess) = versionData.copy(access = newAccess)
-    def publicAccess                     = versionData.withAccess(ApiAccess.Public)
-    def privateAccess                    = versionData.withAccess(ApiAccess.Private(false))
+    def withAccess(newAccess: ApiAccessType) = versionData.copy(access = newAccess)
+    def publicAccess                         = versionData.withAccess(ApiAccessType.Public)
+    def controlledAccess                     = versionData.withAccess(ApiAccessType.Controlled)
+    def internalAccess                       = versionData.withAccess(ApiAccessType.Internal)
   }
 
   extension (apiDefinition: ApiDefinition) {
@@ -47,7 +48,7 @@ trait ApiBuilder extends ApiVersionNbrFixtures with ClockNow {
     def withContext(apiContext: ApiContext) = apiDefinition.copy(context = apiContext)
   }
 
-  val DefaultVersionData = ApiVersion(apiVersionNbrOne, ApiStatus.Stable, ApiAccess.Public, List.empty, awsRequestId = None, endpointsEnabled = true)
+  val DefaultVersionData = ApiVersion(apiVersionNbrOne, ApiStatus.Stable, ApiAccessType.Public, List.empty, awsRequestId = None, endpointsEnabled = true)
 
   val DefaultServiceName = ServiceName("A-Service")
   val DefaultName        = ApiDefinition.Name("API Name")

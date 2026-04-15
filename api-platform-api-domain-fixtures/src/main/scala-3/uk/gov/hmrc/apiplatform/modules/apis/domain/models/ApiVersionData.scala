@@ -23,7 +23,7 @@ object ApiVersionData {
   val apiVersionOnePublicStable = ApiVersion(
     ApiVersionNbrData.one,
     ApiStatus.Stable,
-    ApiAccess.Public,
+    ApiAccessType.Public,
     List(EndpointData.openGetEndpoint),
     true,
     None,
@@ -33,7 +33,7 @@ object ApiVersionData {
   val apiVersionTwoPublicStable = ApiVersion(
     ApiVersionNbrData.two,
     ApiStatus.Stable,
-    ApiAccess.Public,
+    ApiAccessType.Public,
     List(EndpointData.openGetEndpoint),
     true,
     None,

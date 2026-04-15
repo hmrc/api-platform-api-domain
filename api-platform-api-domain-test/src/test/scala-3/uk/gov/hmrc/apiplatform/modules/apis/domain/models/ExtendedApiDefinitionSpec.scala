@@ -84,11 +84,11 @@ class ExtendedApiDefinitionSpec extends BaseJsonFormattersSpec with TableDrivenP
       }
     }
 
-    val public               = Some(ApiAvailability(true, ApiAccess.Public, true, true))
-    val privateAuthorised    = Some(ApiAvailability(true, ApiAccess.Private(), true, true))
-    val privateNotAuthorised = Some(ApiAvailability(true, ApiAccess.Private(), true, false))
-    val trialAuthorised      = Some(ApiAvailability(true, ApiAccess.Private(true), true, true))
-    val trialNotAuthorised   = Some(ApiAvailability(true, ApiAccess.Private(true), true, false))
+    val public                = Some(ApiAvailability(true, ApiAccessType.Public, true, true))
+    val internalAuthorised    = Some(ApiAvailability(true, ApiAccessType.Internal, true, true))
+    val internalNotAuthorised = Some(ApiAvailability(true, ApiAccessType.Internal, true, false))
+    val trialAuthorised       = Some(ApiAvailability(true, ApiAccessType.Controlled, true, true))
+    val trialNotAuthorised    = Some(ApiAvailability(true, ApiAccessType.Controlled, true, false))
 
     val accessibleVersionsScenarios = Table(
       ("Availabilities", "Is version accessible"),
@@ -96,13 +96,13 @@ class ExtendedApiDefinitionSpec extends BaseJsonFormattersSpec with TableDrivenP
       ((public, None), true),
       ((None, public), true),
       ((public, public), true),
-      ((privateAuthorised, None), true),
-      ((None, privateAuthorised), true),
-      ((privateAuthorised, privateAuthorised), true),
-      ((privateNotAuthorised, privateAuthorised), true),
-      ((None, privateNotAuthorised), false),
-      ((privateNotAuthorised, privateNotAuthorised), false),
-      ((trialAuthorised, privateNotAuthorised), true),
+      ((internalAuthorised, None), true),
+      ((None, internalAuthorised), true),
+      ((internalAuthorised, internalAuthorised), true),
+      ((internalNotAuthorised, internalAuthorised), true),
+      ((None, internalNotAuthorised), false),
+      ((internalNotAuthorised, internalNotAuthorised), false),
+      ((trialAuthorised, internalNotAuthorised), true),
       ((None, trialAuthorised), true),
       ((trialAuthorised, trialAuthorised), true),
       ((trialNotAuthorised, None), true),

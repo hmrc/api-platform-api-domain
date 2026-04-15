@@ -22,7 +22,7 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 case class ApiVersion(
     versionNbr: ApiVersionNbr,
     status: ApiStatus,
-    access: ApiAccess = ApiAccess.PUBLIC,
+    access: ApiAccessType = ApiAccessType.PUBLIC,
     endpoints: List[Endpoint], // Should be NonEmpty
     endpointsEnabled: Boolean = true,
     awsRequestId: Option[String] = None,
@@ -42,7 +42,7 @@ object ApiVersion {
         (JsPath \ "versionNbr").read[ApiVersionNbr] // TODO - Future aim to be this field name
     ) and
       (JsPath \ "status").read[ApiStatus] and
-      (JsPath \ "access").read[ApiAccess] and
+      (JsPath \ "access").read[ApiAccessType] and
       (JsPath \ "endpoints").read[List[Endpoint]] and
       (JsPath \ "endpointsEnabled").read[Boolean] and
       (JsPath \ "awsRequestId").readNullable[String] and
@@ -52,7 +52,7 @@ object ApiVersion {
   private val writes: OWrites[ApiVersion] = (
     (JsPath \ "version").write[ApiVersionNbr] and // TODO - change to versionNbr once all readers are safe
       (JsPath \ "status").write[ApiStatus] and
-      (JsPath \ "access").write[ApiAccess] and
+      (JsPath \ "access").write[ApiAccessType] and
       (JsPath \ "endpoints").write[List[Endpoint]] and
       (JsPath \ "endpointsEnabled").write[Boolean] and
       (JsPath \ "awsRequestId").writeNullable[String] and

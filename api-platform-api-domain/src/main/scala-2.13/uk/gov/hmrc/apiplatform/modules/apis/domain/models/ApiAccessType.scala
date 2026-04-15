@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import play.api.libs.json.Format
-
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
 sealed trait ApiAccessType {
@@ -25,11 +23,12 @@ sealed trait ApiAccessType {
   lazy val displayText: String = {
     this.toString().toLowerCase().capitalize
   }
+
+  lazy val isPublic = this == ApiAccessType.PUBLIC
 }
 
 object ApiAccessType {
-  val values = Set[ApiAccessType](PRIVATE, PUBLIC, INTERNAL, CONTROLLED)
-  case object PRIVATE    extends ApiAccessType
+  val values = Set[ApiAccessType](PUBLIC, INTERNAL, CONTROLLED)
   case object PUBLIC     extends ApiAccessType
   case object INTERNAL   extends ApiAccessType
   case object CONTROLLED extends ApiAccessType
@@ -38,5 +37,22 @@ object ApiAccessType {
 
   def unsafeApply(text: String): ApiAccessType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Access Type"))
 
-  implicit val format: Format[ApiAccessType] = SealedTraitJsonFormatting.createFormatFor[ApiAccessType]("API Access Type", apply)
+  import play.api.libs.json._
+
+  private val simpleFormat = SealedTraitJsonFormatting.createFormatFor[ApiAccessType]("API Access Type", apply)
+
+  import cats.implicits._
+
+  // This can be removed once all data is in the new format.
+  implicit val reads: Reads[ApiAccessType] = simpleFormat.preprocess {
+    case JsString(x)                                                                                                   => JsString(x)
+    case JsObject(fields) if (fields.get("type") == JsString("PUBLIC").some)                                           => JsString("PUBLIC")
+    case JsObject(fields) if (fields.get("type") == JsString("INTERNAL").some)                                         => JsString("INTERNAL")
+    case JsObject(fields) if (fields.get("type") == JsString("CONTROLLED").some)                                       => JsString("CONTROLLED")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsFalse.some) => JsString("INTERNAL")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsTrue.some)  => JsString("CONTROLLED")
+  }
+
+  implicit val writes: Writes[ApiAccessType] = simpleFormat
+
 }
