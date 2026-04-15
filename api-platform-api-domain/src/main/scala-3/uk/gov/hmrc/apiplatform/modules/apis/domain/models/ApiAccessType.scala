@@ -19,7 +19,7 @@ package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
 enum ApiAccessType {
-  case Private, Public, Internal, Controlled
+  case Public, Internal, Controlled
 
   def isPublic = this == ApiAccessType.Public
 }
