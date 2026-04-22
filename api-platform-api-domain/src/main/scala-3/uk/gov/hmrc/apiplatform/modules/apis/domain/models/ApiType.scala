@@ -22,8 +22,6 @@ enum ApiType:
 object ApiType {
   def apply(text: String): Option[ApiType] = ApiType.values.find(_.toString.equalsIgnoreCase(text))
 
-  def unsafeApply(text: String): ApiType = apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid API Type"))
-
   import play.api.libs.json.Format
   import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
