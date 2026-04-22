@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
-
 enum ApiStatus {
   case Alpha
   case Beta
@@ -45,6 +43,7 @@ object ApiStatus {
   given Ordering[ApiStatus] = Ordering.by[ApiStatus, Int](ApiStatus.values.indexOf(_))
 
   import play.api.libs.json.Format
+  import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-  given Format[ApiStatus] = SimpleEnumJsonFormatting.createStringFormatFor[ApiStatus]("API Status", apply, _.toString.toUpperCase)
+  given Format[ApiStatus] = SimpleEnumJsonFormatting.createEnumFormatFor[ApiStatus]("API Status", apply)
 }
