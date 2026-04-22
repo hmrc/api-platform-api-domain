@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-case class CombinedApi(displayName: String, serviceName: String, categories: Set[ApiCategory], apiType: ApiType, accessType: ApiAccessType)
+case class CombinedApi(displayName: String, serviceName: ServiceName, categories: Set[ApiCategory], apiType: ApiType, accessType: ApiAccessType)
 
 object CombinedApi {
   import play.api.libs.json._

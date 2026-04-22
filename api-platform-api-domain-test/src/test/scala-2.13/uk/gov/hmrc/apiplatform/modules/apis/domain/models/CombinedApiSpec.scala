@@ -25,7 +25,7 @@ class CombinedApiSpec extends BaseJsonFormattersSpec {
   val aCombinedApi: CombinedApi =
     CombinedApi(
       "a display name",
-      "a service name",
+      ServiceName("a service name"),
       Set(ApiCategory.CHARITIES),
       ApiType.REST_API,
       ApiAccessType.INTERNAL
