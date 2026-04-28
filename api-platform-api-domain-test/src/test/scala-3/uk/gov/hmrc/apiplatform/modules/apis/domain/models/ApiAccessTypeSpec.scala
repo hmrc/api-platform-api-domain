@@ -90,10 +90,12 @@ class ApiAccessTypeSpec extends BaseJsonFormattersSpec with TableDrivenPropertyC
       testFromJson[ApiAccessType]("""{ "type": "PRIVATE", "isTrial": true }""")(ApiAccessType.Controlled)
     }
 
-    "read private access is not tolerant without any fields" in {
-      intercept[RuntimeException] {
-        testFromJson[ApiAccessType]("""{ "type": "PRIVATE"}""")(ApiAccessType.Internal)
-      }
+    "read private access from Json with isTrial: null" in {
+      testFromJson[ApiAccessType]("""{ "type": "PRIVATE", "isTrial": null }""")(ApiAccessType.Internal)
+    }
+
+    "read private access from Json without isTrial" in {
+      testFromJson[ApiAccessType]("""{ "type": "PRIVATE" }""")(ApiAccessType.Internal)
     }
 
     "write to Json" in {

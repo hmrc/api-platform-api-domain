@@ -49,6 +49,8 @@ object ApiAccessType {
     case JsObject(fields) if (fields.get("type") == JsString("PUBLIC").some)                                           => JsString("PUBLIC")
     case JsObject(fields) if (fields.get("type") == JsString("INTERNAL").some)                                         => JsString("INTERNAL")
     case JsObject(fields) if (fields.get("type") == JsString("CONTROLLED").some)                                       => JsString("CONTROLLED")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial").isEmpty)         => JsString("INTERNAL")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsNull.some)  => JsString("INTERNAL")
     case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsFalse.some) => JsString("INTERNAL")
     case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsTrue.some)  => JsString("CONTROLLED")
   }
