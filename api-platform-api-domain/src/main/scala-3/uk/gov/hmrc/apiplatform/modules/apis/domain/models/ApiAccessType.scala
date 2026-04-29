@@ -40,8 +40,8 @@ object ApiAccessType {
     case JsObject(fields) if (fields.get("type") == JsString("PUBLIC").some)                                           => JsString("PUBLIC")
     case JsObject(fields) if (fields.get("type") == JsString("INTERNAL").some)                                         => JsString("INTERNAL")
     case JsObject(fields) if (fields.get("type") == JsString("CONTROLLED").some)                                       => JsString("CONTROLLED")
-    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsFalse.some) => JsString("INTERNAL")
     case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsTrue.some)  => JsString("CONTROLLED")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some)                                          => JsString("INTERNAL")
   }
 
   given Writes[ApiAccessType] = simpleFormat
