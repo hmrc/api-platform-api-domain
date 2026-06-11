@@ -36,12 +36,12 @@ object ApiAccessType {
 
   // This can be removed once all data is in the new format.
   given Reads[ApiAccessType] = simpleFormat.preprocess {
-    case JsString(x)                                                                                                   => JsString(x)
-    case JsObject(fields) if (fields.get("type") == JsString("PUBLIC").some)                                           => JsString("PUBLIC")
-    case JsObject(fields) if (fields.get("type") == JsString("INTERNAL").some)                                         => JsString("INTERNAL")
-    case JsObject(fields) if (fields.get("type") == JsString("CONTROLLED").some)                                       => JsString("CONTROLLED")
-    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsTrue.some)  => JsString("CONTROLLED")
-    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some)                                          => JsString("INTERNAL")
+    case JsString(x)                                                                                                  => JsString(x)
+    case JsObject(fields) if (fields.get("type") == JsString("PUBLIC").some)                                          => JsString("PUBLIC")
+    case JsObject(fields) if (fields.get("type") == JsString("INTERNAL").some)                                        => JsString("INTERNAL")
+    case JsObject(fields) if (fields.get("type") == JsString("CONTROLLED").some)                                      => JsString("CONTROLLED")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some && fields.get("isTrial") == JsTrue.some) => JsString("CONTROLLED")
+    case JsObject(fields) if (fields.get("type") == JsString("PRIVATE").some)                                         => JsString("INTERNAL")
   }
 
   given Writes[ApiAccessType] = simpleFormat
