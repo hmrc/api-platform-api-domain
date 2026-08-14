@@ -2,7 +2,7 @@ import sbt._
 
 object LibraryDependencies {
   val scalatestVersion    = "3.2.19"
-  val commonDomainVersion = "1.1.0"
+  val commonDomainVersion = "1.3.0"
 
   def domain(scalaVersion: String) =
     compileDependencies ++
@@ -11,7 +11,7 @@ object LibraryDependencies {
 
   def fixtures(scalaVersion: String) =
     compileDependencies ++
-    fixturesDependencies ++ 
+    fixturesDependencies.map(_ % "provided") ++ 
     commonTestDependencies(scalaVersion)
 
   def tests(scalaVersion: String) =
@@ -36,3 +36,4 @@ object LibraryDependencies {
   ).map(_ % "test")
 
 }
+
