@@ -2,7 +2,7 @@ import sbt._
 
 object LibraryDependencies {
   val scalatestVersion    = "3.2.19"
-  val commonDomainVersion = "1.4.0-SNAPSHOT"
+  val commonDomainVersion = "1.4.0"
 
   def domain =
     compileDependencies
