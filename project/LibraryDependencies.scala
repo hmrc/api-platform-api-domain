@@ -8,8 +8,8 @@ object LibraryDependencies {
     compileDependencies
 
   def fixtures =
-    compileDependencies ++
-    fixturesDependencies
+    compileDependencies.map(_ % "provided") ++
+    fixturesDependencies.map(_ % "provided")
 
   def tests =
     compileDependencies ++
