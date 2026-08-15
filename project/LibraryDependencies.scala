@@ -5,7 +5,7 @@ object LibraryDependencies {
   val commonDomainVersion = "1.4.0"
 
   def domain =
-    compileDependencies
+    compileDependencies.map(_ % "provided")
 
   def fixtures =
     compileDependencies.map(_ % "provided") ++
