@@ -1,23 +1,22 @@
 import sbt._
 
 object LibraryDependencies {
-  val scalatestVersion    = "3.2.19"
   val commonDomainVersion = "1.4.0"
 
   def domain =
     compileDependencies
 
   def fixtures =
-    compileDependencies.map(_ % "provided") ++
+    compileDependencies ++
     fixturesDependencies.map(_ % "provided")
 
   def tests =
     compileDependencies ++
-    fixturesDependencies ++ 
-    testDependencies.map(_ % "test")
+    fixturesDependencies.map(_ % "test") ++ 
+    testDependencies
 
   private val compileDependencies = Seq(
-    "uk.gov.hmrc"             %% "api-platform-common-domain"          % commonDomainVersion
+    "uk.gov.hmrc"             %% "api-platform-common-domain"          % commonDomainVersion % "provided"
   )
 
   private def fixturesDependencies = Seq(
@@ -25,5 +24,6 @@ object LibraryDependencies {
   )
 
   private def testDependencies = Seq.empty[ModuleID]
+    .map(_ % "test")
 }
 
