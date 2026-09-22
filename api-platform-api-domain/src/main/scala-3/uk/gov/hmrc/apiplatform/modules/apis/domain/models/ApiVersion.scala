@@ -24,7 +24,6 @@ case class ApiVersion(
     status: ApiStatus,
     access: ApiAccessType,
     endpoints: List[Endpoint], // Should be NonEmpty
-    endpointsEnabled: Boolean,
     awsRequestId: Option[String],
     versionSource: ApiVersionSource = ApiVersionSource.Unknown
   ) {
@@ -44,7 +43,6 @@ object ApiVersion {
       (JsPath \ "status").read[ApiStatus] and
       (JsPath \ "access").read[ApiAccessType] and
       (JsPath \ "endpoints").read[List[Endpoint]] and
-      (JsPath \ "endpointsEnabled").read[Boolean] and
       (JsPath \ "awsRequestId").readNullable[String] and
       (JsPath \ "versionSource").read[ApiVersionSource]
   )(ApiVersion.apply _)
@@ -54,10 +52,9 @@ object ApiVersion {
       (JsPath \ "status").write[ApiStatus] and
       (JsPath \ "access").write[ApiAccessType] and
       (JsPath \ "endpoints").write[List[Endpoint]] and
-      (JsPath \ "endpointsEnabled").write[Boolean] and
       (JsPath \ "awsRequestId").writeNullable[String] and
       (JsPath \ "versionSource").write[ApiVersionSource]
-  )(v => (v.versionNbr, v.status, v.access, v.endpoints, v.endpointsEnabled, v.awsRequestId, v.versionSource))
+  )(v => (v.versionNbr, v.status, v.access, v.endpoints, v.awsRequestId, v.versionSource))
 
   given Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiVersionNbr](_.versionNbr)
 

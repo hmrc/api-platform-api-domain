@@ -83,11 +83,11 @@ class ExtendedApiDefinitionSpec extends BaseJsonFormattersSpec with TableDrivenP
       }
     }
 
-    val public               = Some(ApiAvailability(true, ApiAccessType.PUBLIC, true, true))
-    val privateAuthorised    = Some(ApiAvailability(true, ApiAccessType.INTERNAL, true, true))
-    val privateNotAuthorised = Some(ApiAvailability(true, ApiAccessType.INTERNAL, true, false))
-    val trialAuthorised      = Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, true))
-    val trialNotAuthorised   = Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false))
+    val public               = Some(ApiAvailability(ApiAccessType.PUBLIC, true, true))
+    val privateAuthorised    = Some(ApiAvailability(ApiAccessType.INTERNAL, true, true))
+    val privateNotAuthorised = Some(ApiAvailability(ApiAccessType.INTERNAL, true, false))
+    val trialAuthorised      = Some(ApiAvailability(ApiAccessType.CONTROLLED, true, true))
+    val trialNotAuthorised   = Some(ApiAvailability(ApiAccessType.CONTROLLED, true, false))
 
     val accessibleVersionsScenarios = Table(
       ("Availabilities", "Is version accessible"),

@@ -24,7 +24,6 @@ case class ApiVersion(
     status: ApiStatus,
     access: ApiAccessType = ApiAccessType.PUBLIC,
     endpoints: List[Endpoint], // Should be NonEmpty
-    endpointsEnabled: Boolean = true,
     awsRequestId: Option[String] = None,
     versionSource: ApiVersionSource = ApiVersionSource.UNKNOWN
   ) {
@@ -44,7 +43,6 @@ object ApiVersion {
       (JsPath \ "status").read[ApiStatus] and
       (JsPath \ "access").read[ApiAccessType] and
       (JsPath \ "endpoints").read[List[Endpoint]] and
-      (JsPath \ "endpointsEnabled").read[Boolean] and
       (JsPath \ "awsRequestId").readNullable[String] and
       (JsPath \ "versionSource").read[ApiVersionSource]
   )(ApiVersion.apply _)
@@ -54,7 +52,6 @@ object ApiVersion {
       (JsPath \ "status").write[ApiStatus] and
       (JsPath \ "access").write[ApiAccessType] and
       (JsPath \ "endpoints").write[List[Endpoint]] and
-      (JsPath \ "endpointsEnabled").write[Boolean] and
       (JsPath \ "awsRequestId").writeNullable[String] and
       (JsPath \ "versionSource").write[ApiVersionSource]
   )(unlift(ApiVersion.unapply))

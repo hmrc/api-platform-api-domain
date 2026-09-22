@@ -48,7 +48,7 @@ trait ApiBuilder extends ApiVersionNbrFixtures with ClockNow {
     def withContext(apiContext: ApiContext) = apiDefinition.copy(context = apiContext)
   }
 
-  val DefaultVersionData = ApiVersion(apiVersionNbrOne, ApiStatus.Stable, ApiAccessType.Public, List.empty, awsRequestId = None, endpointsEnabled = true)
+  val DefaultVersionData = ApiVersion(apiVersionNbrOne, ApiStatus.Stable, ApiAccessType.Public, List.empty, awsRequestId = None)
 
   val DefaultServiceName = ServiceName("A-Service")
   val DefaultName        = ApiDefinition.Name("API Name")

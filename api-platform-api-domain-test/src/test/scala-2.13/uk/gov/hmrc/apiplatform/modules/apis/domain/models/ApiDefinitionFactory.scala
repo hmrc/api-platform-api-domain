@@ -29,8 +29,8 @@ trait ApiDefinitionFactory {
       version: String,
       status: ApiStatus = ApiStatus.STABLE,
       endpoints: List[Endpoint] = List(anEndpoint),
-      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = true, authorised = true)),
-      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = true, authorised = true))
+      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(access = ApiAccessType.PUBLIC, loggedIn = true, authorised = true)),
+      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(access = ApiAccessType.PUBLIC, loggedIn = true, authorised = true))
     ): ExtendedApiVersion = {
     ExtendedApiVersion(ApiVersionNbr(version), status, endpoints, productionAvailability, sandboxAvailability)
   }

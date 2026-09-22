@@ -45,5 +45,5 @@ object ApiStatus {
   import play.api.libs.json.Format
   import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-  given Format[ApiStatus] = SimpleEnumJsonFormatting.createEnumFormatFor[ApiStatus]("API Status", apply)
+  given Format[ApiStatus] = SimpleEnumJsonFormatting.screamingSnakeCaseFormatFor[ApiStatus]("API Status", apply)
 }

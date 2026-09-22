@@ -23,15 +23,15 @@ trait ApiDefinitionFactory {
   protected val anEndpoint = Endpoint(Endpoint.UriPattern("/some/endpoint1"), Endpoint.Name("endpoint1"), HttpMethod.Post, AuthType.User, scope = None, queryParameters = Nil)
 
   def buildVersion(version: String, status: ApiStatus = ApiStatus.Stable, apiAccess: ApiAccessType = ApiAccessType.Public, endpoints: List[Endpoint] = List(anEndpoint)): ApiVersion = {
-    ApiVersion(ApiVersionNbr(version), status, apiAccess, endpoints, awsRequestId = None, endpointsEnabled = true)
+    ApiVersion(ApiVersionNbr(version), status, apiAccess, endpoints, awsRequestId = None)
   }
 
   def buildExtendedVersion(
       version: String,
       status: ApiStatus = ApiStatus.Stable,
       endpoints: List[Endpoint] = List(anEndpoint),
-      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Public, loggedIn = true, authorised = true)),
-      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Public, loggedIn = true, authorised = true))
+      productionAvailability: Option[ApiAvailability] = Some(ApiAvailability(access = ApiAccessType.Public, loggedIn = true, authorised = true)),
+      sandboxAvailability: Option[ApiAvailability] = Some(ApiAvailability(access = ApiAccessType.Public, loggedIn = true, authorised = true))
     ): ExtendedApiVersion = {
     ExtendedApiVersion(ApiVersionNbr(version), status, endpoints, productionAvailability, sandboxAvailability)
   }

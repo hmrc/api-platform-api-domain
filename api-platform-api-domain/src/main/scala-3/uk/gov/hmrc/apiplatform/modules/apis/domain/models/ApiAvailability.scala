@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apiplatform.modules.apis.domain.models
 
-case class ApiAvailability(endpointsEnabled: Boolean, access: ApiAccessType, loggedIn: Boolean, authorised: Boolean) {
+case class ApiAvailability(access: ApiAccessType, loggedIn: Boolean, authorised: Boolean) {
   lazy val isAccessible: Boolean = authorised || access == ApiAccessType.Controlled || access == ApiAccessType.Public
 }
 

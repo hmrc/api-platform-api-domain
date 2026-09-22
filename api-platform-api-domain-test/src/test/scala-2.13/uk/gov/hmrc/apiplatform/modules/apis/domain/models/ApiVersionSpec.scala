@@ -38,13 +38,12 @@ class ApiVersionSpec extends BaseJsonFormattersSpec with ApiDefinitionFactory {
       scope = None,
       queryParameters = Nil
     )),
-    endpointsEnabled = true,
     awsRequestId = None,
     versionSource = ApiVersionSource.OAS
   )
 
   val expectedJson =
-    """{"version":"1.0","status":"STABLE","access":"PUBLIC","endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
+    """{"version":"1.0","status":"STABLE","access":"PUBLIC","endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"versionSource":"OAS"}"""
 
   "ApiVersion" should {
     val openEndpoint        = anEndpoint.copy(authType = AuthType.NONE)
@@ -75,7 +74,7 @@ class ApiVersionSpec extends BaseJsonFormattersSpec with ApiDefinitionFactory {
 
     "read from Json with new field name" in {
       val newExpectedJson =
-        """{"versionNbr":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"endpointsEnabled":true,"versionSource":"OAS"}"""
+        """{"versionNbr":"1.0","status":"STABLE","access":{"type":"PUBLIC"},"endpoints":[{"uriPattern":"url","endpointName":"name","method":"GET","authType":"NONE","throttlingTier":"UNLIMITED","queryParameters":[]}],"versionSource":"OAS"}"""
       testFromJson(newExpectedJson)(example)
     }
 

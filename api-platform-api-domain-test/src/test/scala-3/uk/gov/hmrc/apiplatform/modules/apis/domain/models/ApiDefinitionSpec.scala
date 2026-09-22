@@ -44,7 +44,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
          |      {
          |         "version":"1.0",
          |         "status":"STABLE",
-         |         "endpointsEnabled": true,
          |         "versionSource": "OAS",
          |         "access": {
          |           "type": "PRIVATE",
@@ -92,7 +91,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
          |               "queryParameters": []
          |            }
          |          ],
-         |         "endpointsEnabled": true,
          |         "versionSource": "OAS"
          |      }
          |   },
@@ -131,7 +129,6 @@ class ApiDefinitionSpec extends HmrcSpec with ApiDefinitionFactory {
          |               "queryParameters": []
          |            }
          |          ],
-         |         "endpointsEnabled": true,
          |         "versionSource": "OAS"
          |      }
          |   },
