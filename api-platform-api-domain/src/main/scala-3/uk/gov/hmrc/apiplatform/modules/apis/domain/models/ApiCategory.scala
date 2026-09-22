@@ -54,6 +54,6 @@ object ApiCategory {
 
   import play.api.libs.json.Format
 
-  given Format[ApiCategory] = SimpleEnumJsonFormatting.createEnumFormatFor[ApiCategory]("API Category", apply)
+  given Format[ApiCategory] = SimpleEnumJsonFormatting.screamingSnakeCaseFormatFor[ApiCategory]("API Category", apply)
 
 }

@@ -42,7 +42,6 @@ class StoredApiDefinitionSpec extends HmrcSpec {
            |      {
            |         "version":"1.0",
            |         "status":"STABLE",
-           |         "endpointsEnabled": true,
            |         "versionSource": "OAS",
            |         "access": {
            |           "type": "PRIVATE",

@@ -25,5 +25,5 @@ object ApiType {
   import play.api.libs.json.Format
   import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-  given Format[ApiType] = SimpleEnumJsonFormatting.createEnumFormatFor[ApiType]("API Type", apply)
+  given Format[ApiType] = SimpleEnumJsonFormatting.screamingSnakeCaseFormatFor[ApiType]("API Type", apply)
 }

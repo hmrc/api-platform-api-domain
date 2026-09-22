@@ -25,7 +25,6 @@ object ApiVersionData {
     ApiStatus.STABLE,
     ApiAccessType.PUBLIC,
     List(EndpointData.openGetEndpoint),
-    true,
     None,
     ApiVersionSource.OAS
   )
@@ -35,7 +34,6 @@ object ApiVersionData {
     ApiStatus.STABLE,
     ApiAccessType.PUBLIC,
     List(EndpointData.openGetEndpoint),
-    true,
     None,
     ApiVersionSource.OAS
   )

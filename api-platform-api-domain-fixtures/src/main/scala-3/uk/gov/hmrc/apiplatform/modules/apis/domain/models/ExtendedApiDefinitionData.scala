@@ -34,7 +34,6 @@ object ExtendedApiDefinitionData {
         ApiVersionData.apiVersionOnePublicStable.endpoints,
         Some(
           ApiAvailability(
-            true,
             ApiAccessType.Public,
             false,
             false
@@ -42,7 +41,6 @@ object ExtendedApiDefinitionData {
         ),
         Some(
           ApiAvailability(
-            true,
             ApiAccessType.Public,
             false,
             false
